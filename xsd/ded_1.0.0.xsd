@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.flancer64.com/dBEAR/Schema" elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.flancer64.com/dBEAR/Schema">
+
+
+	<complexType name="ArrayAttributes">
+		<sequence>
+			<element name="attribute" type="tns:Attribute" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Array of the available attributes of the current entity.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ArrayEntities">
+		<sequence>
+			<element name="entity" type="tns:Entity" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Array of the available entities in the current namespace.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ArrayNamespaces">
+		<sequence>
+			<element name="namespace" type="tns:Namespace" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Array of the available namespaces in the dBEAR structure.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ArrayRelations">
+		<sequence>
+			<element name="relation" type="tns:Relation" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Array of the available relations for the current entity.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Attribute">
+		<all>
+			<element name="type" type="tns:AttributeTypeChoice" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>This attribute type.</documentation>
+				</annotation>
+			</element>
+		</all>
+		<attribute name="id" use="required" type="tns:Name">
+			<annotation>
+				<documentation>
+					Attribute name. Must be unique across all other attributes of the entity in the current namespace.
+				</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<complexType name="AttributeTypeChoice">
+		<annotation>
+			<documentation>Attribute type can be one of the following:</documentation>
+		</annotation>
+		<choice>
+			<element name="binary" type="tns:AttributeTypeBinary"/>
+			<element name="boolean" type="tns:AttributeTypeBoolean"/>
+			<element name="datetime" type="tns:AttributeTypeDatetime"/>
+			<element name="integer" type="tns:AttributeTypeInteger"/>
+			<element name="numeric" type="tns:AttributeTypeNumeric"/>
+			<element name="option" type="tns:AttributeTypeOption"/>
+			<element name="text" type="tns:AttributeTypeText"/>
+		</choice>
+	</complexType>
+
+	<complexType name="AttributeType">
+		<sequence>
+			<element name="isPrimaryKey" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AttributeTypeBinary">
+		<complexContent>
+			<extension base="tns:AttributeType">
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AttributeTypeBoolean">
+		<complexContent>
+			<extension base="tns:AttributeType">
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AttributeTypeDatetime">
+		<complexContent>
+			<extension base="tns:AttributeType">
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AttributeTypeInteger">
+		<complexContent>
+			<extension base="tns:AttributeType">
+				<sequence>
+					<element name="unsigned2" type="boolean"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AttributeTypeNumeric">
+		<complexContent>
+			<extension base="tns:AttributeType">
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AttributeTypeOption">
+		<complexContent>
+			<extension base="tns:AttributeType">
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AttributeTypeText">
+		<complexContent>
+			<extension base="tns:AttributeType">
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Base">
+		<annotation>
+			<documentation>Database type for the root element of the dBEAR structure.</documentation>
+		</annotation>
+		<all>
+			<element name="namespaces" type="tns:ArrayNamespaces" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>Array of the available namespaces in the dBEAR structure.</documentation>
+				</annotation>
+			</element>
+		</all>
+	</complexType>
+
+	<complexType name="Entity">
+		<all>
+			<element name="attributes" type="tns:ArrayAttributes" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>Array of the entity's attributes.</documentation>
+				</annotation>
+			</element>
+			<element name="relations" type="tns:ArrayRelations" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>Array of the entity's relations.</documentation>
+				</annotation>
+			</element>
+		</all>
+		<attribute name="id" use="required" type="tns:Name">
+			<annotation>
+				<documentation>Entity name. Must be unique across all other entities in the current namespace.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<complexType name="Namespace">
+		<all>
+			<element name="entities" type="tns:ArrayEntities" minOccurs="1" maxOccurs="1"/>
+		</all>
+		<attribute name="id" use="required" type="tns:Package">
+			<annotation>
+				<documentation>Namespace name. Must be unique across all other namespaces in the dBEAR instance.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<complexType name="Relation">
+		<attribute name="id" use="required" type="tns:Name">
+			<annotation>
+				<documentation>
+					Relation name. Must be unique across all other relations of the entity in the current namespace.
+				</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+
+	<simpleType name="AttributeTypeNames">
+		<annotation>
+			<documentation>Simple types.</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="binary">
+				<annotation>
+					<documentation>BLOB, BYTEA, ...</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="boolean">
+				<annotation>
+					<documentation>Logical (true|false)</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="datetime">
+				<annotation>
+					<documentation>DATE, TIME, DATETIME, TIMESTAMP, ...</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="integer">
+				<annotation>
+					<documentation>BYTE, INTEGER, BIGINT, ...</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="numeric">
+				<annotation>
+					<documentation>FLOAT, DECIMAL, ...</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="selection">
+				<annotation>
+					<documentation>ENUM, SELECTION, DICT, ...</documentation>
+				</annotation>
+			</enumeration>
+			<enumeration value="text">
+				<annotation>
+					<documentation>CHAR, VARCHAR, TEXT, ...</documentation>
+				</annotation>
+			</enumeration>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Name">
+		<annotation>
+			<documentation>CamelCased alpha-numeric string ("SomeName23").</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="[a-zA-Z0-9]+"/>
+			<minLength value="1"></minLength>
+			<maxLength value="255"></maxLength>
+			<whiteSpace value="collapse"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Package">
+		<annotation>
+			<documentation>Dot-separated lowercased string (Java style is recommended: "com.sun.java.swing.plaf").
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="[a-z0-9\.]+"/>
+			<minLength value="1"></minLength>
+			<maxLength value="255"></maxLength>
+			<whiteSpace value="collapse"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Stub">
+		<annotation>
+			<documentation>Stub to use in XSD development (should be removed).</documentation>
+		</annotation>
+		<restriction base="string">
+			<whiteSpace value="collapse"/>
+		</restriction>
+	</simpleType>
+
+
+	<element name="dBEAR" type="tns:Base"/>
+
+</schema>

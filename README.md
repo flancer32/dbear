@@ -1,2 +1,3 @@
-# dbear
-Basics for Entity-Attribute-Relation databases
+# dBEAR
+
+Common basics for Entity-Attribute-Relation databases.
