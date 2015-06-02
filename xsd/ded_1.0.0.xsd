@@ -45,6 +45,7 @@
 
 	<complexType name="Attribute">
 		<all>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="type" type="tns:AttributeTypeChoice" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>This attribute type.</documentation>
@@ -78,6 +79,16 @@
 	<complexType name="AttributeType">
 		<sequence>
 			<element name="isPrimaryKey" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
+			<element name="isNullable" type="boolean" default="false" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>
+<![CDATA[
+Should we has 'nullable' attribute in XSD?
+http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-12164
+]]>
+					</documentation>
+				</annotation>
+			</element>
 		</sequence>
 	</complexType>
 
@@ -109,7 +120,8 @@
 		<complexContent>
 			<extension base="tns:AttributeType">
 				<sequence>
-					<element name="unsigned2" type="boolean"/>
+					<element name="isUnsigned" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
+					<element name="isAutoincrement" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
 				</sequence>
 			</extension>
 		</complexContent>
@@ -118,6 +130,11 @@
 	<complexType name="AttributeTypeNumeric">
 		<complexContent>
 			<extension base="tns:AttributeType">
+				<sequence>
+					<element name="isUnsigned" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
+					<element name="precision" type="integer" default="16" minOccurs="0" maxOccurs="1"/>
+					<element name="scale" type="integer" default="4" minOccurs="0" maxOccurs="1"/>
+				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
@@ -133,7 +150,9 @@
 	<complexType name="AttributeTypeText">
 		<complexContent>
 			<extension base="tns:AttributeType">
-
+				<sequence>
+					<element name="length" type="integer" default="255" minOccurs="0" maxOccurs="1"/>
+				</sequence>
 			</extension>
 		</complexContent>
 	</complexType>
