@@ -4,17 +4,10 @@
 	<tns:namespaces>
 		<tns:namespace id="flancer32.dbear.sample">
 			<tns:entities>
-				<tns:entity id="Person">
-					<tns:comment>Person basic entity.</tns:comment>
+				<tns:entity id="AuthType">
+					<tns:comment>Authentication type can be used in the current application.</tns:comment>
 					<tns:attributes>
-						<tns:attribute id="NameFirst">
-							<tns:type>
-								<tns:text>
-									<tns:length>255</tns:length>
-								</tns:text>
-							</tns:type>
-						</tns:attribute>
-						<tns:attribute id="NameLast">
+						<tns:attribute id="Value">
 							<tns:type>
 								<tns:text>
 									<tns:length>255</tns:length>
@@ -24,6 +17,20 @@
 					</tns:attributes>
 				</tns:entity>
 			</tns:entities>
+			<tns:relations>
+				<tns:relation id="Person_AuthType">
+					<tns:refs>
+						<tns:entityRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>AuthType</tns:name>
+						</tns:entityRef>
+						<tns:entityRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Person</tns:name>
+						</tns:entityRef>
+					</tns:refs>
+				</tns:relation>
+			</tns:relations>
 		</tns:namespace>
 	</tns:namespaces>
 </tns:dBEAR>

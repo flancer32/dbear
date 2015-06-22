@@ -54,14 +54,14 @@
 	</complexType>
 
 	<complexType name="Attribute">
-		<all>
+		<sequence>
 			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="type" type="tns:AttributeTypeChoice" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>This attribute type.</documentation>
 				</annotation>
 			</element>
-		</all>
+		</sequence>
 		<attribute name="id" use="required" type="tns:Name">
 			<annotation>
 				<documentation>
@@ -181,13 +181,14 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 	</complexType>
 
 	<complexType name="Entity">
-		<all>
+		<sequence>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="attributes" type="tns:SetOfAttributes" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>Array of the entity's attributes.</documentation>
 				</annotation>
 			</element>
-		</all>
+		</sequence>
 		<attribute name="id" use="required" type="tns:Name">
 			<annotation>
 				<documentation>Entity name. Must be unique across all other entities in the current namespace.</documentation>
@@ -288,7 +289,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			<documentation>CamelCased alpha-numeric string ("SomeName23").</documentation>
 		</annotation>
 		<restriction base="string">
-			<pattern value="[a-zA-Z0-9]+"/>
+			<pattern value="[a-zA-Z0-9_]+"/>
 			<minLength value="1"></minLength>
 			<maxLength value="255"></maxLength>
 			<whiteSpace value="collapse"/>
