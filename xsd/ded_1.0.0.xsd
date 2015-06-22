@@ -3,7 +3,7 @@
 	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.flancer64.com/dBEAR/Schema">
 
 
-	<complexType name="ArrayAttributes">
+	<complexType name="SetOfAttributes">
 		<sequence>
 			<element name="attribute" type="tns:Attribute" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
@@ -13,7 +13,7 @@
 		</sequence>
 	</complexType>
 
-	<complexType name="ArrayEntities">
+	<complexType name="SetOfEntities">
 		<sequence>
 			<element name="entity" type="tns:Entity" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
@@ -23,7 +23,17 @@
 		</sequence>
 	</complexType>
 
-	<complexType name="ArrayNamespaces">
+	<complexType name="SetOfRelationEntryReferences">
+		<sequence>
+			<element name="entityRef" type="tns:RelationEntryReference" minOccurs="1" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Array of the references to the available entities in the current dBEAR.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SetOfNamespaces">
 		<sequence>
 			<element name="namespace" type="tns:Namespace" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
@@ -33,7 +43,7 @@
 		</sequence>
 	</complexType>
 
-	<complexType name="ArrayRelations">
+	<complexType name="SetOfRelations">
 		<sequence>
 			<element name="relation" type="tns:Relation" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
@@ -162,7 +172,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			<documentation>Database type for the root element of the dBEAR structure.</documentation>
 		</annotation>
 		<all>
-			<element name="namespaces" type="tns:ArrayNamespaces" minOccurs="1" maxOccurs="1">
+			<element name="namespaces" type="tns:SetOfNamespaces" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>Array of the available namespaces in the dBEAR structure.</documentation>
 				</annotation>
@@ -172,14 +182,9 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 
 	<complexType name="Entity">
 		<all>
-			<element name="attributes" type="tns:ArrayAttributes" minOccurs="1" maxOccurs="1">
+			<element name="attributes" type="tns:SetOfAttributes" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>Array of the entity's attributes.</documentation>
-				</annotation>
-			</element>
-			<element name="relations" type="tns:ArrayRelations" minOccurs="0" maxOccurs="1">
-				<annotation>
-					<documentation>Array of the entity's relations.</documentation>
 				</annotation>
 			</element>
 		</all>
@@ -190,10 +195,26 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 		</attribute>
 	</complexType>
 
+	<complexType name="RelationEntryReference">
+		<annotation>
+			<documentation>Reference to the part of the relation (eEntity or other relation).</documentation>
+		</annotation>
+		<sequence>
+			<element name="namespace" type="tns:Package" minOccurs="1" maxOccurs="1"/>
+			<element name="name" type="tns:Name" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+		<attribute name="isEntity" type="boolean" default="true" use="optional"/>
+	</complexType>
+
 	<complexType name="Namespace">
-		<all>
-			<element name="entities" type="tns:ArrayEntities" minOccurs="1" maxOccurs="1"/>
-		</all>
+		<sequence>
+			<element name="entities" type="tns:SetOfEntities" minOccurs="1" maxOccurs="1"/>
+			<element name="relations" type="tns:SetOfRelations" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>Array of the entity's relations.</documentation>
+				</annotation>
+			</element>
+		</sequence>
 		<attribute name="id" use="required" type="tns:Package">
 			<annotation>
 				<documentation>Namespace name. Must be unique across all other namespaces in the dBEAR instance.</documentation>
@@ -202,6 +223,14 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 	</complexType>
 
 	<complexType name="Relation">
+		<sequence>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
+			<element name="refs" type="tns:SetOfRelationEntryReferences" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>Set of the entities or other relations that are parts of the current relation.</documentation>
+				</annotation>
+			</element>
+		</sequence>
 		<attribute name="id" use="required" type="tns:Name">
 			<annotation>
 				<documentation>
@@ -268,22 +297,13 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 
 	<simpleType name="Package">
 		<annotation>
-			<documentation>Dot-separated lowercased string (Java style is recommended: "com.sun.java.swing.plaf").
+			<documentation>Dot-separated alpha-numeric string (Java style is recommended: "com.sun.java.swing.plaf").
 			</documentation>
 		</annotation>
 		<restriction base="string">
-			<pattern value="[a-z0-9\.]+"/>
+			<pattern value="[a-zA-Z0-9\.]+"/>
 			<minLength value="1"></minLength>
 			<maxLength value="255"></maxLength>
-			<whiteSpace value="collapse"/>
-		</restriction>
-	</simpleType>
-
-	<simpleType name="Stub">
-		<annotation>
-			<documentation>Stub to use in XSD development (should be removed).</documentation>
-		</annotation>
-		<restriction base="string">
 			<whiteSpace value="collapse"/>
 		</restriction>
 	</simpleType>
