@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/ded_1.0.0.xsd ">
+	<tns:namespaces>
+		<tns:namespace id="flancer32.dbear.sample.01">
+			<tns:entities>
+				<tns:entity id="Person">
+					<tns:attributes>
+						<tns:attribute id="NameFirst">
+							<tns:type>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="NameLast">
+							<tns:type>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+			</tns:entities>
+		</tns:namespace>
+	</tns:namespaces>
+</tns:dBEAR>
