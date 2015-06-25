@@ -7,7 +7,7 @@
 		<sequence>
 			<element name="attribute" type="tns:Attribute" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
-					<documentation>Array of the available attributes of the current entity.</documentation>
+					<documentation>Set of the available attributes of the current entity.</documentation>
 				</annotation>
 			</element>
 		</sequence>
@@ -17,15 +17,15 @@
 		<sequence>
 			<element name="entity" type="tns:Entity" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
-					<documentation>Array of the available entities in the current namespace.</documentation>
+					<documentation>Set of the available entities in the current namespace.</documentation>
 				</annotation>
 			</element>
 		</sequence>
 	</complexType>
 
-	<complexType name="SetOfRelationEntryReferences">
+	<complexType name="ArrayOfRelationEntryReferences">
 		<sequence>
-			<element name="entityRef" type="tns:RelationEntryReference" minOccurs="1" maxOccurs="unbounded">
+			<element name="entryRef" type="tns:RelationEntryReference" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
 					<documentation>Array of the references to the available entities in the current dBEAR.</documentation>
 				</annotation>
@@ -37,7 +37,7 @@
 		<sequence>
 			<element name="namespace" type="tns:Namespace" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
-					<documentation>Array of the available namespaces in the dBEAR structure.</documentation>
+					<documentation>Set of the available namespaces in the dBEAR structure.</documentation>
 				</annotation>
 			</element>
 		</sequence>
@@ -47,7 +47,16 @@
 		<sequence>
 			<element name="relation" type="tns:Relation" minOccurs="1" maxOccurs="unbounded">
 				<annotation>
-					<documentation>Array of the available relations for the current entity.</documentation>
+					<documentation>Set of the available relations for the current entity/relation.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="SetOfRelationIndexes">
+		<sequence>
+			<element name="index" type="tns:RelationIndex" minOccurs="0" maxOccurs="unbounded">
+				<annotation>
+					<documentation>Set of the indexes that use current relation entry.</documentation>
 				</annotation>
 			</element>
 		</sequence>
@@ -99,6 +108,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 					</documentation>
 				</annotation>
 			</element>
+			<element name="isUnique" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
 		</sequence>
 	</complexType>
 
@@ -198,13 +208,28 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 
 	<complexType name="RelationEntryReference">
 		<annotation>
-			<documentation>Reference to the part of the relation (eEntity or other relation).</documentation>
+			<documentation>Reference to the part of the relation (entity or other relation).</documentation>
 		</annotation>
 		<sequence>
 			<element name="namespace" type="tns:Package" minOccurs="1" maxOccurs="1"/>
 			<element name="name" type="tns:Name" minOccurs="1" maxOccurs="1"/>
+			<element name="indexes" type="tns:SetOfRelationIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</sequence>
 		<attribute name="isEntity" type="boolean" default="true" use="optional"/>
+	</complexType>
+
+	<complexType name="RelationIndex">
+		<annotation>
+			<documentation>Indexing information for the relation's entry.</documentation>
+		</annotation>
+		<sequence>
+			<element name="position" type="integer" default="0" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+		<attribute name="id" use="required" type="tns:Name">
+			<annotation>
+				<documentation>Name of the index that uses this relation's entry.</documentation>
+			</annotation>
+		</attribute>
 	</complexType>
 
 	<complexType name="Namespace">
@@ -226,7 +251,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 	<complexType name="Relation">
 		<sequence>
 			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
-			<element name="refs" type="tns:SetOfRelationEntryReferences" minOccurs="1" maxOccurs="1">
+			<element name="refs" type="tns:ArrayOfRelationEntryReferences" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>Set of the entities or other relations that are parts of the current relation.</documentation>
 				</annotation>

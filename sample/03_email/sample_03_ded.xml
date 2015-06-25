@@ -4,12 +4,13 @@
 	<tns:namespaces>
 		<tns:namespace id="flancer32.dbear.sample">
 			<tns:entities>
-				<tns:entity id="AuthType">
-					<tns:comment>Authentication type can be used in the current application.</tns:comment>
+				<tns:entity id="EmailAuth">
+					<tns:comment>Email that should be used as login name for authentication.</tns:comment>
 					<tns:attributes>
 						<tns:attribute id="Value">
 							<tns:type>
 								<tns:text>
+									<tns:isUnique>true</tns:isUnique>
 									<tns:length>255</tns:length>
 								</tns:text>
 							</tns:type>
@@ -18,11 +19,14 @@
 				</tns:entity>
 			</tns:entities>
 			<tns:relations>
-				<tns:relation id="Person_AuthType">
+				<tns:relation id="Person_EmailAuth">
 					<tns:refs>
 						<tns:entryRef>
 							<tns:namespace>flancer32.dbear.sample</tns:namespace>
-							<tns:name>AuthType</tns:name>
+							<tns:name>EmailAuth</tns:name>
+							<tns:indexes>
+								<tns:index id="UniqueEmail"/>
+							</tns:indexes>
 						</tns:entryRef>
 						<tns:entryRef>
 							<tns:namespace>flancer32.dbear.sample</tns:namespace>
