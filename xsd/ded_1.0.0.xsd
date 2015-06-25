@@ -52,9 +52,9 @@
 			</element>
 		</sequence>
 	</complexType>
-	<complexType name="SetOfRelationIndexes">
+	<complexType name="SetOfIndexes">
 		<sequence>
-			<element name="index" type="tns:RelationIndex" minOccurs="0" maxOccurs="unbounded">
+			<element name="index" type="tns:Index" minOccurs="0" maxOccurs="unbounded">
 				<annotation>
 					<documentation>Set of the indexes that use current relation entry.</documentation>
 				</annotation>
@@ -70,6 +70,7 @@
 					<documentation>This attribute type.</documentation>
 				</annotation>
 			</element>
+			<element name="indexes" type="tns:SetOfIndexes" minOccurs="0" maxOccurs="1"/>
 		</sequence>
 		<attribute name="id" use="required" type="tns:Name">
 			<annotation>
@@ -213,21 +214,21 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 		<sequence>
 			<element name="namespace" type="tns:Package" minOccurs="1" maxOccurs="1"/>
 			<element name="name" type="tns:Name" minOccurs="1" maxOccurs="1"/>
-			<element name="indexes" type="tns:SetOfRelationIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="indexes" type="tns:SetOfIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</sequence>
 		<attribute name="isEntity" type="boolean" default="true" use="optional"/>
 	</complexType>
 
-	<complexType name="RelationIndex">
+	<complexType name="Index">
 		<annotation>
-			<documentation>Indexing information for the relation's entry.</documentation>
+			<documentation>Indexing information for the attribute or relation's entry.</documentation>
 		</annotation>
 		<sequence>
 			<element name="position" type="integer" default="0" minOccurs="0" maxOccurs="1"/>
 		</sequence>
 		<attribute name="id" use="required" type="tns:Name">
 			<annotation>
-				<documentation>Name of the index that uses this relation's entry.</documentation>
+				<documentation>Name of the index that uses this attribute or relation's entry.</documentation>
 			</annotation>
 		</attribute>
 	</complexType>
