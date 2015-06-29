@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS r_person_email_auth;
+DROP TABLE IF EXISTS r_person_phone_auth;
 DROP TABLE IF EXISTS r_person_authtype;
 DROP TABLE IF EXISTS e_authtype;
 DROP TABLE IF EXISTS e_person;
-DROP TABLE IF EXISTS e_email_auth;
 DROP TABLE IF EXISTS e_email;
 DROP TABLE IF EXISTS e_phone;
 
@@ -48,19 +48,36 @@ CREATE TABLE r_person_authtype (
 CREATE TABLE r_person_email_auth (
   id int UNSIGNED NOT NULL AUTO_INCREMENT,
   person int UNSIGNED DEFAULT NULL,
-  email_auth int UNSIGNED NOT NULL,
+  email int UNSIGNED NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE INDEX UQ_r_person_email_auth_email_auth (email_auth),
+  UNIQUE INDEX UQ_r_person_email_auth_email_auth (email),
   CONSTRAINT FK_person_email_auth_person_id FOREIGN KEY (person)
   REFERENCES e_person (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT FK_person_email_auth_email_auth_id FOREIGN KEY (email_auth)
-  REFERENCES e_email_auth (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT FK_person_email_auth_email_auth_id FOREIGN KEY (email)
+  REFERENCES e_email (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE r_person_phone_auth (
+  id int UNSIGNED NOT NULL AUTO_INCREMENT,
+  person int UNSIGNED DEFAULT NULL,
+  phone int UNSIGNED NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT FK_person_phone_auth_person FOREIGN KEY (person)
+  REFERENCES e_person (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT FK_person_phone_auth_phone FOREIGN KEY (phone)
+  REFERENCES e_phone (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
 INSERT INTO e_person (id, NameFirst, NameLast) VALUES (1, 'Alex', 'Gusev');
 INSERT INTO e_authtype (id, Value) VALUES (1, 'by email');
-INSERT INTO e_email_auth (id, Value) VALUES (1, 'alex@flancer.lv');
-INSERT INTO e_email_auth (id, Value) VALUES (2, 'info@flancer.lv');
+INSERT INTO e_authtype (id, Value) VALUES (2, 'by phone');
+INSERT INTO e_email (id, Value) VALUES (1, 'alex@flancer.lv');
+INSERT INTO e_email (id, Value) VALUES (2, 'info@flancer.lv');
+INSERT INTO e_phone (id, Code, Number) VALUES (1, '371', '29181801');
+INSERT INTO e_phone (id, Code, Number) VALUES (2, '371', '29283383');
 INSERT INTO r_person_authtype (id, person, authtype) VALUES (1, 1, 1);
-INSERT INTO r_person_email_auth (id, person, email_auth) VALUES (1, 1, 1);
-INSERT INTO r_person_email_auth (id, person, email_auth) VALUES (2, 1, 2);
+INSERT INTO r_person_authtype (id, person, authtype) VALUES (2, 1, 2);
+INSERT INTO r_person_email_auth (id, person, email) VALUES (1, 1, 1);
+INSERT INTO r_person_email_auth (id, person, email) VALUES (2, 1, 2);
+INSERT INTO r_person_phone_auth (id, person, phone) VALUES (1, 1, 1);
+INSERT INTO r_person_phone_auth (id, person, phone) VALUES (2, 1, 2);
