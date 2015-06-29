@@ -212,8 +212,10 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			<documentation>Reference to the part of the relation (entity or other relation).</documentation>
 		</annotation>
 		<sequence>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="namespace" type="tns:Package" minOccurs="1" maxOccurs="1"/>
 			<element name="name" type="tns:Name" minOccurs="1" maxOccurs="1"/>
+			<element name="alias" type="tns:Name" minOccurs="0" maxOccurs="1"/>
 			<element name="indexes" type="tns:SetOfIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</sequence>
 		<attribute name="isEntity" type="boolean" default="true" use="optional"/>
@@ -224,6 +226,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			<documentation>Indexing information for the attribute or relation's entry.</documentation>
 		</annotation>
 		<sequence>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="position" type="integer" default="0" minOccurs="0" maxOccurs="1"/>
 		</sequence>
 		<attribute name="id" use="required" type="tns:Name">
@@ -235,7 +238,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 
 	<complexType name="Namespace">
 		<sequence>
-			<element name="entities" type="tns:SetOfEntities" minOccurs="1" maxOccurs="1"/>
+			<element name="entities" type="tns:SetOfEntities" minOccurs="0" maxOccurs="1"/>
 			<element name="relations" type="tns:SetOfRelations" minOccurs="0" maxOccurs="1">
 				<annotation>
 					<documentation>Array of the entity's relations.</documentation>
