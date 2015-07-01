@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../xsd/ded_1.0.0.xsd ">
+	<tns:namespaces>
+		<tns:namespace id="flancer32.dbear.sample">
+			<tns:comment>Single namespace for all samples is used.</tns:comment>
+			<tns:entities>
+				<tns:entity id="AuthType">
+					<tns:comment>Authentication type can be used in the current application.</tns:comment>
+					<tns:attributes>
+						<tns:attribute id="Value">
+							<tns:type>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="EmailAuth">
+					<tns:comment>Email that should be used as login name for authentication.</tns:comment>
+					<tns:attributes>
+						<tns:attribute id="Value">
+							<tns:type>
+								<tns:text>
+									<tns:isUnique>true</tns:isUnique>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Person">
+					<tns:comment>Person basic entity.</tns:comment>
+					<tns:attributes>
+						<tns:attribute id="NameFirst">
+							<tns:type>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="NameLast">
+							<tns:type>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Phone">
+					<tns:comment>Person phones.</tns:comment>
+					<tns:attributes>
+						<tns:attribute id="Code">
+							<tns:comment>Country code (371 for Latvia).</tns:comment>
+							<tns:type>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+							<tns:indexes>
+								<tns:index id="UniquePhone">
+									<tns:position>0</tns:position>
+								</tns:index>
+							</tns:indexes>
+						</tns:attribute>
+						<tns:attribute id="Number">
+							<tns:type>
+								<tns:text>
+									<tns:isUnique>true</tns:isUnique>
+									<tns:length>255</tns:length>
+								</tns:text>
+							</tns:type>
+							<tns:indexes>
+								<tns:index id="UniquePhone">
+									<tns:position>1</tns:position>
+								</tns:index>
+							</tns:indexes>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+			</tns:entities>
+			<tns:relations>
+				<tns:relation id="Person_AuthType">
+					<tns:refs>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>AuthType</tns:name>
+						</tns:entryRef>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Person</tns:name>
+						</tns:entryRef>
+					</tns:refs>
+				</tns:relation>
+				<tns:relation id="Person_EmailAuth">
+					<tns:refs>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>EmailAuth</tns:name>
+							<tns:indexes>
+								<tns:index id="UniqueEmail"/>
+							</tns:indexes>
+						</tns:entryRef>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Person</tns:name>
+						</tns:entryRef>
+					</tns:refs>
+				</tns:relation>
+				<tns:relation id="Person_Parent">
+					<tns:comment>Parent relation for the customer.</tns:comment>
+					<tns:refs>
+						<tns:entryRef>
+							<tns:comment>Person itself.</tns:comment>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Person</tns:name>
+							<tns:indexes>
+								<tns:index id="UniquePerson">
+									<tns:comment>Person itself.</tns:comment>
+								</tns:index>
+								<tns:index id="UniquePersonAndParent">
+									<tns:comment>Person in unique pair Person - Parent.</tns:comment>
+									<tns:position>0</tns:position>
+								</tns:index>
+							</tns:indexes>
+						</tns:entryRef>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Person</tns:name>
+							<tns:alias>Parent</tns:alias>
+							<tns:indexes>
+								<tns:index id="UniquePersonAndParent">
+									<tns:comment>Parent in unique pair Person - Parent.</tns:comment>
+									<tns:position>1</tns:position>
+								</tns:index>
+							</tns:indexes>
+						</tns:entryRef>
+					</tns:refs>
+				</tns:relation>
+				<tns:relation id="Person_SmsAuth">
+					<tns:comment>Phone number to send SMS with validation code to get 2 factor authentication.</tns:comment>
+					<tns:refs>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Phone</tns:name>
+							<tns:indexes>
+								<tns:index id="UniquePhone"/>
+							</tns:indexes>
+						</tns:entryRef>
+						<tns:entryRef>
+							<tns:namespace>flancer32.dbear.sample</tns:namespace>
+							<tns:name>Person</tns:name>
+						</tns:entryRef>
+					</tns:refs>
+				</tns:relation>
+			</tns:relations>
+		</tns:namespace>
+	</tns:namespaces>
+</tns:dBEAR>

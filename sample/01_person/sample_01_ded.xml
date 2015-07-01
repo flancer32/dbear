@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/ded_1.0.0.xsd ">
 	<tns:namespaces>
 		<tns:namespace id="flancer32.dbear.sample">
+			<tns:comment>Single namespace for all samples is used.</tns:comment>
 			<tns:entities>
 				<tns:entity id="Person">
 					<tns:comment>Person basic entity.</tns:comment>

@@ -182,13 +182,14 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 		<annotation>
 			<documentation>Database type for the root element of the dBEAR structure.</documentation>
 		</annotation>
-		<all>
+		<sequence>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="namespaces" type="tns:SetOfNamespaces" minOccurs="1" maxOccurs="1">
 				<annotation>
 					<documentation>Array of the available namespaces in the dBEAR structure.</documentation>
 				</annotation>
 			</element>
-		</all>
+		</sequence>
 	</complexType>
 
 	<complexType name="Entity">
@@ -238,6 +239,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 
 	<complexType name="Namespace">
 		<sequence>
+			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
 			<element name="entities" type="tns:SetOfEntities" minOccurs="0" maxOccurs="1"/>
 			<element name="relations" type="tns:SetOfRelations" minOccurs="0" maxOccurs="1">
 				<annotation>
