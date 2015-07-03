@@ -1,0 +1,52 @@
+{
+    "dBEAR": 
+    {
+        "comment": "Initial structure for sample domain.",
+        "namespaces": 
+        [
+            {
+                "flancer32.dbear.sample": 
+                {
+                    "comment": "Base namespace for samples.",
+                    "entities": 
+                    [
+                        {
+                            "Person": 
+                            {
+                                "comment": "Person basic entity with 2 attributes.",
+                                "attributes": 
+                                [
+                                    {
+                                        "NameFirst": 
+                                        {
+                                            "type": 
+                                            {
+                                                "text": 
+                                                {
+                                                    "length": 255
+                                                }
+                                            }
+                                        }
+                                    },
+
+                                    {
+                                        "NameLast": 
+                                        {
+                                            "type": 
+                                            {
+                                                "text": 
+                                                {
+                                                    "length": 255
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

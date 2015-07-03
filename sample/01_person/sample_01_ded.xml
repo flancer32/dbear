@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/ded_1.0.0.xsd ">
+	<tns:comment>Initial structure for sample domain.</tns:comment>
 	<tns:namespaces>
 		<tns:namespace id="flancer32.dbear.sample">
-			<tns:comment>Single namespace for all samples is used.</tns:comment>
+			<tns:comment>Base namespace for samples.</tns:comment>
 			<tns:entities>
 				<tns:entity id="Person">
-					<tns:comment>Person basic entity.</tns:comment>
+					<tns:comment>Person basic entity with 2 attributes.</tns:comment>
 					<tns:attributes>
 						<tns:attribute id="NameFirst">
 							<tns:type>
