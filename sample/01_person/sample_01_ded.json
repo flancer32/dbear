@@ -12,18 +12,14 @@
             "attributes": [
               {
                 "field": "NameFirst",
-                "type": {
-                  "text": {
-                    "length": 255
-                  }
-                }
+                "type": "VARCHAR(255)",
+                "validate": "NOT NULL"
               },
               {
                 "field": "NameLast",
-                "type": {
-                  "text": {
-                    "length": 255
-                  }
+                "type": "VARCHAR(255)",
+                "validate": {
+                  "notEmpty": "true"
                 }
               }
             ]
