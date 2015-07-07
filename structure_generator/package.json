@@ -1,0 +1,16 @@
+{
+  "name": "Structure_generator",
+  "description": "Generating DB structure from request.json",
+  "author": "Victor Gusev <viktor@nmmlm.com>",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "mysql": "^2.7.0",
+    "promise": "^7.0.3",
+    "sequelize": "^3.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flancer32/structure_generator.git"
+  },
+  "license": "MIT"
+}

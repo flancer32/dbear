@@ -1,0 +1,56 @@
+{
+  "dBEAR": {
+    "comment": "Initial structure for sample domain.",
+    "namespaces": [
+      {
+        "id": "flancer32.dbear.sample",
+        "comment": "Base namespace for samples.",
+        "entities": [
+          {
+            "id": "Person",
+            "comment": "Person basic entity with 2 attributes.",
+            "attributes": [
+              {
+                "field": "NameFirst",
+                "type": "VARCHAR(255)"
+              },
+              {
+                "field": "NameLast",
+                "type": "VARCHAR(255)"
+              }
+            ]
+          },
+          {
+            "id": "Order",
+            "comment": "Bla-bla-bla.",
+            "attributes": [
+              {
+                "field": "Number",
+                "type": "VARCHAR(255)",
+                "validate": "NOT NULL"
+              },
+              {
+                "field": "Amount",
+                "type": "VARCHAR(255)"
+              }
+            ]
+          },
+          {
+            "id": "Peopless",
+            "attributes": [
+              {
+                "field": "Number",
+                "type": "VARCHAR(255)",
+                "validate": "NOT NULL"
+              },
+              {
+                "field": "Amount",
+                "type": "VARCHAR(255)"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
