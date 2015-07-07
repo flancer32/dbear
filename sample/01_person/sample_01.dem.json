@@ -3,7 +3,7 @@
     "comment": "Initial structure for sample domain.",
     "namespaces": [
       {
-        "id": "flancer32.dbear.sample",
+        "id": "com.flancer32.dbear.sample.core",
         "comment": "Base namespace for samples.",
         "entities": [
           {

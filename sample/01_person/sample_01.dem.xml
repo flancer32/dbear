@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/ded_1.0.0.xsd ">
+		   xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/ded_1.0.0.xsd ">
 	<tns:comment>Initial structure for sample domain.</tns:comment>
 	<tns:namespaces>
-		<tns:namespace id="flancer32.dbear.sample">
+		<tns:namespace id="com.flancer32.dbear.sample.core">
 			<tns:comment>Base namespace for samples.</tns:comment>
 			<tns:entities>
 				<tns:entity id="Person">
@@ -12,6 +12,7 @@
 						<tns:attribute id="NameFirst">
 							<tns:type>
 								<tns:text>
+									<tns:isNullable>false</tns:isNullable>
 									<tns:length>255</tns:length>
 								</tns:text>
 							</tns:type>

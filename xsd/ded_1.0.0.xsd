@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema targetNamespace="http://www.flancer64.com/dBEAR/Schema" elementFormDefault="qualified"
-	xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.flancer64.com/dBEAR/Schema">
+		xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.flancer64.com/dBEAR/Schema">
 
 
 	<complexType name="SetOfAttributes">
@@ -102,7 +102,7 @@
 			<element name="isNullable" type="boolean" default="false" minOccurs="0" maxOccurs="1">
 				<annotation>
 					<documentation>
-<![CDATA[
+						<![CDATA[
 Should we has 'nullable' attribute in XSD?
 http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-12164
 ]]>
