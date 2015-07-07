@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		   xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/ded_1.0.0.xsd ">
+		   xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/dem_1.0.0.xsd ">
 	<tns:comment>Initial structure for sample domain.</tns:comment>
 	<tns:namespaces>
 		<tns:namespace id="com.flancer32.dbear.sample.core">
