@@ -5,11 +5,10 @@ var xpath = require('xml2js-xpath') //xpath instance (currently not used)
 var prefixMatch = new RegExp(/(?!xmlns)^.*:/);
 
 function tagStripPrefix(name){
-    var result = name.replace(prefixMatch, '');
-    return result //function to strip tag prefix
+    return name.replace(prefixMatch, ''); //function to strip tag prefix
 }
 
-fs.readFile('ded.xml', 'ascii', function (err, data) {
+fs.readFile('ded.xml', 'utf8', function (err, data) {
     if (err) throw err
     xml2js.parseString(data, {
         tagNameProcessors: [tagStripPrefix], // strip tag prefix
@@ -17,10 +16,10 @@ fs.readFile('ded.xml', 'ascii', function (err, data) {
         mergeAttrs: true}, // attributes become child nodes
         function (err, result) {
         var str = JSON.stringify(result, function(key, value) {
-            if (key == 'xmlns:tns') return undefined;
+            if (key == 'xmlns:tns') return undefined; // remove xmlns:tns tag
             if (key == 'xmlns:xsi') return undefined; // remove xmlns:xsi tag
             if (key == 'xsi:schemaLocation') return undefined; // remove xsi:schemaLocation tag
-            return value
+            return value;
         }, 4)
 
         fs.writeFile('ded.json', str)

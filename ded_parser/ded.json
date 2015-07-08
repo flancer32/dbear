@@ -1,7 +1,5 @@
 {
     "dBEAR": {
-        "xmlns:tns": "http://www.flancer64.com/dBEAR/Schema",
-        "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
         "namespaces": {
             "namespace": {
                 "id": "flancer32.dbear.sample",
