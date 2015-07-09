@@ -98,8 +98,12 @@
 
 	<complexType name="AttributeType">
 		<sequence>
-			<element name="isPrimaryKey" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
-			<element name="isNullable" type="boolean" default="false" minOccurs="0" maxOccurs="1">
+			<element name="isPrimaryKey" type="boolean" default="false" minOccurs="0" maxOccurs="1">
+				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
+			</element>
+			<element name="isNullable" type="boolean" default="true" minOccurs="0" maxOccurs="1">
+				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
+				<!-- Если isNullable == false, то нужно указывать default-значение, которым будет инициализироваться атрибут в БД -->
 				<annotation>
 					<documentation>
 						<![CDATA[
@@ -214,8 +218,12 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 		</annotation>
 		<sequence>
 			<element name="comment" type="string" minOccurs="0" maxOccurs="1"/>
-			<element name="namespace" type="tns:Package" minOccurs="1" maxOccurs="1"/>
-			<element name="name" type="tns:Name" minOccurs="1" maxOccurs="1"/>
+			<element name="namespace" type="tns:Package" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>Current namespace is used if this element is omitted.</documentation>
+				</annotation>
+			</element>
+			<element name="id" type="tns:Name" minOccurs="1" maxOccurs="1"/>
 			<element name="alias" type="tns:Name" minOccurs="0" maxOccurs="1"/>
 			<element name="indexes" type="tns:SetOfIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</sequence>

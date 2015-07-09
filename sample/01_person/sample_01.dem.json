@@ -11,15 +11,15 @@
             "comment": "Person basic entity with 2 attributes.",
             "attributes": [
               {
-                "field": "NameFirst",
-                "type": "VARCHAR(255)",
-                "validate": "NOT NULL"
+                "id": "NameFirst",
+                "type": {
+                  "text": {}
+                }
               },
               {
-                "field": "NameLast",
-                "type": "VARCHAR(255)",
-                "validate": {
-                  "notEmpty": "true"
+                "id": "NameLast",
+                "type": {
+                  "text": {}
                 }
               }
             ]

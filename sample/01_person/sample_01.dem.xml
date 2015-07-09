@@ -11,17 +11,12 @@
 					<tns:attributes>
 						<tns:attribute id="NameFirst">
 							<tns:type>
-								<tns:text>
-									<tns:isNullable>false</tns:isNullable>
-									<tns:length>255</tns:length>
-								</tns:text>
+								<tns:text/>
 							</tns:type>
 						</tns:attribute>
 						<tns:attribute id="NameLast">
 							<tns:type>
-								<tns:text>
-									<tns:length>255</tns:length>
-								</tns:text>
+								<tns:text/>
 							</tns:type>
 						</tns:attribute>
 					</tns:attributes>

@@ -1,0 +1,61 @@
+{
+  "dBEAR": {
+    "comment": "Second iteration in the domain data development.",
+    "namespaces": [
+      {
+        "id": "com.flancer32.dbear.sample.core",
+        "comment": "Add attribute to the existing Entity.",
+        "entities": [
+          {
+            "id": "Person",
+            "attributes": [
+              {
+                "id": "Gender",
+                "type": {
+                  "text": {
+                    "isNullable": "false",
+                    "isUnique": "false",
+                    "length": "1"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "com.flancer32.dbear.sample.auth",
+        "comment": "Another namespace with authentication related entities.",
+        "entities": [
+          {
+            "id": "AuthMethod",
+            "comment": "Authentication methods can be used in the current application (username and password, SMS code, etc.)",
+            "attributes": [
+              {
+                "id": "Name",
+                "type": {
+                  "text": {}
+                }
+              }
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "id": "Person_AuthMethod",
+            "comment": "Each Person can be authenticated by one ore more methods.",
+            "refs": [
+              {
+                "id": "AuthMethod"
+              },
+              {
+                "namespace": "com.flancer32.dbear.sample.core",
+                "id": "Person"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
