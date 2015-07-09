@@ -1,8 +1,13 @@
 /* Define dependencies */
-var Colors = require('colors');
 var Sequelize = require('sequelize');
-var Promise = require('promise');
 var request = require('./request.json');
+var Gen = require('./generator');
+
+//var gen = new Generator()
+//gen.connect('sample_sequelize', 'sample', '3Jcftix7VycNkEYKxIDW')
+//gen.setDem(dem)
+//gen.createStructure()
+
 /* DB arrays*/
 var db_entities = [];
 var db_namespaces = [];
@@ -12,7 +17,7 @@ function setConnection(db_name, login, password) {
     console.log("Setting connection with DB...".green);
     var result = new Sequelize(db_name, login, password, {
         host: 'localhost', dialect: 'mysql', define: {
-            timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+            timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
             freezeTableName: true /* disable the modification of tablenames into plural */
         }
     });
@@ -33,7 +38,6 @@ function defineEntities(entities) {
     }
 }
 
-
 function createMeta(JSON) {
     // CreateMetaInstances
     var meta_n = sequelize.define('_n', {
@@ -41,8 +45,8 @@ function createMeta(JSON) {
     });
     var meta_e = sequelize.define('_e', {
         //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
-        name: {type: Sequelize.STRING, allowNull: false},
-        allias: {type: Sequelize.STRING, allowNull: false},
+        name:    {type: Sequelize.STRING, allowNull: false},
+        allias:  {type: Sequelize.STRING, allowNull: false},
         comment: Sequelize.STRING
         /*
          TODO Set obliged foreign key
@@ -52,14 +56,14 @@ function createMeta(JSON) {
          */
     });
     var meta_r = sequelize.define('_r', {
-        name: {type: Sequelize.STRING, allowNull: false},
-        allias: {type: Sequelize.STRING, allowNull: false},
+        name:    {type: Sequelize.STRING, allowNull: false},
+        allias:  {type: Sequelize.STRING, allowNull: false},
         comment: Sequelize.STRING
     });
     var meta_a = sequelize.define('_a', {
-        name: {type: Sequelize.STRING, allowNull: false},
-        allias: {type: Sequelize.STRING, allowNull: false},
-        type: {type: Sequelize.STRING, allowNull: false},
+        name:    {type: Sequelize.STRING, allowNull: false},
+        allias:  {type: Sequelize.STRING, allowNull: false},
+        type:    {type: Sequelize.STRING, allowNull: false},
         comment: Sequelize.STRING
     });
     meta_e.hasMany(meta_a, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'});
@@ -125,14 +129,37 @@ function analyzeJSON(request) {
     }
     return result;
 }
+//
+//var one = new Gen('some type')
+//console.log(one.getInfo())
+//console.log(one.color)
+//one.color = 'green'
+//one.sound = 'loud'
+//console.log(one.color)
+//
+//var two = new Gen('second')
+//two.color = 'blue'
+//two.getInfo = getOut
+//console.log(two.getInfo())
+//console.log(one.getInfo())
+//
+//function getOut() {
+//    return 'get out'
+//}
+//
+//var gen = new Generator()
+//gen.setConnection('sample_sequelize', 'sample', '3Jcftix7VycNkEYKxIDW')
+//gen.setDem(dem)
+//gen.createStructure()
 
 var dbear = analyzeJSON(request);
 var sequelize = setConnection('sample_sequelize', 'sample', '3Jcftix7VycNkEYKxIDW');
 createMeta(request);
 /* TODO analyze entities before defining
-* alliases
-* */
+ * alliases
+ * */
 defineEntities(dbear.namespaces[1].entities);
 sequelize.drop().then(function () {
     sequelize.sync();
 });
+
