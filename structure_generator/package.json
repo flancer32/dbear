@@ -4,6 +4,7 @@
   "author": "Victor Gusev <viktor@nmmlm.com>",
   "dependencies": {
     "colors": "^1.1.2",
+    "fs": "0.0.2",
     "mysql": "^2.7.0",
     "promise": "^7.0.3",
     "sequelize": "^3.3.2"
@@ -12,5 +13,8 @@
     "type": "git",
     "url": "https://github.com/flancer32/structure_generator.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js"
+  }
 }

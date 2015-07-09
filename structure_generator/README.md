@@ -10,8 +10,6 @@ Create DB 'sample_sequelize' on localhost, create user 'sample' with password '3
 Grant all permissions for user 'sample' on DB 'sample_sequelize'.
 
 ## Launch
+
      // To create request.json structure
     $ node app.js
-
-    // To create meta tables structure
-    $ node meta.js
