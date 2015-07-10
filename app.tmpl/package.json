@@ -1,0 +1,46 @@
+{
+  "name": "flancer32-sample-app",
+  "version": "0.1.0",
+  "description": "Template of the sample JS application.",
+  "homepage": "https://github.com/flancer32/sample-app",
+  "bugs": {
+    "url": "https://github.com/flancer32/sample-app/issues",
+    "email": "support@email.com"
+  },
+  "license": "MIT",
+  "author": "One Only Person Should Be Here <user@email.com> (http://domain.com/)",
+  "contributors": [
+    {
+      "name": "Alex Gusev",
+      "email": "flancer64@gmail.com",
+      "url": "https://github.com/flancer64",
+      "contributions": 17,
+      "additions": 1725,
+      "deletions": 482,
+      "hireable": false
+    },
+    {
+      "name": "Viktor",
+      "email": "viktor@nmmlm.com",
+      "url": "https://github.com/viktor-gusev",
+      "contributions": 2,
+      "additions": 37,
+      "deletions": 58,
+      "hireable": false
+    },
+    {
+      "url": "https://github.com/Alexandr-Baluhin",
+      "contributions": 5,
+      "additions": 733,
+      "deletions": 328
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flancer32/dbear"
+  },
+  "scripts": {},
+  "config": {},
+  "dependencies": {},
+  "devDependencies": {}
+}
