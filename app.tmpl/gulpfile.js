@@ -18,7 +18,7 @@ Use the following commands with gulp:\n\
     clean:  clean up build results;\n\
     todo:   generate to-do list in ./build/TODO.md;\n\
     plato:  generate source analysis report in ./build/plato/;\n\
-    test:   run tests (./src/**/*.spec.js) and save report to './build/TEST.md' (failed if launched first, start 'gulp todo' before);\n\
+    test-rep:   run tests (./src/**/*.spec.js) and save report to './build/TEST.md' (failed if launched first, start 'gulp todo' before);\n\
 \n"
     console.log(msg)
 })
@@ -43,11 +43,12 @@ gulp.task('todo', function () {
 gulp.task('plato', function () {
     var files = ['src/**/*.js']
     var outputDir = 'build/plato'
-    var callback = function (report) { /* once done the analysis,execute this */ }
+    var callback = function (report) { /* once done the analysis,execute this */
+    }
     plato.inspect(files, outputDir, {}, callback)
 })
 
-gulp.task('test', function () {
+gulp.task('test-rep', function () {
     var output = './build/TESTS.md'
     // clear out old coverage file (TODO: failed if 'gulp test' is started first)
     fs.writeFileSync(output, '')
@@ -61,4 +62,7 @@ gulp.task('test', function () {
     }
 
     return gulp.src('src/**/*.spec.js', {read: false}).pipe(mocha({reporter: 'markdown'}))
+})
+gulp.task('test', function () {
+    return gulp.src('src/**/*.spec.js', {read: false}).pipe(mocha({reporter: 'spec'}))
 })

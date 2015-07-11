@@ -43,11 +43,12 @@
   "config": {},
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-todo": "^3.1.1",
-    "gulp-mocha": "^2.1.2",
-    "plato": "^1.5.0",
+    "chai": "^3.0.0",
     "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.2",
+    "gulp-todo": "^3.1.1",
+    "plato": "^1.5.0",
     "vinyl-paths": "^1.0.0"
   }
 }
