@@ -17,10 +17,9 @@ fs.readFile('ded.xml', 'ascii', function (err, data) {
         mergeAttrs: true}, // attributes become child nodes
         function (err, result) {
         var str = JSON.stringify(result, function(key, value) {
-            if (key == 'xmlns:tns') return undefined;
-            if (key == 'xmlns:xsi') return undefined; // remove xmlns:xsi tag
-            if (key == 'xsi:schemaLocation') return undefined; // remove xsi:schemaLocation tag
-            return value
+            var result = value;
+            if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined;
+            return result;
         }, 4)
 
         fs.writeFile('ded.json', str)
