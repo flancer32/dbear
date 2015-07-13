@@ -1,6 +1,5 @@
 var fs = require('fs') // fs instance
 var xml2js = require('xml2js') // xml2js instance
-var xpath = require('xml2js-xpath') //xpath instance (currently not used)
 
 var prefixMatch = new RegExp(/(?!xmlns)^.*:/);
 
