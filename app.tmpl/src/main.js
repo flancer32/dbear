@@ -7,3 +7,5 @@
 function someFunc() {
     return 3
 }
+
+module.exports = someFunc

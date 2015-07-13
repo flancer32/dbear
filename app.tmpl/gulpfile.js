@@ -10,14 +10,18 @@ var todo = require('gulp-todo')
 var mocha = require('gulp-mocha')
 /* Generate complexity analysis reports with plato (https://github.com/es-analysis/plato) */
 var plato = require('plato')
+/* Server side testing and code coverage */
+var istanbul = require('gulp-istanbul');
+/* Filesystem operations */
 var fs = require('fs')
 
 gulp.task('default', function () {
     var msg = "\n\
 Use the following commands with gulp:\n\
-    clean:  clean up build results;\n\
-    todo:   generate to-do list in ./build/TODO.md;\n\
-    plato:  generate source analysis report in ./build/plato/;\n\
+    clean:      clean up build results;\n\
+    todo:       generate to-do list in ./build/TODO.md;\n\
+    plato:      generate source analysis report in ./build/plato/;\n\
+    test:       run tests (./src/**/*.spec.js) and display report in console;\n\
     test-rep:   run tests (./src/**/*.spec.js) and save report to './build/TEST.md' (failed if launched first, start 'gulp todo' before);\n\
 \n"
     console.log(msg)
@@ -48,6 +52,9 @@ gulp.task('plato', function () {
     plato.inspect(files, outputDir, {}, callback)
 })
 
+/**
+ *  Run test and save Markdown report to file.
+ */
 gulp.task('test-rep', function () {
     var output = './build/TESTS.md'
     // clear out old coverage file (TODO: failed if 'gulp test' is started first)
@@ -63,6 +70,33 @@ gulp.task('test-rep', function () {
 
     return gulp.src('src/**/*.spec.js', {read: false}).pipe(mocha({reporter: 'markdown'}))
 })
+
+/**
+ *  Run test and display report in console.
+ */
 gulp.task('test', function () {
     return gulp.src('src/**/*.spec.js', {read: false}).pipe(mocha({reporter: 'spec'}))
 })
+
+/**
+ * Generate code coverage report for JavaScript code.
+ */
+gulp.task('cover', function (cb) {
+    //@formatter:off
+  gulp.src(['src/**/!(*.spec).js'])
+    .pipe(istanbul()) // Covering files
+    .pipe(istanbul.hookRequire()) // Force `require` to return covered files
+    .on('finish', function () {
+      gulp.src(['src/**/*.spec.js'])
+        .pipe(mocha())
+        .pipe(istanbul.writeReports(
+                {
+                    dir: './build/coverage',
+                    reportOpts: { dir: './build/coverage' }
+                }
+        )) // Creating the reports after tests ran
+        .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } })) // Enforce a coverage of at least 90%
+        .on('end', cb);
+    });
+    //@formatter:on
+});
