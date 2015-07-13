@@ -4,6 +4,7 @@
 ## Install
 
     $ npm install
+    $ npm i -g mocha
 
 
 ## Usage
@@ -22,7 +23,7 @@
         cover:      run test coverage and save report to './build/coverage/lcov-report/index.html';
     
     
-    [09:45:11] Finished 'default' after 236 µs
+    [09:45:11] Finished 'default' after 236 Âµs
 
 
 
