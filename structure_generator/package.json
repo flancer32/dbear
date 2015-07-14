@@ -9,6 +9,16 @@
     "promise": "^7.0.3",
     "sequelize": "^3.3.2"
   },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.2",
+    "gulp-todo": "^3.1.1",
+    "gulp-istanbul": "^0.10.0",
+    "plato": "^1.5.0",
+    "vinyl-paths": "^1.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/flancer32/structure_generator.git"

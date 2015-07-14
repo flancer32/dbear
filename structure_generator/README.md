@@ -12,4 +12,4 @@ Grant all permissions for user 'sample' on DB 'sample_sequelize'.
 ## Launch
 
      // To create request.json structure
-    $ node app.js
+    $ node generator.spec.js

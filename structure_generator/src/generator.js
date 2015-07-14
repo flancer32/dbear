@@ -1,4 +1,5 @@
 var Sequelize = require('sequelize');
+var Promise = require('Promise');
 
 function Generator() {
     this.sequelize = {};
@@ -7,20 +8,28 @@ function Generator() {
     this.setConnection = function (db_name, login, password) {
         /* Creating conection instance (one per app) */
         console.log("Setting connection with DB...".green);
-        var result = new Sequelize(db_name, login, password, {
-            host: 'localhost', dialect: 'mysql', define: {
-                timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
-                freezeTableName: true /* disable the modification of tablenames into plural */
-            }
-        });
-        result.authenticate().then(function (result) {
-            console.log("Connection established.".green)
-        }, function (errors) {
-            console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?".red);
-            console.log(errors.red);
-            result = null;
-        });
-        this.sequelize = result;
+
+        return new Promise(function (resolve, reject) {
+            var result = new Sequelize(db_name, login, password, {
+                host: 'localhost', dialect: 'mysql', define: {
+                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    freezeTableName: true /* disable the modification of tablenames into plural */
+                }
+            });
+            result.authenticate().then(function (result) {
+                console.log("Connection established.".green);
+                resolve('Connectin established');
+
+            }, function (errors) {
+                console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?".red);
+                console.log(errors.red);
+                result = null;
+                reject(errors);
+            });
+            this.sequelize = result;
+        })
+
+
     };
     this.createMeta = function () {
         // CreateMetaInstances
