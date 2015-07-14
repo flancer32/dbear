@@ -45,7 +45,10 @@
   },
   "config": {},
   "dependencies": {
-    "commander": "^2.8.1"
+    "commander": "^2.8.1",
+    "mysql": "^2.7.0",
+    "promise": "^7.0.3",
+    "sequelize": "^3.3.2"
   },
   "devDependencies": {
     "chai": "^3.0.0",
