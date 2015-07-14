@@ -7,7 +7,7 @@ function Generator() {
     this.db_entities = [];
     this.setConnection = function (db_name, login, password) {
         /* Creating conection instance (one per app) */
-        console.log("Setting connection with DB...".green);
+        console.log("Setting connection with DB...");
 
         return new Promise(function (resolve, reject) {
             var result = new Sequelize(db_name, login, password, {
@@ -17,12 +17,12 @@ function Generator() {
                 }
             });
             result.authenticate().then(function (result) {
-                console.log("Connection established.".green);
+                console.log("Connection established.");
                 resolve('Connectin established');
 
             }, function (errors) {
-                console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?".red);
-                console.log(errors.red);
+                console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?");
+                console.log(errors);
                 result = null;
                 reject(errors);
             });
