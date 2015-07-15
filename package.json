@@ -40,7 +40,7 @@
     "url": "https://github.com/flancer32/dbear"
   },
   "scripts": {
-    "start": "node src/dbear.js",
+    "start": "node src/dbear.js --help",
     "test": "mocha --reporter spec src/**/*.spec.js"
   },
   "config": {},
