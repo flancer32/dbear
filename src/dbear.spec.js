@@ -1,25 +1,56 @@
-var assert = require('chai').assert
 var should = require('chai').should()
-var program = require('./dbear.js')
+var sinon = require('sinon').sandbox.create()
+var dbear = require('./dbear.js')
 
-describe('#program', function () {
+describe('#dbear', function () {
     it('should be a Command object', function () {
-        assert.equal('object', typeof  program)
-        assert.equal('Command', program.constructor.name)
+        (typeof  dbear).should.be.equal('object')
+        dbear.constructor.name.should.be.equal('Command')
     })
 
     it('version should be 0.1.0', function () {
-        assert.equal('0.1.0', program.version())
+        dbear.version().should.be.equal('0.1.0')
     })
 
     it('should define available commands', function () {
-        // TODO use one of the 'assert' or 'should'
-        program.parse(['node', 'dbear.js'])
-        program.commands[0].name().should.equal('validate')
-        program.commands[1].name().should.equal('convert')
-        program.commands[2].name().should.equal('generate')
-        program.commands[3].name().should.equal('analyze')
+        //dbear.parse([])
+        dbear.commands[0].name().should.equal('validate')
+        dbear.commands[1].name().should.equal('convert')
+        dbear.commands[2].name().should.equal('generate')
+        dbear.commands[3].name().should.equal('analyze')
     })
+
+    it('should define available options', function () {
+        var i = 0
+        dbear.options[i++].flags.should.equal('-V, --version')
+        dbear.options[i++].flags.should.equal('-d, --db-dialect [value]')
+        dbear.options[i++].flags.should.equal('-H, --db-host [value]')
+        dbear.options[i++].flags.should.equal('-n, --db-name [value]')
+        dbear.options[i++].flags.should.equal('-u, --db-user [value]')
+        dbear.options[i++].flags.should.equal('-i, --in [value]')
+    })
+
+    it('should perform validation', function () {
+        sinon.stub(process, 'exit');
+        sinon.stub(process.stdout, 'write');
+        dbear.parse(['node', 'dbear', '-i', 'input_file', 'validate'])
+        var output = process.stdout.write.args[0];
+        output[0].should.contain([
+            'validate is here'
+        ].join('\n'));
+        sinon.restore();
+    })
+
+    it('should perform conversation', function () {
+        dbear.parse(['node', 'dbear', '-i', 'input_file', 'convert'])
+    })
+
+    it('should perform generation', function () {
+        dbear.parse(['node', 'dbear', '-i', 'input_file', 'generate'])
+    })
+
+    it('should perform analyze', function () {
+        dbear.parse(['node', 'dbear', '-i', 'input_file', 'analyze'])
+    })
+
 })
-
-

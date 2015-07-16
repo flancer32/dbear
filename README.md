@@ -2,11 +2,36 @@
 
 Common basics for Entity-Attribute-Relation databases.
 
+
 ## Install
 
     $ npm install
     $ npm i -g mocha
+
+
+## Usage
+
+    node src\dbear.js --help
     
+      Usage: dbear [options] [command]
+    
+    
+      Commands:
+    
+        validate   Validate incoming DEM (XML or JSON)
+        convert    Convert DEM from one format to another (XML to JSON, for example)
+        generate   Parse incoming DEM and create tables in DB
+        analyze    Analize given DB and create outgoing DEM
+    
+      Options:
+    
+        -h, --help      output usage information
+        -V, --version   output the version number
+        -g, --generate  Parse incoming DEM and create tables in DB
+
+
+
+
 ## Create DB
     
     Create DB 'sample_sequelize' on localhost, create user 'sample' with password '3Jcftix7VycNkEYKxIDW'. 

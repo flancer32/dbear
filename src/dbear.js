@@ -9,7 +9,11 @@ module.exports = program
 
 program
     .version(require('../package.json').version)
-    .option('-g, --generate', 'Parse incoming DEM and create tables in DB')
+    .option('-d, --db-dialect [value]', 'RDBMS dialect (mariadb|postgres|mysql), default: mariadb', /^(mariadb|postgres|mysql)$/i, 'mariadb')
+    .option('-H, --db-host [value]', 'Host to connect to, default: localhost')
+    .option('-n, --db-name [value]', 'Database name to connect to')
+    .option('-u, --db-user [value]', 'User name for database connection')
+    .option('-i, --in [value]', 'Input DEM file (XML or JSON)')
 
 program
     .command('validate')
