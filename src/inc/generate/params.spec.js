@@ -1,8 +1,8 @@
 var Params = require('./params');
 var should = require('chai').should();
 
-describe('Params testing', function() {
-    it('Default params', function(){
+describe('Default params', function() {
+    it('should contain default values', function(){
         var params = new Params;
         params.dbLogin.should.equal('login');
         params.dbName.should.equal('sample');

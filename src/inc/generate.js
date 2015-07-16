@@ -5,13 +5,13 @@ function Generator() {
     this.sequelize = {};
     this.model = {};
     this.db_entities = [];
-    this.setConnection = function (db_name, login, password) {
+    this.setConnection = function (params) {
         /* Creating conection instance (one per app) */
         console.log("Setting connection with DB...");
 
         return new Promise(function (resolve, reject) {
-            var result = new Sequelize(db_name, login, password, {
-                host: 'localhost', dialect: 'mysql', define: {
+            var result = new Sequelize(params.dbName, params.dbLogin, params.dbPass, {
+                host: params.dbHost, dialect: params.dbDialect, define: {
                     timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
@@ -129,7 +129,7 @@ function Generator() {
 // * alliases
 // * */
     };
-    this.sync = function (forced) {
+    this.synchronize = function (forced) {
         if (forced) {
             this.sequelize.drop().then(function () {
                 this.sequelize.sync();
