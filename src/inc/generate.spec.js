@@ -1,6 +1,6 @@
 /* Define dependencies */
 //var request = require('../../sample/01_person/sample_01.dem.json');
-var Generator = require('./generator');
+var Generator = require('./generate');
 var assert = require('chai')
 
 describe('Generator module', function () {
