@@ -32,4 +32,4 @@ describe('Generator module', function () {
 //sg.createMeta();
 //sg.createModel(request);
 //sg.defineEntities(sg.model.namespaces[1].entities);
-//sg.sync(true);
+//sg.synchronize(true);
