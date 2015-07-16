@@ -34,6 +34,9 @@ program
     .description('Parse incoming DEM and create tables in DB')
     .action(function () {
         console.log('generate is here...');
+        var generator = new Generator;
+        var params = new Params;
+        generator.createDBEAR(params)
     })
 
 program

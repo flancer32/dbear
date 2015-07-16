@@ -153,7 +153,16 @@ function Generator() {
 
         return this.sequelize.sync();
 
-    }
+    };
+    this.createDBEAR = function (params) {
+        this.setConnection(params).then(function () {
+            return Promise.all([this.createMeta(), this.createModel(request)])
+        }).then(function () {
+            return this.defineEntities(this.model.namespaces[0].entities)
+        }).then(function () {
+            return this.synchronize()
+        })
+    };
 }
 
 module['exports'] = Generator;
