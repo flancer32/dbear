@@ -17,7 +17,20 @@ fs.readFile('sample_02.dem.xml', 'ascii', function (err, data) {
         explicitArray: false, // remove arrays in child nodes
         mergeAttrs: true}, // attributes become child nodes
         function (err, result) {
-        var str = JSON.stringify(result, function (key, value) {
+
+        var str = JSON.stringify(result,
+
+            function (key, value) {
+
+                function sendArr(result) {
+                    var namespacesArr = [];
+                    var result = namespacesArr;
+                    for(var i = 0; i < result.dBEAR.namespaces.namespace.length; i++) {
+                        namespacesArr = result.dBEAR.namespaces.namespace[i].id;
+                        break;
+                    }
+                    return result;
+                }
             var result = value;
             if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation' || key == 'xmlns:dbear' || key == 'comment') result = undefined;
             return result;
