@@ -20,7 +20,17 @@ describe('Generator module', function () {
         it('should authenticate with correct data', function (done) {
             //sg.sequelize = new Sequelize('sample', 'sample_sequelize', '3Jcftix7VycNkEYKxIDW');
 
-            sinon.stub(sg.Sequelize)
+            sinon.stub(sg, 'getOrm', function () {
+                return function (database, username, password, options) {
+                    this.db = database
+                    this.username = username
+                    this.authenticate = function () {
+                        /* validate params */
+                        1 + 1
+                    }
+                }
+            })
+
             sg.setConnection(params).then(function (resolve) {
                 assert.isTrue(true, 'Connection test1 succeed');
                 done()

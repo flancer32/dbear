@@ -2,32 +2,38 @@ var Sequelize = require('sequelize');
 var Promise = require('Promise');
 
 function Generator() {
-    this.Sequelize = Sequelize;
     this.sequelize = {};
     this.model = {};
     this.db_entities = [];
+
+    this.getOrm = function () {
+        return Sequelize
+    }
+
     this.setConnection = function (params) {
         /* Creating conection instance (one per app) */
         console.log("Setting connection with DB...");
-
+        var Orm = this.getOrm()
+        var gen = this
         return new Promise(function (resolve, reject) {
-            var result = new this.Sequelize(params.dbName, params.dbUser, params.dbPassword, {
+            var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
-            });
-            result.authenticate().then(function (result) {
+            }
+            gen.sequelize = new Orm(params.dbName, params.dbUser, params.dbPassword, opt);
+
+            gen.sequelize.authenticate().then(function (result) {
                 console.log("Connection established.");
                 resolve('Connectin established');
 
             }, function (errors) {
                 console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?");
                 console.log(errors);
-                this.sequelize = null;
+                gen.sequelize = null;
                 reject(errors);
             });
-            this.sequelize = result;
         })
 
 
@@ -42,8 +48,8 @@ function Generator() {
             });
             var meta_e = this.sequelize.define('_e', {
                 //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
-                name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                name:    {type: Sequelize.STRING, allowNull: false},
+                allias:  {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
                 /*
                  TODO Set obliged foreign key
@@ -53,14 +59,14 @@ function Generator() {
                  */
             });
             var meta_r = this.sequelize.define('_r', {
-                name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                name:    {type: Sequelize.STRING, allowNull: false},
+                allias:  {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             });
             var meta_a = this.sequelize.define('_a', {
-                name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
-                type: {type: Sequelize.STRING, allowNull: false},
+                name:    {type: Sequelize.STRING, allowNull: false},
+                allias:  {type: Sequelize.STRING, allowNull: false},
+                type:    {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             });
             meta_e.hasMany(meta_a, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'});
