@@ -1,6 +1,8 @@
 var should = require('chai').should()
 var sinon = require('sinon').sandbox.create()
 var dbear = require('./dbear.js')
+var Generator = require('./inc/generate')
+var generator = new Generator
 
 describe('#dbear', function () {
     it('should be a Command object', function () {
@@ -27,6 +29,7 @@ describe('#dbear', function () {
         dbear.options[i++].flags.should.equal('-H, --db-host [value]')
         dbear.options[i++].flags.should.equal('-n, --db-name [value]')
         dbear.options[i++].flags.should.equal('-u, --db-user [value]')
+        dbear.options[i++].flags.should.equal('-p, --db-password [value]')
         dbear.options[i++].flags.should.equal('-i, --in [value]')
     })
 
@@ -45,8 +48,21 @@ describe('#dbear', function () {
         dbear.parse(['node', 'dbear', '-i', 'input_file', 'convert'])
     })
 
-    it('should perform generation', function () {
-        dbear.parse(['node', 'dbear', '-i', 'input_file', 'generate'])
+    describe('should perform generation', function () {
+
+        it('with default parameters (except input file)', function () {
+            sinon.stub(generator, 'createDBEAR', function (params) {
+                params.dbDialect.should.equal('mariadb')
+                params.dbHost.should.equal('localhost')
+                params.dbName.should.equal('sample')
+                params.dbUser.should.equal('sample')
+                params.dbPassword.should.equal('sample')
+                params.demFile.should.equal('input_file')
+            })
+            dbear.generator = generator
+            dbear.parse(['node', 'dbear', '-i', 'input_file', 'generate'])
+        })
+
     })
 
     it('should perform analyze', function () {
