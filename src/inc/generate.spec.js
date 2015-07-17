@@ -2,17 +2,25 @@
 //var request = require('../../sample/01_person/sample_01.dem.json');
 var Generator = require('./generate');
 var assert = require('chai');
-var Params = require('./generate/params');
+var params = require('./generate/params');
+var sinon = require('sinon').sandbox.create()
+var Sequelize = require('sequelize');
 
 describe('Generator module', function () {
     describe('#setConnection()', function () {
         var sg = new Generator();
-        var params = new Params;
+
+        //var params = new Params;
         params.dbLogin = 'sample';
         params.dbName = 'sample_sequelize';
         params.dbPass = '3Jcftix7VycNkEYKxIDW';
+        params.dbHost = 'localhost';
+        params.dbDialect = 'mysql';
         // 1st test
         it('should authenticate with correct data', function (done) {
+            //sg.sequelize = new Sequelize('sample', 'sample_sequelize', '3Jcftix7VycNkEYKxIDW');
+
+            sinon.stub(sg.Sequelize)
             sg.setConnection(params).then(function (resolve) {
                 assert.isTrue(true, 'Connection test1 succeed');
                 done()
@@ -34,7 +42,8 @@ describe('Generator module', function () {
         // wait somehow...
 
     })
-});
+})
+;
 
 
 //sg.createMeta();

@@ -2,6 +2,7 @@ var Sequelize = require('sequelize');
 var Promise = require('Promise');
 
 function Generator() {
+    this.Sequelize = Sequelize;
     this.sequelize = {};
     this.model = {};
     this.db_entities = [];
@@ -10,7 +11,7 @@ function Generator() {
         console.log("Setting connection with DB...");
 
         return new Promise(function (resolve, reject) {
-            var result = new Sequelize(params.dbName, params.dbLogin, params.dbPass, {
+            var result = new this.Sequelize(params.dbName, params.dbUser, params.dbPassword, {
                 host: params.dbHost, dialect: params.dbDialect, define: {
                     timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
@@ -23,7 +24,7 @@ function Generator() {
             }, function (errors) {
                 console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?");
                 console.log(errors);
-                result = null;
+                this.sequelize = null;
                 reject(errors);
             });
             this.sequelize = result;
@@ -35,6 +36,7 @@ function Generator() {
 
         return new Promise(function (resolve, reject) {
             // CreateMetaInstances
+            console.log("Creating Meta...")
             var meta_n = this.sequelize.define('_n', {
                 name: {type: Sequelize.STRING, allowNull: false}, comment: Sequelize.STRING
             });
@@ -68,6 +70,7 @@ function Generator() {
             meta_n.hasMany(meta_r, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'});
             meta_r.belongsTo(meta_n);
 
+            console.log("Meta was created")
             // I suppose, here should be some check before...
             resolve('Ok.');
 
@@ -81,31 +84,19 @@ function Generator() {
     };
     this.createModel = function (request) {
 
-        return new Promise(function (resolve, reject) {
+        //return new Promise(function (resolve, reject) {
 
-            function analyzeNamespaces(request) {
-                function analyzeEntities(request) {
-                    function analyzeAttr(request) {
-                        var result = {};
-                        result.field = request.id;
-                        if (request.type.hasOwnProperty('text')) {
-                            result.type = 'VARCHAR(255)'
-                        } else if (request.type.hasOwnProperty('int')) {
-                            result.type = 'INTEGER'
-                        } else {
-                            console.log(("Can't get type of attribute in " + JSON.stringify(result.type)).red)
-                        }
-                        return result;
-                    }
-
+        function analyzeNamespaces(request) {
+            function analyzeEntities(request) {
+                function analyzeAttr(request) {
                     var result = {};
-                    result.id = request.id;
-                    if (request.hasOwnProperty('comment')) {
-                        result.comment = request.comment;
-                    }
-                    result.attributes = [];
-                    for (var i = 0; i < request.attributes.length; i++) {
-                        result.attributes[i] = analyzeAttr(request.attributes[i])
+                    result.field = request.id;
+                    if (request.type.hasOwnProperty('text')) {
+                        result.type = 'VARCHAR(255)'
+                    } else if (request.type.hasOwnProperty('int')) {
+                        result.type = 'INTEGER'
+                    } else {
+                        console.log(("Can't get type of attribute in " + JSON.stringify(result.type)))
                     }
                     return result;
                 }
@@ -115,33 +106,50 @@ function Generator() {
                 if (request.hasOwnProperty('comment')) {
                     result.comment = request.comment;
                 }
-                result.entities = [];
-                for (var i = 0; i < request.entities.length; i++) {
-                    result.entities[i] = analyzeEntities(request.entities[i])
+                result.attributes = [];
+                for (var i = 0; i < request.attributes.length; i++) {
+                    result.attributes[i] = analyzeAttr(request.attributes[i])
                 }
                 return result;
             }
 
             var result = {};
-            if (request.dBEAR.hasOwnProperty('comment')) {
-                result.comment = request.dBEAR.comment;
+            result.id = request.id;
+            if (request.hasOwnProperty('comment')) {
+                result.comment = request.comment;
             }
-            result.namespaces = [];
-            for (var i = 0; i < request.dBEAR.namespaces.length; i++) {
-                result.namespaces[i] = analyzeNamespaces(request.dBEAR.namespaces[i])
+            result.entities = [];
+            for (var i = 0; i < request.entities.length; i++) {
+                result.entities[i] = analyzeEntities(request.entities[i])
             }
-            this.model = result;
-            resolve('Ok!');
-        })
+            return result;
+        }
+
+        var result = {};
+        if (request.dBEAR.hasOwnProperty('comment')) {
+            result.comment = request.dBEAR.comment;
+        }
+        result.namespaces = [];
+        for (var i = 0; i < request.dBEAR.namespaces.length; i++) {
+            result.namespaces[i] = analyzeNamespaces(request.dBEAR.namespaces[i])
+        }
+        this.model = result;
+        console.log("Model was created")
+        //resolve('Ok!');
+        //})
 
     };
     this.defineEntities = function (entities) {
 
         return new Promise(function (resolve, reject) {
             for (var i = 0; i < entities.length; i++) {
+                console.log("Some text...")
                 this.db_entities[i] = this.sequelize.define(entities[i].id, entities[i].attributes)
+                if (i + 1 >= entities.length) {
+                    console.log("resolved!")
+                    resolve('Ok!');
+                }
             }
-            resolve('Ok!');
             /* TODO analyze entities before defining
              * alliases
              * */
@@ -150,18 +158,23 @@ function Generator() {
 
     };
     this.synchronize = function () {
+        console.log("Sync()...")
+        this.sequelize.drop().then(function () {
+            this.sequelize.sync();
+        })
 
-        return this.sequelize.sync();
 
     };
     this.createDBEAR = function (params) {
-        this.setConnection(params).then(function () {
-            return Promise.all([this.createMeta(), this.createModel(request)])
-        }).then(function () {
-            return this.defineEntities(this.model.namespaces[0].entities)
-        }).then(function () {
-            return this.synchronize()
-        })
+
+        var request = require(params.demFile)
+
+        this.setConnection(params)
+        this.createModel(request)
+        this.createMeta();
+        this.defineEntities(this.model.namespaces[0].entities).then(function () {
+            this.synchronize();
+        });
     };
 }
 
