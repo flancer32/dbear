@@ -7,11 +7,13 @@ describe('Generator module', function () {
     describe('#setConnection()', function () {
         var sg = new Generator();
         // 1st test
-        it('should authenticate with correct data', function () {
+        it('should authenticate with correct data', function (done) {
             sg.setConnection('sample_sequelize', 'sample', '3Jcftix7VycNkEYKxIDW').then(function (resolve) {
                 assert.isTrue(true, 'Connection test1 succeed')
+                done()
             }, function (reject) {
                 assert.isTrue(false, 'Connection test1 failed \n' + reject)
+                done()
             });
         });
         // 2nd test
