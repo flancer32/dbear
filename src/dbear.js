@@ -4,13 +4,13 @@
  *
  */
 var program = require('commander')
-var ParamsGenerator = require('./inc/generate/params')
+var paramsGenerator = require('./inc/generate/params')
 var Generator = require('./inc/generate')
 /**
  * Initialize program properties that can be replaced in tests.
  */
 program.params = {}
-program.params.generate = new ParamsGenerator
+program.params.generate = paramsGenerator
 /**
  * @type {*|Generator}
  */
@@ -50,7 +50,6 @@ program
     .command('generate')
     .description('Parse incoming DEM and create tables in DB')
     .action(function (command) {
-        /** @type {ParamsGenerator} */
         var params = program.params.generate
         params.dbDialect = program.dbDialect
         params.dbHost = program.dbHost

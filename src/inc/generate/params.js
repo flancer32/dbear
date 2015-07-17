@@ -1,11 +1,10 @@
 function Params() {
-    this.dbDialect
-    this.dbHost
-    this.dbName
-    this.dbUser
-    this.dbPassword
-    this.demFile
-    return this
+    this.dbDialect = undefined
+    this.dbHost = undefined
+    this.dbName = undefined
+    this.dbUser = undefined
+    this.dbPassword = undefined
+    this.demFile = undefined
 }
 
-module['exports'] = Params
+module['exports'] = new Params()
