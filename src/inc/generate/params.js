@@ -1,11 +1,11 @@
 function Params() {
-    this.dbName = 'sample';
-    this.dbLogin = 'login';
-    this.dbPass = 'pass';
-    this.dbDialect = 'mysql';
-    this.dbHost = 'localhost';
-    this.dbearFile = '';
+    this.dbDialect
+    this.dbHost
+    this.dbName
+    this.dbUser
+    this.dbPassword
+    this.demFile
     return this
 }
 
-module['exports'] = Params;
+module['exports'] = Params
