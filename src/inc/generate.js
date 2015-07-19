@@ -10,7 +10,7 @@ function Generator() {
         console.log("Setting connection with DB...");
 
         return new Promise(function (resolve, reject) {
-            var result = new Sequelize(params.dbName, params.dbLogin, params.dbPass, {
+            var result = new Sequelize(params.dbName, params.dbUser, params.dbPassword, {
                 host: params.dbHost, dialect: params.dbDialect, define: {
                     timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
