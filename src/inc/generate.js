@@ -7,21 +7,27 @@ function Generator() {
     this.db_entities = [];
 
     this.getOrm = function () {
+        /* Is using for testing. */
         return Sequelize
     }
 
     this.setConnection = function (params) {
+
         /* Creating conection instance (one per app) */
         console.log("Setting connection with DB...");
-        var Orm = this.getOrm()
-        var gen = this
+
+        /* In 'Promises' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
+        var Orm = this.getOrm();
+
         return new Promise(function (resolve, reject) {
             var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
-            }
+            };
             gen.sequelize = new Orm(params.dbName, params.dbUser, params.dbPassword, opt);
 
             gen.sequelize.authenticate().then(function (result) {
@@ -39,17 +45,19 @@ function Generator() {
 
     };
     this.createMeta = function () {
-
+        /* In 'Promises' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
         return new Promise(function (resolve, reject) {
             // CreateMetaInstances
             console.log("Creating Meta...")
-            var meta_n = this.sequelize.define('_n', {
+            var meta_n = gen.sequelize.define('_n', {
                 name: {type: Sequelize.STRING, allowNull: false}, comment: Sequelize.STRING
             });
-            var meta_e = this.sequelize.define('_e', {
+            var meta_e = gen.sequelize.define('_e', {
                 //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
-                name:    {type: Sequelize.STRING, allowNull: false},
-                allias:  {type: Sequelize.STRING, allowNull: false},
+                name: {type: Sequelize.STRING, allowNull: false},
+                allias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
                 /*
                  TODO Set obliged foreign key
@@ -58,15 +66,15 @@ function Generator() {
                  http://docs.sequelizejs.com/en/1.7.0/docs/associations/#foreign-keys
                  */
             });
-            var meta_r = this.sequelize.define('_r', {
-                name:    {type: Sequelize.STRING, allowNull: false},
-                allias:  {type: Sequelize.STRING, allowNull: false},
+            var meta_r = gen.sequelize.define('_r', {
+                name: {type: Sequelize.STRING, allowNull: false},
+                allias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             });
-            var meta_a = this.sequelize.define('_a', {
-                name:    {type: Sequelize.STRING, allowNull: false},
-                allias:  {type: Sequelize.STRING, allowNull: false},
-                type:    {type: Sequelize.STRING, allowNull: false},
+            var meta_a = gen.sequelize.define('_a', {
+                name: {type: Sequelize.STRING, allowNull: false},
+                allias: {type: Sequelize.STRING, allowNull: false},
+                type: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             });
             meta_e.hasMany(meta_a, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'});
@@ -147,12 +155,15 @@ function Generator() {
     };
     this.defineEntities = function (entities) {
 
+        /* In 'Promises' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
         return new Promise(function (resolve, reject) {
             for (var i = 0; i < entities.length; i++) {
-                console.log("Some text...")
-                this.db_entities[i] = this.sequelize.define(entities[i].id, entities[i].attributes)
-                if (i + 1 >= entities.length) {
-                    console.log("resolved!")
+                console.log("Defining Entitity " + entities[i].id)
+                gen.db_entities[i] = gen.sequelize.define(entities[i].id, entities[i].attributes)
+                if (i + 1 == entities.length) {
+                    console.log("Entities were defined!")
                     resolve('Ok!');
                 }
             }
@@ -164,23 +175,38 @@ function Generator() {
 
     };
     this.synchronize = function () {
-        console.log("Sync()...")
-        this.sequelize.drop().then(function () {
-            this.sequelize.sync();
+        console.log("Sync()...");
+        /* In 'then' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
+        /* Erase all structure in DB. This should be changed to option. */
+        gen.sequelize.drop().then(function () {
+            gen.sequelize.sync();
         })
 
 
     };
     this.createDBEAR = function (params) {
 
-        var request = require(params.demFile)
+        /* Get request in JSON format. */
+        var request = require(params.demFile);
+        /* In 'then' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
+        /* setConnection creates this.sequelize, that is using further. */
+        gen.setConnection(params).then(function () {
+            /*Parse JSON and create Meta information.*/
+            gen.createModel(request)
+            gen.createMeta();
+        }).then(function () {
+            /* Using this.model define entities. */
+            gen.defineEntities(gen.model.namespaces[0].entities)
+        }).then(function () {
+            /* Finally, sync all structure with DB. */
+            gen.synchronize();
+        })
 
-        this.setConnection(params)
-        this.createModel(request)
-        this.createMeta();
-        this.defineEntities(this.model.namespaces[0].entities).then(function () {
-            this.synchronize();
-        });
+
     };
 }
 
