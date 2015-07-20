@@ -4,13 +4,21 @@
  *
  */
 var program = require('commander')
+var paramsConverter = require('./inc/convert/params')
 var paramsGenerator = require('./inc/generate/params')
+var Converter = require('./inc/convert')
 var Generator = require('./inc/generate')
 /**
  * Initialize program properties that can be replaced in tests.
  */
 program.params = {}
+program.params.convert = paramsConverter
 program.params.generate = paramsGenerator
+/**
+ *
+ * @type {exports|module.exports}
+ */
+program.converter = new Converter
 /**
  * @type {*|Generator}
  */
@@ -31,6 +39,7 @@ program
     .option('-u, --db-user [value]', 'User name to create database connection, default: sample', 'sample')
     .option('-p, --db-password [value]', 'Password to create database connection, default: sample', 'sample')
     .option('-i, --in [value]', 'Input DEM file (XML or JSON)')
+    .option('-o, --out [value]', 'Output DEM file (JSON)')
 
 program
     .command('validate')
@@ -42,8 +51,11 @@ program
 program
     .command('convert')
     .description('Convert DEM from one format to another (XML to JSON, for example)')
-    .action(function () {
-        console.log('convert is here...')
+    .action(function (command) {
+        var params = program.params.convert
+        params.demFileIn = program.in
+        params.demFileOut = program.out
+        program.converter.run(params)
     })
 
 program

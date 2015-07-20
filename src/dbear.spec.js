@@ -31,6 +31,7 @@ describe('#dbear', function () {
         dbear.options[i++].flags.should.equal('-u, --db-user [value]')
         dbear.options[i++].flags.should.equal('-p, --db-password [value]')
         dbear.options[i++].flags.should.equal('-i, --in [value]')
+        dbear.options[i++].flags.should.equal('-o, --out [value]')
     })
 
     it('should perform validation', function () {
@@ -45,7 +46,7 @@ describe('#dbear', function () {
     })
 
     it('should perform conversation', function () {
-        dbear.parse(['node', 'dbear', '-i', 'input_file', 'convert'])
+        dbear.parse(['node', 'dbear', '-i', 'input_file', '-o', 'output_file', 'convert'])
     })
 
     describe('should perform generation', function () {
