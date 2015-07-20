@@ -1,0 +1,203 @@
+{
+    "dBEAR": {
+        "namespaces": {
+            "namespace": {
+                "id": "flancer32.dbear.sample",
+                "comment": "Single namespace for all samples is used.",
+                "entities": {
+                    "entity": [
+                        {
+                            "id": "AuthType",
+                            "comment": "Authentication type can be used in the current application.",
+                            "attributes": {
+                                "attribute": {
+                                    "id": "Value",
+                                    "type": {
+                                        "text": {
+                                            "length": "255"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "id": "EmailAuth",
+                            "comment": "Email that should be used as login name for authentication.",
+                            "attributes": {
+                                "attribute": {
+                                    "id": "Value",
+                                    "type": {
+                                        "text": {
+                                            "isUnique": "true",
+                                            "length": "255"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "id": "Person",
+                            "comment": "Person basic entity.",
+                            "attributes": {
+                                "attribute": [
+                                    {
+                                        "id": "NameFirst",
+                                        "type": {
+                                            "text": {
+                                                "length": "255"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "id": "NameLast",
+                                        "type": {
+                                            "text": {
+                                                "length": "255"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Phone",
+                            "comment": "Person phones.",
+                            "attributes": {
+                                "attribute": [
+                                    {
+                                        "id": "Code",
+                                        "comment": "Country code (371 for Latvia).",
+                                        "type": {
+                                            "text": {
+                                                "length": "255"
+                                            }
+                                        },
+                                        "indexes": {
+                                            "index": {
+                                                "id": "UniquePhone",
+                                                "position": "0"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "id": "Number",
+                                        "type": {
+                                            "text": {
+                                                "isUnique": "true",
+                                                "length": "255"
+                                            }
+                                        },
+                                        "indexes": {
+                                            "index": {
+                                                "id": "UniquePhone",
+                                                "position": "1"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "relations": {
+                    "relation": [
+                        {
+                            "id": "Person_AuthType",
+                            "refs": {
+                                "entryRef": [
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "AuthType"
+                                    },
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "Person"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Person_EmailAuth",
+                            "refs": {
+                                "entryRef": [
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "EmailAuth",
+                                        "indexes": {
+                                            "index": {
+                                                "id": "UniqueEmail"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "Person"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Person_Parent",
+                            "comment": "Parent relation for the customer.",
+                            "refs": {
+                                "entryRef": [
+                                    {
+                                        "comment": "Person itself.",
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "Person",
+                                        "indexes": {
+                                            "index": [
+                                                {
+                                                    "id": "UniquePerson",
+                                                    "comment": "Person itself."
+                                                },
+                                                {
+                                                    "id": "UniquePersonAndParent",
+                                                    "comment": "Person in unique pair Person - Parent.",
+                                                    "position": "0"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "Person",
+                                        "alias": "Parent",
+                                        "indexes": {
+                                            "index": {
+                                                "id": "UniquePersonAndParent",
+                                                "comment": "Parent in unique pair Person - Parent.",
+                                                "position": "1"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Person_SmsAuth",
+                            "comment": "Phone number to send SMS with validation code to get 2 factor authentication.",
+                            "refs": {
+                                "entryRef": [
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "Phone",
+                                        "indexes": {
+                                            "index": {
+                                                "id": "UniquePhone"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "namespace": "flancer32.dbear.sample",
+                                        "name": "Person"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
