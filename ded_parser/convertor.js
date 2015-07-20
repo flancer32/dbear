@@ -32,7 +32,7 @@ fs.readFile('sample_02.dem.xml', 'ascii', function (err, data) {
                     return result;
                 }
             var result = value;
-            if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation' || key == 'xmlns:dbear' || key == 'comment') result = undefined;
+            if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation' || key == 'xmlns:dbear') result = undefined;
             return result;
         }, 4)
 
