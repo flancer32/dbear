@@ -5,40 +5,56 @@ function Generator() {
     this.sequelize = {};
     this.model = {};
     this.db_entities = [];
+
+    this.getOrm = function () {
+        /* Is using for testing. */
+        return Sequelize
+    }
+
     this.setConnection = function (params) {
+
         /* Creating conection instance (one per app) */
         console.log("Setting connection with DB...");
 
+        /* In 'Promises' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
+        var Orm = this.getOrm();
+
         return new Promise(function (resolve, reject) {
-            var result = new Sequelize(params.dbName, params.dbUser, params.dbPassword, {
+            var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
                     timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
-            });
-            result.authenticate().then(function (result) {
+            };
+            gen.sequelize = new Orm(params.dbName, params.dbUser, params.dbPassword, opt);
+
+            gen.sequelize.authenticate().then(function (result) {
                 console.log("Connection established.");
                 resolve('Connectin established');
 
             }, function (errors) {
                 console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?");
                 console.log(errors);
-                result = null;
+                gen.sequelize = null;
                 reject(errors);
             });
-            this.sequelize = result;
         })
 
 
     };
     this.createMeta = function () {
-
+        /* In 'Promises' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
         return new Promise(function (resolve, reject) {
             // CreateMetaInstances
-            var meta_n = this.sequelize.define('_n', {
+            console.log("Creating Meta...")
+            var meta_n = gen.sequelize.define('_n', {
                 name: {type: Sequelize.STRING, allowNull: false}, comment: Sequelize.STRING
             });
-            var meta_e = this.sequelize.define('_e', {
+            var meta_e = gen.sequelize.define('_e', {
                 //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
                 name: {type: Sequelize.STRING, allowNull: false},
                 allias: {type: Sequelize.STRING, allowNull: false},
@@ -50,12 +66,12 @@ function Generator() {
                  http://docs.sequelizejs.com/en/1.7.0/docs/associations/#foreign-keys
                  */
             });
-            var meta_r = this.sequelize.define('_r', {
+            var meta_r = gen.sequelize.define('_r', {
                 name: {type: Sequelize.STRING, allowNull: false},
                 allias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             });
-            var meta_a = this.sequelize.define('_a', {
+            var meta_a = gen.sequelize.define('_a', {
                 name: {type: Sequelize.STRING, allowNull: false},
                 allias: {type: Sequelize.STRING, allowNull: false},
                 type: {type: Sequelize.STRING, allowNull: false},
@@ -68,6 +84,7 @@ function Generator() {
             meta_n.hasMany(meta_r, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'});
             meta_r.belongsTo(meta_n);
 
+            console.log("Meta was created")
             // I suppose, here should be some check before...
             resolve('Ok.');
 
@@ -81,31 +98,19 @@ function Generator() {
     };
     this.createModel = function (request) {
 
-        return new Promise(function (resolve, reject) {
+        //return new Promise(function (resolve, reject) {
 
-            function analyzeNamespaces(request) {
-                function analyzeEntities(request) {
-                    function analyzeAttr(request) {
-                        var result = {};
-                        result.field = request.id;
-                        if (request.type.hasOwnProperty('text')) {
-                            result.type = 'VARCHAR(255)'
-                        } else if (request.type.hasOwnProperty('int')) {
-                            result.type = 'INTEGER'
-                        } else {
-                            console.log(("Can't get type of attribute in " + JSON.stringify(result.type)).red)
-                        }
-                        return result;
-                    }
-
+        function analyzeNamespaces(request) {
+            function analyzeEntities(request) {
+                function analyzeAttr(request) {
                     var result = {};
-                    result.id = request.id;
-                    if (request.hasOwnProperty('comment')) {
-                        result.comment = request.comment;
-                    }
-                    result.attributes = [];
-                    for (var i = 0; i < request.attributes.length; i++) {
-                        result.attributes[i] = analyzeAttr(request.attributes[i])
+                    result.field = request.id;
+                    if (request.type.hasOwnProperty('text')) {
+                        result.type = 'VARCHAR(255)'
+                    } else if (request.type.hasOwnProperty('int')) {
+                        result.type = 'INTEGER'
+                    } else {
+                        console.log(("Can't get type of attribute in " + JSON.stringify(result.type)))
                     }
                     return result;
                 }
@@ -115,33 +120,53 @@ function Generator() {
                 if (request.hasOwnProperty('comment')) {
                     result.comment = request.comment;
                 }
-                result.entities = [];
-                for (var i = 0; i < request.entities.length; i++) {
-                    result.entities[i] = analyzeEntities(request.entities[i])
+                result.attributes = [];
+                for (var i = 0; i < request.attributes.length; i++) {
+                    result.attributes[i] = analyzeAttr(request.attributes[i])
                 }
                 return result;
             }
 
             var result = {};
-            if (request.dBEAR.hasOwnProperty('comment')) {
-                result.comment = request.dBEAR.comment;
+            result.id = request.id;
+            if (request.hasOwnProperty('comment')) {
+                result.comment = request.comment;
             }
-            result.namespaces = [];
-            for (var i = 0; i < request.dBEAR.namespaces.length; i++) {
-                result.namespaces[i] = analyzeNamespaces(request.dBEAR.namespaces[i])
+            result.entities = [];
+            for (var i = 0; i < request.entities.length; i++) {
+                result.entities[i] = analyzeEntities(request.entities[i])
             }
-            this.model = result;
-            resolve('Ok!');
-        })
+            return result;
+        }
+
+        var result = {};
+        if (request.dBEAR.hasOwnProperty('comment')) {
+            result.comment = request.dBEAR.comment;
+        }
+        result.namespaces = [];
+        for (var i = 0; i < request.dBEAR.namespaces.length; i++) {
+            result.namespaces[i] = analyzeNamespaces(request.dBEAR.namespaces[i])
+        }
+        this.model = result;
+        console.log("Model was created")
+        //resolve('Ok!');
+        //})
 
     };
     this.defineEntities = function (entities) {
 
+        /* In 'Promises' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
         return new Promise(function (resolve, reject) {
             for (var i = 0; i < entities.length; i++) {
-                this.db_entities[i] = this.sequelize.define(entities[i].id, entities[i].attributes)
+                console.log("Defining Entitity " + entities[i].id)
+                gen.db_entities[i] = gen.sequelize.define(entities[i].id, entities[i].attributes)
+                if (i + 1 == entities.length) {
+                    console.log("Entities were defined!")
+                    resolve('Ok!');
+                }
             }
-            resolve('Ok!');
             /* TODO analyze entities before defining
              * alliases
              * */
@@ -150,18 +175,38 @@ function Generator() {
 
     };
     this.synchronize = function () {
+        console.log("Sync()...");
+        /* In 'then' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
+        /* Erase all structure in DB. This should be changed to option. */
+        gen.sequelize.drop().then(function () {
+            gen.sequelize.sync();
+        })
 
-        return this.sequelize.sync();
 
     };
     this.createDBEAR = function (params) {
-        this.setConnection(params).then(function () {
-            return Promise.all([this.createMeta(), this.createModel(request)])
+
+        /* Get request in JSON format. */
+        var request = require(params.demFile);
+        /* In 'then' functions 'this' is not visible.
+         * This hack fix it. */
+        var gen = this;
+        /* setConnection creates this.sequelize, that is using further. */
+        gen.setConnection(params).then(function () {
+            /*Parse JSON and create Meta information.*/
+            gen.createModel(request)
+            gen.createMeta();
         }).then(function () {
-            return this.defineEntities(this.model.namespaces[0].entities)
+            /* Using this.model define entities. */
+            gen.defineEntities(gen.model.namespaces[0].entities)
         }).then(function () {
-            return this.synchronize()
+            /* Finally, sync all structure with DB. */
+            gen.synchronize();
         })
+
+
     };
 }
 
