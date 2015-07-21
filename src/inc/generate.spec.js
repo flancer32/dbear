@@ -1,62 +1,53 @@
 /* Define dependencies */
 //var request = require('../../sample/01_person/sample_01.dem.json');
 var Generator = require('./generate')
-var assert = require('chai')
 var params = require('./generate/params')
 var sinon = require('sinon').sandbox.create()
-var Sequelize = require('sequelize')
+var should = require('chai').should()
+var assert = require('chai')
 
 describe('Generator module', function () {
     describe('#setConnection()', function () {
         var sg = new Generator()
 
-        //var params = new Params;
-        params.dbLogin = 'sample'
+        params.dbUser = 'sample'
         params.dbName = 'sample_sequelize'
-        params.dbPass = '3Jcftix7VycNkEYKxIDW'
+        params.dbPassword = '3Jcftix7VycNkEYKxIDW'
         params.dbHost = 'localhost'
         params.dbDialect = 'mysql'
         // 1st test
         it('should authenticate with correct data', function (done) {
-            console.log("Test01 START!")
-
             sinon.stub(sg, 'getOrm', function () {
                 return function (database, username, password, options) {
                     this.db = database
+                    this.password = password
                     this.username = username
                     this.authenticate = function () {
-                        /* validate params */
-                        1 + 1
+                        return new Promise(function (resolve, reject) {
+                            /* validate params */
+                            console.log("database - " + database)
+                            console.log("Username - " + username)
+                            console.log("password - " + password)
+                            database.should.equal(params.dbName + 1)
+                            username.should.equal(params.dbUser)
+                            password.should.equal(params.dbPassword)
+                            resolve()
+                        })
                     }
                 }
             })
-
-            sg.setConnection(params).then(function (resolve) {
-                assert.isTrue(true, 'Connection test1 succeed')
-                done()
-            }, function (reject) {
-                /* TODO uncomment this! This test was disabled
-                * #Created on 21-Jul-15
-                * */
-                //assert.isTrue(false, 'Connection test1 failed \n' + reject)
-                done()
+            /* TODO fix it!*/
+            sg.setConnection(params).then(function () {
+                console.log("Ok!")
+                assert.isTrue(true)
+            }, function () {
+                console.log("Something bad happened")
+                assert.isTrue(false)
             })
+            done()
         })
-        // 2nd test
-        //params.dbLogin = 'wrong_login';
-        it('should not authenticate with incorrect data', function () {
-            sg.setConnection(params).then(function (resolve) {
-                assert.isTrue(false, 'Connection test2 failed \n Error was expected.')
-            }, function (reject) {
-                assert.isTrue(true, 'Connection test2 succeed')
-            })
-            //assert.isTrue(false, 'hi!');
-        })
-        // wait somehow...
-
     })
 })
-
 
 
 //sg.createMeta();
