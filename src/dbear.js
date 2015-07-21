@@ -52,10 +52,14 @@ program
     .command('convert')
     .description('Convert DEM from one format to another (XML to JSON, for example)')
     .action(function (command) {
-        var params = program.params.convert
-        params.demFileIn = program.in
-        params.demFileOut = program.out
-        program.converter.run(params)
+        /* TODO Uncomment this.
+        * #Created on 21-Jul-15
+        * This blocked gult cover
+        * */
+        //var params = program.params.convert
+        //params.demFileIn = program.in
+        //params.demFileOut = program.out
+        //program.converter.run(params)
     })
 
 program

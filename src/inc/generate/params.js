@@ -4,8 +4,7 @@ function Params() {
     this.dbName = undefined
     this.dbUser = undefined
     this.dbPassword = undefined
-    this.demFileIn = undefined
-    this.demFileOut = undefined
+    this.demFile = undefined
 }
 
 module['exports'] = new Params()

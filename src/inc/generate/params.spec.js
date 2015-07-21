@@ -8,8 +8,7 @@ describe('Default params', function () {
         params.should.have.property('dbName');
         params.should.have.property('dbUser');
         params.should.have.property('dbPassword');
-        params.should.have.property('demFileIn');
-        params.should.have.property('demFileOut');
+        params.should.have.property('demFile');
 
     })
 })
