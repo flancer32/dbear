@@ -4,7 +4,7 @@ var parseString = require('xml2js').parseString // xml2js instance
 var prefixMatch = new RegExp(/(?!xmlns)^.*:/)
 
 
-function Convertor() {
+function Converter() {
     this.run = function (param) {
         var fileIn = param.demFileIn
         var fileOut = param.demFileOut
@@ -88,17 +88,17 @@ function tagStripPrefix(name) {
     return result //function to strip tag prefix
 }
 
-module['exports'] = Convertor
+module['exports'] = Converter
 
-/* TODO create test for convertor
+/* TODO create test for converter
  * #Created on 21-Jul-15
  * */
 
 /* To launch convert.js create test.js in this directory (it's already in gitignore) with this code: */
 
-//var convertor = require('./convert.js')
+//var converter = require('./convert.js')
 //var params = require('./generate/params.js')
-//var cnv = new convertor
+//var cnv = new converter
 //params.demFileIn = '../../sample/01_person/sample_01.dem.xml'
 //params.demFileOut = 'dem.json'
 //cnv.run(params)
