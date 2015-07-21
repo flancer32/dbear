@@ -16,7 +16,7 @@ program.params.convert = paramsConverter
 program.params.generate = paramsGenerator
 /**
  *
- * @type {exports|module.exports}
+ * @type {*|Converter}
  */
 program.converter = new Converter
 /**
@@ -56,10 +56,10 @@ program
         * #Created on 21-Jul-15
         * This blocked gult cover
         * */
-        //var params = program.params.convert
-        //params.demFileIn = program.in
-        //params.demFileOut = program.out
-        //program.converter.run(params)
+        var params = program.params.convert
+        params.demFileIn = program.in
+        params.demFileOut = program.out
+        program.converter.run(params)
     })
 
 program

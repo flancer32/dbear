@@ -2,7 +2,9 @@ var should = require('chai').should()
 var sinon = require('sinon').sandbox.create()
 var dbear = require('./dbear.js')
 var Generator = require('./inc/generate')
+var Converter = require('./inc/convert')
 var generator = new Generator
+var converter = new Converter
 
 describe('#dbear', function () {
     it('should be a Command object', function () {
@@ -46,6 +48,11 @@ describe('#dbear', function () {
     })
 
     it('should perform conversation', function () {
+        sinon.stub(converter, 'run', function (params) {
+            params.demFileIn.should.equal('input_file')
+            params.demFileOut.should.equal('output_file')
+        })
+        dbear.converter = converter
         dbear.parse(['node', 'dbear', '-i', 'input_file', '-o', 'output_file', 'convert'])
     })
 
