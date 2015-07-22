@@ -129,7 +129,7 @@ function analyze(request) {
 /*
 ---Main part of convertor
  */
-fs.readFile('sample1.dem.xml', 'ascii',
+fs.readFile('sample.dem.xml', 'ascii',
 
     function (err, data) {
         if (err) throw err
@@ -150,6 +150,6 @@ fs.readFile('sample1.dem.xml', 'ascii',
                 return result;
                 }, 2)
 
-        fs.writeFile('sample1.dem.json', str) // json structure now
+        fs.writeFile('sample.dem.json', str) // json structure now
         })
     })
