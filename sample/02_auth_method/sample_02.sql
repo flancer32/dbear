@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS e_person;
 
 CREATE TABLE e_authmethod (
   id int UNSIGNED NOT NULL AUTO_INCREMENT,
-  Value varchar(255) NOT NULL,
+  Name varchar(255) NOT NULL,
   PRIMARY KEY (id)
 );
 

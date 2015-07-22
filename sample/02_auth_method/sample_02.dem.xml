@@ -3,7 +3,7 @@
 			 xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../../xsd/dem_1.0.0.xsd ">
 	<dbear:comment>Second iteration in the domain data development.</dbear:comment>
 	<dbear:namespaces>
-		<dbear:namespace id="flancer32.dbear.sample.core">
+		<dbear:namespace id="com.flancer32.dbear.sample.core">
 			<dbear:comment>Add attribute to the existing Entity.</dbear:comment>
 			<dbear:entities>
 				<dbear:entity id="Person">
@@ -21,7 +21,7 @@
 				</dbear:entity>
 			</dbear:entities>
 		</dbear:namespace>
-		<dbear:namespace id="flancer32.dbear.sample.auth">
+		<dbear:namespace id="com.flancer32.dbear.sample.auth">
 			<dbear:comment>Another namespace with authentication related entities.</dbear:comment>
 			<dbear:entities>
 				<dbear:entity id="AuthMethod">
