@@ -37,14 +37,16 @@ Common basics for Entity-Attribute-Relation databases.
 
 ### Convert XML DEM to JSON DEM
 
-    $ node ./src/dbear.js --in input.xml --out output.json convert
+    $ node ./src/dbear.js --in ./sample/sample.dem.xml --out ./sample/sample.dem.json convert
+
+### Create DB structure from XML DEM 
+
+    $ node ./src/dbear.js --in ./sample/sample.dem.xml generate
 
 
-## Create DB
-    
-    Create DB 'sample_sequelize' on localhost, create user 'sample' with password '3Jcftix7VycNkEYKxIDW'. 
-    Grant all permissions for user 'sample' on DB 'sample_sequelize'.
+## Samples
 
+[Samples](./sample/)
 
 ## Development tasks
 [Gulp](https://github.com/gulpjs/gulp)

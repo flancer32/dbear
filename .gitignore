@@ -2,7 +2,4 @@
 /.project
 /build/
 /node_modules/
-/xsd/*.xml
-/npm-debug.log
-src/inc/dem.json
-src/inc/test.js
+/sample/sample.dem.json
