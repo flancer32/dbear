@@ -1,4 +1,5 @@
 /* Define dependencies */
+'use strict'
 //var request = require('../../sample/01_person/sample_01.dem.json');
 var Generator = require('./generate')
 var params = require('./generate/params')

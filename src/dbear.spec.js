@@ -1,10 +1,11 @@
+'use strict'
 var should = require('chai').should()
 var sinon = require('sinon').sandbox.create()
 var dbear = require('./dbear.js')
 var Generator = require('./inc/generate')
 var Converter = require('./inc/convert')
-var generator = new Generator
-var converter = new Converter
+var generator = new Generator()
+var converter = new Converter()
 
 describe('#dbear', function () {
     it('should be a Command object', function () {

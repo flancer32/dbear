@@ -1,3 +1,4 @@
+'use strict'
 function Params() {
     this.demFileIn = undefined
     this.demFileOut = undefined

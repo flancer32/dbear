@@ -3,6 +3,7 @@
  * dBEAR module's entry point.
  *
  */
+'use strict'
 var program = require('commander')
 var paramsConverter = require('./inc/convert/params')
 var paramsGenerator = require('./inc/generate/params')
@@ -18,11 +19,11 @@ program.params.generate = paramsGenerator
  *
  * @type {*|Converter}
  */
-program.converter = new Converter
+program.converter = new Converter()
 /**
  * @type {*|Generator}
  */
-program.generator = new Generator
+program.generator = new Generator()
 /**
  * Module's exports.
  */
@@ -53,9 +54,9 @@ program
     .description('Convert DEM from one format to another (XML to JSON, for example)')
     .action(function (command) {
         /* TODO Uncomment this.
-        * #Created on 21-Jul-15
-        * This blocked gult cover
-        * */
+         * #Created on 21-Jul-15
+         * This blocked gult cover
+         * */
         var params = program.params.convert
         params.demFileIn = program.in
         params.demFileOut = program.out

@@ -1,3 +1,4 @@
+'use strict'
 var fs = require('fs') // fs instance
 var parseString = require('xml2js').parseString // xml2js instance
 
