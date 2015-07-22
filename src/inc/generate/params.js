@@ -1,3 +1,4 @@
+'use strict'
 function Params() {
     this.dbDialect = undefined
     this.dbHost = undefined

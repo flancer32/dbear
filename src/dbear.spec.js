@@ -1,8 +1,11 @@
+'use strict'
 var should = require('chai').should()
 var sinon = require('sinon').sandbox.create()
 var dbear = require('./dbear.js')
 var Generator = require('./inc/generate')
-var generator = new Generator
+var Converter = require('./inc/convert')
+var generator = new Generator()
+var converter = new Converter()
 
 describe('#dbear', function () {
     it('should be a Command object', function () {
@@ -31,6 +34,7 @@ describe('#dbear', function () {
         dbear.options[i++].flags.should.equal('-u, --db-user [value]')
         dbear.options[i++].flags.should.equal('-p, --db-password [value]')
         dbear.options[i++].flags.should.equal('-i, --in [value]')
+        dbear.options[i++].flags.should.equal('-o, --out [value]')
     })
 
     it('should perform validation', function () {
@@ -45,7 +49,12 @@ describe('#dbear', function () {
     })
 
     it('should perform conversation', function () {
-        dbear.parse(['node', 'dbear', '-i', 'input_file', 'convert'])
+        sinon.stub(converter, 'run', function (params) {
+            params.demFileIn.should.equal('input_file')
+            params.demFileOut.should.equal('output_file')
+        })
+        dbear.converter = converter
+        dbear.parse(['node', 'dbear', '-i', 'input_file', '-o', 'output_file', 'convert'])
     })
 
     describe('should perform generation', function () {

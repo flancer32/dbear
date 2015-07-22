@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ../xsd/dem_1.0.0.xsd ">
+	<tns:namespaces>
+		<tns:namespace id="com.flancer32.dbear.sample.core">
+			<tns:comment>Base namespace for samples.</tns:comment>
+			<tns:entities>
+				<tns:entity id="Person">
+					<tns:comment>Person basic entity with 2 attributes.</tns:comment>
+					<tns:attributes>
+						<tns:attribute id="NameFirst">
+							<tns:type>
+								<tns:text/>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="NameLast">
+							<tns:type>
+								<tns:text/>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="Gender">
+							<tns:type>
+								<tns:text>
+									<tns:isNullable>false</tns:isNullable>
+									<tns:isUnique>false</tns:isUnique>
+									<tns:length>1</tns:length>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+			</tns:entities>
+		</tns:namespace>
+		<tns:namespace id="com.flancer32.dbear.sample.auth">
+			<tns:comment>Another namespace with authentication related entities.</tns:comment>
+			<tns:entities>
+				<tns:entity id="AuthMethod">
+					<tns:comment>Authentication methods can be used in the current application (username and password, SMS code, etc.).</tns:comment>
+					<tns:attributes>
+						<tns:attribute id="Name">
+							<tns:type>
+								<tns:text/>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+			</tns:entities>
+			<tns:relations>
+				<tns:relation id="Person_AuthMethod">
+					<tns:comment>Each Person can be authenticated by one ore more methods.</tns:comment>
+					<tns:refs>
+						<tns:entryRef>
+							<tns:id>AuthMethod</tns:id>
+						</tns:entryRef>
+						<tns:entryRef>
+							<tns:namespace>com.flancer32.dbear.sample.core</tns:namespace>
+							<tns:id>Person</tns:id>
+							<!-- Uncomment unique index to allow one only authentication method per person. -->
+							<!--
+							<tns:indexes>
+								<tns:index id="UniquePerson">
+									<tns:comment>One only Method per Person is allowed.</tns:comment>
+								</tns:index>
+							</tns:indexes>
+							-->
+						</tns:entryRef>
+					</tns:refs>
+				</tns:relation>
+			</tns:relations>
+		</tns:namespace>
+	</tns:namespaces>
+</tns:dBEAR>

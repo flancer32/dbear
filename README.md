@@ -11,32 +11,42 @@ Common basics for Entity-Attribute-Relation databases.
 
 ## Usage
 
-    node src\dbear.js --help
+    $ node ./src/dbear.js --help
+
+    Usage: dbear [options] [command]
     
-      Usage: dbear [options] [command]
-    
-    
-      Commands:
+    Commands:
     
         validate   Validate incoming DEM (XML or JSON)
         convert    Convert DEM from one format to another (XML to JSON, for example)
         generate   Parse incoming DEM and create tables in DB
         analyze    Analize given DB and create outgoing DEM
     
-      Options:
+    Options:
     
-        -h, --help      output usage information
-        -V, --version   output the version number
-        -g, --generate  Parse incoming DEM and create tables in DB
+        -h, --help                 output usage information
+        -V, --version              output the version number
+        -d, --db-dialect [value]   RDBMS dialect (mariadb|postgres|mysql), default: mariadb
+        -H, --db-host [value]      Host to connect to, default: localhost
+        -n, --db-name [value]      Database name to connect to, default: sample
+        -u, --db-user [value]      User name to create database connection, default: sample
+        -p, --db-password [value]  Password to create database connection, default: sample
+        -i, --in [value]           Input DEM file (XML or JSON)
+        -o, --out [value]          Output DEM file (JSON)
 
 
+### Convert XML DEM to JSON DEM
+
+    $ node ./src/dbear.js --in ./sample/sample.dem.xml --out ./sample/sample.dem.json convert
+
+### Create DB structure from XML DEM 
+
+    $ node ./src/dbear.js --in ./sample/sample.dem.xml generate
 
 
-## Create DB
-    
-    Create DB 'sample_sequelize' on localhost, create user 'sample' with password '3Jcftix7VycNkEYKxIDW'. 
-    Grant all permissions for user 'sample' on DB 'sample_sequelize'.
+## Samples
 
+[Samples](./sample/)
 
 ## Development tasks
 [Gulp](https://github.com/gulpjs/gulp)

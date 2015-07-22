@@ -47,9 +47,20 @@ gulp.task('todo', function () {
 gulp.task('plato', function () {
     var files = ['src/**/*.js']
     var outputDir = 'build/plato'
-    var callback = function (report) { /* once done the analysis,execute this */
+    /* http://jshint.com/docs/options/ */
+    var opts = {
+        jshint: {
+            options: {
+                strict: true,
+                node:   true,
+                mocha:  true,
+                asi:    true
+            }
+        }
     }
-    plato.inspect(files, outputDir, {}, callback)
+    /* callback function */
+    var done = function (report) {}
+    plato.inspect(files, outputDir, opts, done)
 })
 
 /**
