@@ -21,11 +21,11 @@ describe('Generator module', function () {
         it('should authenticate with correct data', function (done) {
             sinon.stub(sg, 'getOrm', function () {
                 return function (database, username, password, options) {
+                    database.should.equal(params.dbName)
+                    username.should.equal(params.dbUser)
+                    password.should.equal(params.dbPassword)
                     this.authenticate = function () {
-                        database.should.equal(params.dbName)
-                        username.should.equal(params.dbUser)
-                        password.should.equal(params.dbPassword)
-                        return new Promise(function (resolve, reject) {
+                         return new Promise(function (resolve, reject) {
                             resolve()
                         })
                     }
