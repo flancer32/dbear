@@ -224,8 +224,29 @@ function Generator() {
      * @returns {object}
      */
     function getJsonFromDemFile(path) {
-        var result = require(path)
-        var self = this
+        var result
+        if (path.slice(-3) == 'xml') {
+            console.log("DEM as xml file is loaded")
+            /* Convert xml to JSON*/
+            var converter = require('./convert.js')
+            var params = require('./convert/params.js')
+            var cnv = new converter
+            params.demFileIn = path
+            params.demFileOut = './dem.json'
+            cnv.run(params)
+            result = require('./dem.json')
+        } else if (path.slice(-4) == 'json') {
+            console.log("DEM as JSON file is loaded")
+            /* Get JSON */
+            result = require(path)
+        } else {
+            /* Throw error*/
+        }
+        /* TODO why we need this?
+         * #Created on 23-Jul-15
+         * Delete on 6-Aug-15 if unneeded
+         * */
+        //var self = this
         return result;
     }
 }
