@@ -185,9 +185,14 @@ function Generator() {
         /* In 'then' functions 'this' is not visible.
          * This hack fix it. */
         var gen = this
-        /* Erase all structure in DB. This should be changed to option. */
+        /* Erase all structure in DB. This should be changed to optional. */
         gen.sequelize.drop().then(function () {
-            gen.sequelize.sync()
+            /* Return Promise*/
+            return gen.sequelize.sync()
+        }).then(function () {
+            console.log("Good bye!")
+            /* Close connection */
+            gen.sequelize.close()
         })
 
 
