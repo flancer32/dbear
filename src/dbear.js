@@ -73,8 +73,9 @@ program
         params.dbName = program.dbName
         params.dbUser = program.dbUser
         params.dbPassword = program.dbPassword
+        /* todo transform 'demFile' to absolute path */
         params.demFile = program.in
-        program.generator.createDBEAR(params)
+        program.generator.run(params)
     })
 
 program

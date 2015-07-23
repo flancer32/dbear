@@ -8,7 +8,7 @@ function Generator() {
     this.db_entities = []
 
     this.getOrm = function () {
-        /* Is using for testing. */
+        /* to use in tests . */
         return Sequelize
     }
 
@@ -45,8 +45,9 @@ function Generator() {
 
 
     };
+
     this.createMeta = function () {
-        /* In 'Promises' functions 'this' is not visible.
+        /* In 'Promises' functions 'this' is not this but that - function's scope itself.
          * This hack fix it. */
         var gen = this
         return new Promise(function (resolve, reject) {
@@ -97,6 +98,7 @@ function Generator() {
 
 
     }
+
     this.createModel = function (request) {
 
         //return new Promise(function (resolve, reject) {
@@ -154,6 +156,7 @@ function Generator() {
         //})
 
     }
+
     this.defineEntities = function (entities) {
 
         /* In 'Promises' functions 'this' is not visible.
@@ -176,6 +179,7 @@ function Generator() {
 
 
     }
+
     this.synchronize = function () {
         console.log("Sync()...")
         /* In 'then' functions 'this' is not visible.
@@ -188,10 +192,11 @@ function Generator() {
 
 
     }
-    this.createDBEAR = function (params) {
 
+    this.run = function (params) {
         /* Get request in JSON format. */
-        var request = require(params.demFile)
+        /* todo: we need to analyze format of the DEM file and to use converter to get JSON from XML (as separate function)*/
+        var request = getJsonFromDemFile(params.demFile)
         /* In 'then' functions 'this' is not visible.
          * This hack fix it. */
         var gen = this
@@ -207,9 +212,17 @@ function Generator() {
             /* Finally, sync all structure with DB. */
             gen.synchronize()
         })
+    }
 
-
+    /**
+     * @param path
+     * @returns {object}
+     */
+    function getJsonFromDemFile(path) {
+        var result = require(path)
+        var self = this
+        return result;
     }
 }
 
-module['exports'] = Generator
+module.exports = Generator

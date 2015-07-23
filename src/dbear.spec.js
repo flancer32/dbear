@@ -60,7 +60,7 @@ describe('#dbear', function () {
     describe('should perform generation', function () {
 
         it('with default parameters (except input file)', function () {
-            sinon.stub(generator, 'createDBEAR', function (params) {
+            sinon.stub(generator, 'run', function (params) {
                 params.dbDialect.should.equal('mariadb')
                 params.dbHost.should.equal('localhost')
                 params.dbName.should.equal('sample')
