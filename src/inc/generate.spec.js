@@ -25,19 +25,21 @@ describe('Generator module', function () {
                     username.should.equal(params.dbUser)
                     password.should.equal(params.dbPassword)
                     this.authenticate = function () {
-                         return new Promise(function (resolve, reject) {
+                        return new Promise(function (resolve, reject) {
                             resolve()
                         })
                     }
                 }
             })
             /* TODO fix it! Should we close opened connection?????*/
-            sg.setConnection(params).then(function () {
+            sg.setConnection(params).then(function (resolve) {
                 console.log("Ok!")
-                assert.isTrue(true)
+                resolve.should.equal("Connection established")
                 done()
             }, function (err) {
                 console.log("Something bad happened")
+                /* done() will be not called, if this should is rejected */
+                '2'.should.equal('3')
                 done(err)
             })
 

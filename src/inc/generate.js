@@ -33,7 +33,7 @@ function Generator() {
 
             gen.sequelize.authenticate().then(function (result) {
                 console.log("Connection established.")
-                resolve('Connectin established')
+                resolve('Connection established')
 
             }, function (errors) {
                 console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?")
