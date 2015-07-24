@@ -210,6 +210,11 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 				<documentation>Entity name. Must be unique across all other entities in the current namespace.</documentation>
 			</annotation>
 		</attribute>
+		<attribute name="alias" use="optional" type="tns:Alias">
+			<annotation>
+				<documentation>Entity alias (second part of the table name for entity of relation)</documentation>
+			</annotation>
+		</attribute>
 	</complexType>
 
 	<complexType name="RelationEntryReference">
@@ -260,6 +265,11 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 				<documentation>Namespace name. Must be unique across all other namespaces in the dBEAR instance.</documentation>
 			</annotation>
 		</attribute>
+		<attribute name="alias" use="optional" type="tns:Alias">
+			<annotation>
+				<documentation>Namespace alias (first part of the table name for entity of relation)</documentation>
+			</annotation>
+		</attribute>
 	</complexType>
 
 	<complexType name="Relation">
@@ -279,6 +289,22 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			</annotation>
 		</attribute>
 	</complexType>
+
+	<simpleType name="Alias">
+		<annotation>
+			<documentation>Alias for objects ("order"). Desired part of the table name in DB for namespaces, entities
+				and relations (table 'core_customer' - 'Customer' entity from 'com.sample.core' namespace). Aliases are
+				automatically composed in the dBEAR meta data based on desired values. Suffix (1, 2, ...) is added
+				for the equal aliases.
+			</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="[a-z0-9_]+"/>
+			<minLength value="1"></minLength>
+			<maxLength value="8"></maxLength>
+			<whiteSpace value="collapse"/>
+		</restriction>
+	</simpleType>
 
 	<simpleType name="AttributeTypeNames">
 		<annotation>
@@ -328,7 +354,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			<documentation>CamelCased alpha-numeric string ("SomeName23").</documentation>
 		</annotation>
 		<restriction base="string">
-			<pattern value="[a-zA-Z0-9_]+"/>
+			<pattern value="[a-zA-Z0-9\.]+"/>
 			<minLength value="1"></minLength>
 			<maxLength value="255"></maxLength>
 			<whiteSpace value="collapse"/>
@@ -341,7 +367,7 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 			</documentation>
 		</annotation>
 		<restriction base="string">
-			<pattern value="[a-zA-Z0-9\.]+"/>
+			<pattern value="[a-zA-Z0-9\._]+"/>
 			<minLength value="1"></minLength>
 			<maxLength value="255"></maxLength>
 			<whiteSpace value="collapse"/>

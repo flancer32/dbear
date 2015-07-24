@@ -25,10 +25,12 @@
       },
       {
         "id": "com.flancer32.dbear.sample.auth",
+        "alias": "auth",
         "comment": "Another namespace with authentication related entities.",
         "entities": [
           {
             "id": "AuthMethod",
+            "alias": "method",
             "comment": "Authentication methods can be used in the current application (username and password, SMS code, etc.)",
             "attributes": [
               {
@@ -42,7 +44,7 @@
         ],
         "relations": [
           {
-            "id": "Person_AuthMethod",
+            "id": "Person.AuthMethod",
             "comment": "Each Person can be authenticated by one ore more methods.",
             "refs": [
               {

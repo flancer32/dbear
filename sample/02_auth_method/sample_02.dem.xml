@@ -21,10 +21,10 @@
 				</dbear:entity>
 			</dbear:entities>
 		</dbear:namespace>
-		<dbear:namespace id="com.flancer32.dbear.sample.auth">
+		<dbear:namespace id="com.flancer32.dbear.sample.auth" alias="auth">
 			<dbear:comment>Another namespace with authentication related entities.</dbear:comment>
 			<dbear:entities>
-				<dbear:entity id="AuthMethod">
+				<dbear:entity id="AuthMethod" alias="method">
 					<dbear:comment>Authentication methods can be used in the current application (username and password, SMS code, etc.).</dbear:comment>
 					<dbear:attributes>
 						<dbear:attribute id="Name">
@@ -36,7 +36,7 @@
 				</dbear:entity>
 			</dbear:entities>
 			<dbear:relations>
-				<dbear:relation id="Person_AuthMethod">
+				<dbear:relation id="Person.AuthMethod">
 					<dbear:comment>Each Person can be authenticated by one ore more methods.</dbear:comment>
 					<dbear:refs>
 						<dbear:entryRef>
