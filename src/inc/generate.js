@@ -25,12 +25,11 @@ function Generator() {
         return new Promise(function (resolve, reject) {
             var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
             }
             gen.sequelize = new Orm(params.dbName, params.dbUser, params.dbPassword, opt)
-
             gen.sequelize.authenticate().then(function (result) {
                 console.log("Connection established.")
                 resolve('Connection established')
@@ -58,8 +57,8 @@ function Generator() {
             })
             var meta_e = gen.sequelize.define('_e', {
                 //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
-                name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                name:    {type: Sequelize.STRING, allowNull: false},
+                allias:  {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
                 /*
                  TODO Set obliged foreign key
@@ -69,14 +68,14 @@ function Generator() {
                  */
             })
             var meta_r = gen.sequelize.define('_r', {
-                name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                name:    {type: Sequelize.STRING, allowNull: false},
+                allias:  {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             })
             var meta_a = gen.sequelize.define('_a', {
-                name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
-                type: {type: Sequelize.STRING, allowNull: false},
+                name:    {type: Sequelize.STRING, allowNull: false},
+                allias:  {type: Sequelize.STRING, allowNull: false},
+                type:    {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             })
             meta_e.hasMany(meta_a, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'})
@@ -216,6 +215,8 @@ function Generator() {
         }).then(function () {
             /* Finally, sync all structure with DB. */
             gen.synchronize()
+        }).catch(function (err) {
+            console.log(err);
         })
     }
 

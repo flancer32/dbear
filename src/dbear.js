@@ -34,7 +34,7 @@ module.exports = program
  */
 program
     .version(require('../package.json').version)
-    .option('-d, --db-dialect [value]', 'RDBMS dialect (mariadb|postgres|mysql), default: mariadb', /^(mariadb|postgres|mysql)$/i, 'mariadb')
+    .option('-d, --db-dialect [value]', 'RDBMS dialect (mariadb|postgres|mysql), default: mariadb', /^(mariadb|postgres|mysql|sqlite|mssql)$/i, 'mariadb')
     .option('-H, --db-host [value]', 'Host to connect to, default: localhost', 'localhost')
     .option('-n, --db-name [value]', 'Database name to connect to, default: sample', 'sample')
     .option('-u, --db-user [value]', 'User name to create database connection, default: sample', 'sample')
