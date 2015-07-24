@@ -3,6 +3,9 @@
 var fs = require('fs') // fs instance
 var parseString = require('xml2js').parseString // xml2js method parseString instance
 var prefixMatch = new RegExp(/(?!xmlns)^.*:/);
+var promise = require('promise');
+var dataXML; // variable for data processing
+var resultJSON; //variable for json processing
 
 /*
  ---Bunch of functions to create a new valid json structure (relations part)
@@ -127,27 +130,38 @@ function Converter() {
     this.run = function (param) {
         var fileIn = param.demFileIn
         var fileOut = param.demFileOut
-        fs.readFile(fileIn, 'ascii', function (err, data) {
-            if (err) throw err
-            parseString(data, {
-                    tagNameProcessors: [tagStripPrefix], // strip tag prefix
-                    explicitArray: false, // remove arrays in child nodes
-                    mergeAttrs: true, // attributes become child nodes
-                    emptyTag: {}}, // default value of empty tag
 
-                function (err, result) // callable function
-                {
-                    var common = analyze(result) // get a new json structure
-                    var str = JSON.stringify(common,
-                        function (key, value) // callable function to strip some useless nodes
-                        {
+        var promise = new Promise(function (resolve, reject) {
+            fs.readFile(fileIn, 'ascii', function (err, data) {
+                if (err) {reject (err)} else resolve("The data was successfully read!")
+                dataXML = data
+            }).then(function() {
+                parseString(dataXML, {
+                        tagNameProcessors: [tagStripPrefix], // strip tag prefix
+                        explicitArray: false, // remove arrays in child nodes
+                        mergeAttrs: true, // attributes become child nodes
+                        emptyTag: {}}, // default value of empty tag
+
+                    function (err, result) {
+                        if (err) {reject (err)} else resolve("Strings are successfully parsed!")
+                        var result = analyze(result) // get a new json structure
+                        resultJSON = result
+
+                        return result // return JSON model
+                    })
+            }).then(function () {
+                /* ded.json is writing to the same directory. Maybe we should create special folder? */
+                fs.writeFile(fileOut, JSON.stringify(resultJSON,
+                    function (key, value) // callable function to strip some useless nodes
+                    {
                         var result = value
                         if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined;
                         return result;
-                    }, 2)
-                    /* ded.json is writing to the same directory. Maybe we should create special folder? */
-                    fs.writeFile(fileOut, str)
-                })
+                    }, 2))
+                if (isElement(fileOut)) {
+                    resolve("File was successfully written!")
+                } else reject("Error!")
+            })
         })
     }
 }
