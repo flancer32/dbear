@@ -47,8 +47,6 @@ describe('Generator module', function () {
     })
 })
 
-
-//sg.createMeta();
 //sg.createModel(request);
 //sg.defineEntities(sg.model.namespaces[1].entities);
 //sg.synchronize(true);

@@ -1,6 +1,7 @@
 'use strict'
 var Sequelize = require('sequelize')
 var Promise = require('Promise')
+var meta = require('./generate/meta.js')
 
 function Generator() {
     this.sequelize = {}
@@ -45,58 +46,7 @@ function Generator() {
 
     };
 
-    this.createMeta = function () {
-        /* In 'Promises' functions 'this' is not this but that - function's scope itself.
-         * This hack fix it. */
-        var gen = this
-        return new Promise(function (resolve, reject) {
-            // CreateMetaInstances
-            console.log("Creating Meta...")
-            var meta_n = gen.sequelize.define('_n', {
-                name: {type: Sequelize.STRING, allowNull: false}, comment: Sequelize.STRING
-            })
-            var meta_e = gen.sequelize.define('_e', {
-                //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
-                name:    {type: Sequelize.STRING, allowNull: false},
-                allias:  {type: Sequelize.STRING, allowNull: false},
-                comment: Sequelize.STRING
-                /*
-                 TODO Set obliged foreign key
-                 #created on 07.07.15
-                 It's possible to create attribute without link to parental entity.
-                 http://docs.sequelizejs.com/en/1.7.0/docs/associations/#foreign-keys
-                 */
-            })
-            var meta_r = gen.sequelize.define('_r', {
-                name:    {type: Sequelize.STRING, allowNull: false},
-                allias:  {type: Sequelize.STRING, allowNull: false},
-                comment: Sequelize.STRING
-            })
-            var meta_a = gen.sequelize.define('_a', {
-                name:    {type: Sequelize.STRING, allowNull: false},
-                allias:  {type: Sequelize.STRING, allowNull: false},
-                type:    {type: Sequelize.STRING, allowNull: false},
-                comment: Sequelize.STRING
-            })
-            meta_e.hasMany(meta_a, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'})
-            meta_a.belongsTo(meta_e)
-            meta_n.hasMany(meta_e, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'})
-            meta_e.belongsTo(meta_n)
-            meta_n.hasMany(meta_r, {onDelete: 'RESTRICT', onUpdate: 'RESTRICT'})
-            meta_r.belongsTo(meta_n)
 
-            console.log("Meta was created")
-            // I suppose, here should be some check before...
-            resolve('Ok.')
-
-            // sync()
-            // getMetaData
-            // Compare to new JSON
-            // addExtraRows to Meta
-        })
-
-
-    }
 
     this.createModel = function (request) {
 
@@ -208,7 +158,7 @@ function Generator() {
         gen.setConnection(params).then(function () {
             /*Parse JSON and create Meta information.*/
             gen.createModel(request)
-            gen.createMeta()
+            meta.createMeta(gen.sequelize)
         }).then(function () {
             /* Using this.model define entities. */
             gen.defineEntities(gen.model.namespaces[0].entities)
@@ -235,6 +185,7 @@ function Generator() {
             params.demFileIn = path
             params.demFileOut = './dem.json'
             cnv.run(params)
+            /* TODO This part don't work. */
             result = require('./dem.json')
         } else if (path.slice(-4) == 'json') {
             console.log("DEM as JSON file is loaded")
