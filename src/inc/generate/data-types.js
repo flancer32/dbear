@@ -4,12 +4,12 @@
 var Sequelize = require('sequelize')
 
 
-module.export = {
+module.exports = {
     BINARY: Sequelize.STRING.BINARY,
     BOOLEAN: Sequelize.BOOLEAN,
     DATETIME: Sequelize.DATE,
     INTEGER: Sequelize.INTEGER,
-    //NUMERIC : ,
-    //OPTION : ,
+    NUMERIC: Sequelize.DECIMAL,
+    OPTION: Sequelize.ENUM,
     TEXT: Sequelize.STRING
 }
