@@ -11,39 +11,39 @@ var promise = require('promise')
 function analyzeRelations(request) {
     function analyzeRefs(request) {
 
-        var result = {};
+        var result = {}
 
         if (request.hasOwnProperty('comment') || request.hasOwnProperty('namespace')) {
-            result.comment = request.comment;
-            result.namespace = request.namespace;
+            result.comment = request.comment
+            result.namespace = request.namespace
         }
 
-        result.id = request.id;
+        result.id = request.id
 
         if (request.hasOwnProperty('indexes')) {
-            result.indexes = [];
+            result.indexes = []
             if (Array.isArray(request.indexes.index)) {
                 for (var i = 0; i < request.indexes.index.length; i++) {
                     result.indexes[i] = request.indexes.index[i]
                 }
             } else result.indexes[0] = request.indexes.index
         }
-        return result;
+        return result
     }
 
-    var result = {};
-    result.id = request.id;
+    var result = {}
+    result.id = request.id
     if (request.hasOwnProperty('comment')) {
-        result.comment = request.comment;
+        result.comment = request.comment
     }
-    result.refs = [];
+    result.refs = []
     if (Array.isArray(request.refs.entryRef)) {
         for (var i = 0; i < request.refs.entryRef.length; i++) {
             result.refs[i] = analyzeRefs(request.refs.entryRef[i])
         }
     } else result.refs[0] = analyzeRefs(request.refs.entryRef)
 
-    return result;
+    return result
 }
 
 /*
@@ -54,43 +54,43 @@ function analyze(request) {
         function analyzeEntities(request) {
             function analyzeAttr(request) {
 
-                var result = {};
-                result.id = request.id;
-                result.alias = request.alias;
+                var result = {}
+                result.id = request.id
+                result.alias = request.alias
                 if (request.hasOwnProperty('comment')) {
-                    result.comment = request.comment;
+                    result.comment = request.comment
                 }
-                result.type = request.type;
+                result.type = request.type
 
-                return result;
+                return result
 
             }
 
-            var result = {};
-            result.id = request.id;
-            result.alias = request.alias;
+            var result = {}
+            result.id = request.id
+            result.alias = request.alias
             if (request.hasOwnProperty('comment')) {
-                result.comment = request.comment;
+                result.comment = request.comment
             }
-            result.attributes = [];
+            result.attributes = []
             if (Array.isArray(request.attributes.attribute)) {
                 for (var i = 0; i < request.attributes.attribute.length; i++) {
                     result.attributes[i] = analyzeAttr(request.attributes.attribute[i])
                 }
             } else result.attributes[0] = analyzeAttr(request.attributes.attribute)
 
-            return result;
+            return result
 
         }
 
-        var result = {};
+        var result = {}
 
-        result.id = request.id;
-        result.alias = request.alias;
+        result.id = request.id
+        result.alias = request.alias
         if (request.hasOwnProperty('comment')) {
-            result.comment = request.comment;
+            result.comment = request.comment
         }
-        result.entities = [];
+        result.entities = []
         if (Array.isArray(request.entities.entity)) {
             for (var i = 0; i < request.entities.entity.length; i++) {
                 result.entities[i] = analyzeEntities(request.entities.entity[i])
@@ -98,7 +98,7 @@ function analyze(request) {
         } else result.entities[0] = analyzeEntities(request.entities.entity)
 
         if (request.hasOwnProperty('relations')) {
-            result.relations = [];
+            result.relations = []
             if (Array.isArray(request.relations.relation)) {
                 for (var i = 0; i < request.relations.relation.length; i++) {
                     result.relations[i] = analyzeRelations(request.relations.relation[i])
@@ -106,15 +106,15 @@ function analyze(request) {
             } else result.relations[0] = analyzeRelations(request.relations.relation)
         }
 
-        return result;
+        return result
     }
 
-    var result = {"dBEAR": {}};
+    var result = {"dBEAR": {}}
 
     if (request.dBEAR.hasOwnProperty('comment')) {
-        result.dBEAR.comment = request.dBEAR.comment;
+        result.dBEAR.comment = request.dBEAR.comment
     }
-    result.dBEAR.namespaces = [];
+    result.dBEAR.namespaces = []
     if (Array.isArray(request.dBEAR.namespaces.namespace)) {
         for (var i = 0; i < request.dBEAR.namespaces.namespace.length; i++) {
             result.dBEAR.namespaces[i] = analyzeNamespaces(request.dBEAR.namespaces.namespace[i])
@@ -178,8 +178,8 @@ function strJSON(resultJSON) {
             function (key, value) // callable function to strip some useless nodes
             {
                 var result = value
-                if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined;
-                return result;
+                if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined
+                return result
             }, 2)
         resolve(result)
     })
