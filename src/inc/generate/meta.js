@@ -16,11 +16,12 @@ var createMeta = function (sequelize) {
             var ssstr = Sequelize.STRING
             var meta_n = sequelize.define('_namespace', {
                 name: {type: Sequelize.STRING, allowNull: false},
+                alias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             })
             var meta_e = sequelize.define('_entity', {
                 name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                alias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
                 /*
                  TODO Set obliged foreign key
@@ -29,14 +30,14 @@ var createMeta = function (sequelize) {
                  http://docs.sequelizejs.com/en/1.7.0/docs/associations/#foreign-keys
                  */
             })
-            var meta_r = sequelize.define('_r', {
+            var meta_r = sequelize.define('_relation', {
                 name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                alias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             })
-            var meta_a = sequelize.define('_a', {
+            var meta_a = sequelize.define('_attribute', {
                 name: {type: Sequelize.STRING, allowNull: false},
-                allias: {type: Sequelize.STRING, allowNull: false},
+                alias: {type: Sequelize.STRING, allowNull: false},
                 type: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
             })
