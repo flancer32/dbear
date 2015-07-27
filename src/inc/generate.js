@@ -7,6 +7,7 @@ function Generator() {
     this.sequelize = {}
     this.model = {}
     this.db_entities = []
+    this.db_relations = []
 
     this.getOrm = function () {
         /* to use in tests . */
@@ -52,7 +53,7 @@ function Generator() {
         //return new Promise(function (resolve, reject) {
 
         function analyzeNamespaces(request) {
-            function analyzeEntities(request) {
+            function analyzeEntities(request, namespace) {
                 function analyzeAttr(request) {
                     var result = {};
                     result.field = request.id
@@ -67,7 +68,7 @@ function Generator() {
                 }
 
                 var result = {}
-                result.id = request.id
+                result.id = getTableAlias(request.id, namespace, 'e')
                 if (request.hasOwnProperty('comment')) {
                     result.comment = request.comment;
                 }
@@ -78,19 +79,16 @@ function Generator() {
                 return result
             }
 
-            function analyzeRelations(request) {
+            function analyzeRelations(request, namespace) {
 
                 var result = {}
-                result.id = request.id
+                result.id = getTableAlias(request.id, namespace, 'r')
                 if (request.hasOwnProperty('comment')) {
                     result.comment = request.comment;
                 }
                 result.refs = []
                 for (var i = 0; i < request.refs.length; i++) {
-                    result.refs[i].id = request.refs[i].id
-                    if (request.refs[i].hadOwnProperty('namespace')) {
-                        result.refs[i].namespace = request.refs[i].namespace
-                    }
+                    result.refs[i] = request.refs[i]
                 }
                 return result
             }
@@ -104,14 +102,14 @@ function Generator() {
             if (request.hasOwnProperty('entities')) {
                 result.entities = []
                 for (var i = 0; i < request.entities.length; i++) {
-                    result.entities[i] = analyzeEntities(request.entities[i])
+                    result.entities[i] = analyzeEntities(request.entities[i], request.id)
                 }
             }
             /* Analyze Relations */
             if (request.hasOwnProperty('relations')) {
                 result.relations = []
                 for (i = 0; i < request.entities.length; i++) {
-                    result.relations[i] = analyzeRelations(request.relations[i])
+                    result.relations[i] = analyzeRelations(request.relations[i], request.id)
                 }
             }
             return result
@@ -132,31 +130,62 @@ function Generator() {
 
     }
 
-    this.defineEntities = function (entities) {
+    function defineEntities(entities, options) {
 
         /* In 'Promises' functions 'this' is not visible.
          * This hack fix it. */
         var gen = this
-        return new Promise(function (resolve, reject) {
+        //return new Promise(function (resolve, reject) {
             for (var i = 0; i < entities.length; i++) {
-                console.log("Defining Entities " + entities[i].id)
-                gen.db_entities[i] = gen.sequelize.define(entities[i].id, entities[i].attributes)
-                if (i + 1 == entities.length) {
-                    console.log("Entities were defined!")
-                    resolve('Ok!');
-                }
+                console.log("Define new entity :  " + entities[i].id)
+                gen.db_entities[i] = gen.sequelize.define(entities[i].id, entities[i].attributes, options)
+                //if (i + 1 == entities.length) {
+                //    console.log("Entities were defined!")
+                //    resolve('Ok!');
+                //}
             }
             /* TODO analyze entities before defining
              * #Created ~ 1-Jul-15
              * aliases
              * */
-        })
+        //})
 
 
     }
 
-    function getTableAlias(origin) {
+    function defineRelations(relations) {
+        for (var i = 0; i < relations.length; i++) {
+            console.log("Define new relation :  " + relations[i].id)
+            this.db_relations = this.sequelize.define(relations[i].id)
+        }
+    }
 
+    this.defineStructure = function (model) {
+        for (var i = 0; i < model.dbear.namespaces.length; i++) {
+            if (model.dbear.namespaces[i].entities.length != 0) {
+                defineEntities(model.dbear.namespaces[i].entities)
+            }
+            if (model.dbear.namespaces[i].relations.length != 0) {
+                defineRelations(model.dbear.namespaces[i].relations)
+            }
+        }
+    }
+
+    function getTableAlias(origin, namespace, type) {
+        /*
+         * Example:
+         * Origin = customer
+         * Namespace = core
+         * Type = e
+         * result = core_e_customer
+         * */
+        /* TODO create complex analyze here!
+         #Created on 27-Jul-15
+         * Connection to Meta
+         * Short namespaces
+         * */
+        var result = namespace + '_' + type + '_' + origin;
+        return result;
     }
 
     this.synchronize = function () {
@@ -191,7 +220,7 @@ function Generator() {
             meta.createMeta(gen.sequelize)
         }).then(function () {
             /* Using this.model define entities. */
-            gen.defineEntities(gen.model.namespaces[0].entities)
+            gen.defineStructure(this.model)
         }).then(function () {
             /* Finally, sync all structure with DB. */
             gen.synchronize()
