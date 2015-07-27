@@ -131,27 +131,12 @@ function Converter() {
         var fileOut = param.demFileOut
 
         readXML(fileIn).then(function (data) {
-            console.log("Hi!")
+            parseXML(data)
         })
 
 
         //
-        //parseString(data, {
-        //        tagNameProcessors: [tagStripPrefix], // strip tag prefix
-        //        explicitArray: false, // remove arrays in child nodes
-        //        mergeAttrs: true, // attributes become child nodes
-        //        emptyTag: {}
-        //    }, // default value of empty tag
-        //
-        //    function (err, result) {
-        //        if (err) {
-        //            reject(err)
-        //        } else resolve("Strings are successfully parsed!")
-        //        var result = analyze(result) // get a new json structure
-        //        resultJSON = result
-        //
-        //        return result // return JSON model
-        //    })
+
 
         /* ded.json is writing to the same directory. Maybe we should create special folder? */
         //fs.writeFile(fileOut, JSON.stringify(resultJSON,
@@ -169,7 +154,6 @@ function Converter() {
 function readXML(fileIn) {
     return new Promise(function (resolve, reject) {
         fs.readFile(fileIn, function (err, data) {
-            console.log(data)
             if (err) {
                 reject(err)
             } else resolve(data)
@@ -177,6 +161,17 @@ function readXML(fileIn) {
         })
     })
 
+}
+
+function parseXML(data) {
+    var resultJSON = parseString(data, {
+            tagNameProcessors: [tagStripPrefix], // strip tag prefix
+            explicitArray: false, // remove arrays in child nodes
+            mergeAttrs: true, // attributes become child nodes
+            emptyTag: {}
+        })
+    var result = analyze(resultJSON)
+    return result // return JSON model
 }
 
 /*
