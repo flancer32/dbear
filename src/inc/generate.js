@@ -26,7 +26,7 @@ function Generator() {
         return new Promise(function (resolve, reject) {
             var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
             }
@@ -45,7 +45,6 @@ function Generator() {
 
 
     };
-
 
 
     this.createModel = function (request) {
@@ -79,14 +78,41 @@ function Generator() {
                 return result
             }
 
+            function analyzeRelations(request) {
+
+                var result = {}
+                result.id = request.id
+                if (request.hasOwnProperty('comment')) {
+                    result.comment = request.comment;
+                }
+                result.refs = []
+                for (var i = 0; i < request.refs.length; i++) {
+                    result.refs[i].id = request.refs[i].id
+                    if (request.refs[i].hadOwnProperty('namespace')) {
+                        result.refs[i].namespace = request.refs[i].namespace
+                    }
+                }
+                return result
+            }
+
             var result = {}
             result.id = request.id
             if (request.hasOwnProperty('comment')) {
                 result.comment = request.comment
             }
-            result.entities = []
-            for (var i = 0; i < request.entities.length; i++) {
-                result.entities[i] = analyzeEntities(request.entities[i])
+            /* Analyze Entities*/
+            if (request.hasOwnProperty('entities')) {
+                result.entities = []
+                for (var i = 0; i < request.entities.length; i++) {
+                    result.entities[i] = analyzeEntities(request.entities[i])
+                }
+            }
+            /* Analyze Relations */
+            if (request.hasOwnProperty('relations')) {
+                result.relations = []
+                for (i = 0; i < request.entities.length; i++) {
+                    result.relations[i] = analyzeRelations(request.relations[i])
+                }
             }
             return result
         }
@@ -113,7 +139,7 @@ function Generator() {
         var gen = this
         return new Promise(function (resolve, reject) {
             for (var i = 0; i < entities.length; i++) {
-                console.log("Defining Entitity " + entities[i].id)
+                console.log("Defining Entities " + entities[i].id)
                 gen.db_entities[i] = gen.sequelize.define(entities[i].id, entities[i].attributes)
                 if (i + 1 == entities.length) {
                     console.log("Entities were defined!")
@@ -122,10 +148,14 @@ function Generator() {
             }
             /* TODO analyze entities before defining
              * #Created ~ 1-Jul-15
-             * alliases
+             * aliases
              * */
         })
 
+
+    }
+
+    function getTableAlias(origin) {
 
     }
 
