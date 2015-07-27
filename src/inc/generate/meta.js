@@ -1,20 +1,24 @@
 /**
+ * Create META-tables in DB.
+ *
  * Created by Victor on 24-Jul-15.
  */
+var Promise = require('Promise')
 var Sequelize = require('sequelize')
 
-exports.createMeta = function (sequelize) {
-    /* In 'Promises' functions 'this' is not this but that - function's scope itself.
-     * This hack fix it. */
+var createMeta = function (sequelize) {
+
     return new Promise(function (resolve, reject) {
         try {
             // CreateMetaInstances
             console.log("Creating Meta...")
-            var meta_n = sequelize.define('_n', {
-                name: {type: Sequelize.STRING, allowNull: false}, comment: Sequelize.STRING
+            var str = sequelize.STRING
+            var ssstr = Sequelize.STRING
+            var meta_n = sequelize.define('_namespace', {
+                name: {type: Sequelize.STRING, allowNull: false},
+                comment: Sequelize.STRING
             })
-            var meta_e = sequelize.define('_e', {
-                //id: {type: Sequelize.INTEGER(11).UNSIGNED, allowNull: false},
+            var meta_e = sequelize.define('_entity', {
                 name: {type: Sequelize.STRING, allowNull: false},
                 allias: {type: Sequelize.STRING, allowNull: false},
                 comment: Sequelize.STRING
@@ -57,3 +61,5 @@ exports.createMeta = function (sequelize) {
 
 
 }
+
+exports.createMeta = createMeta

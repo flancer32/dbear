@@ -5,7 +5,6 @@
 var meta = require('./meta')
 var should = require('chai').should()
 var sinon = require('sinon')
-var assert = require('chai')
 
 function Entity() {
     this.callCount1 = 0
