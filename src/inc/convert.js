@@ -56,6 +56,7 @@ function analyze(request) {
 
                 var result = {};
                 result.id = request.id;
+                result.alias = request.alias;
                 if (request.hasOwnProperty('comment')) {
                     result.comment = request.comment;
                 }
@@ -67,6 +68,7 @@ function analyze(request) {
 
             var result = {};
             result.id = request.id;
+            result.alias = request.alias;
             if (request.hasOwnProperty('comment')) {
                 result.comment = request.comment;
             }
@@ -84,6 +86,7 @@ function analyze(request) {
         var result = {};
 
         result.id = request.id;
+        result.alias = request.alias;
         if (request.hasOwnProperty('comment')) {
             result.comment = request.comment;
         }
