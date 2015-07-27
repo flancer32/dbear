@@ -4,7 +4,6 @@ var fs = require('fs') // fs instance
 var parseString = require('xml2js').parseString // xml2js method parseString instance
 var prefixMatch = new RegExp(/(?!xmlns)^.*:/)
 var promise = require('promise')
-var resultJSON; //variable for json processing
 
 /*
  ---Bunch of functions to create a new valid json structure (relations part)
@@ -131,22 +130,14 @@ function Converter() {
         var fileOut = param.demFileOut
 
         readXML(fileIn).then(function (data) {
-            parseXML(data)
+            parseXML(data).then(function (resultJSON) {
+                strJSON(resultJSON).then(function (result) {
+                    writeJSON(fileOut, result).then(function (resolve) {
+                            resolve(result)
+                    })
+                })
+            })
         })
-
-
-        //
-
-
-        /* ded.json is writing to the same directory. Maybe we should create special folder? */
-        //fs.writeFile(fileOut, JSON.stringify(resultJSON,
-        //    function (key, value) // callable function to strip some useless nodes
-        //    {
-        //        var result = value
-        //        if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined;
-        //        return result;
-        //    }, 2))
-
     }
 }
 
@@ -174,7 +165,29 @@ function parseXML(data) {
             if (err) {
                 reject(err)
             } else resolve(resultJSON)
-            console.log(resultJSON)
+        })
+    })
+}
+
+function strJSON(resultJSON) {
+    return new Promise(function (resolve) {
+        var result = JSON.stringify(resultJSON,
+            function (key, value) // callable function to strip some useless nodes
+            {
+                var result = value
+                if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined;
+                return result;
+            }, 2)
+        resolve(result)
+    })
+}
+
+function writeJSON(fileOut, result) {
+    return new Promise(function (resolve, reject) {
+        fs.writeFile(fileOut, result, function (err) {
+            if (err) {
+                reject (err)
+            } else resolve("The conversion is finished!")
         })
     })
 }
