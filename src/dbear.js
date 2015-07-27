@@ -53,10 +53,6 @@ program
     .command('convert')
     .description('Convert DEM from one format to another (XML to JSON, for example)')
     .action(function (command) {
-        /* TODO Uncomment this.
-         * #Created on 21-Jul-15
-         * This blocked gult cover
-         * */
         var params = program.params.convert
         params.demFileIn = program.in
         params.demFileOut = program.out
@@ -80,7 +76,7 @@ program
 
 program
     .command('analyze')
-    .description('Analize given DB and create outgoing DEM')
+    .description('Analyze given DB and create outgoing DEM')
     .action(function () {
         console.log('analyze is here...')
     })
