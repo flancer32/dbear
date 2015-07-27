@@ -157,21 +157,26 @@ function readXML(fileIn) {
             if (err) {
                 reject(err)
             } else resolve(data)
-
         })
     })
 
 }
 
 function parseXML(data) {
-    var resultJSON = parseString(data, {
+    return new Promise(function (resolve, reject) {
+        parseString(data, {
             tagNameProcessors: [tagStripPrefix], // strip tag prefix
             explicitArray: false, // remove arrays in child nodes
             mergeAttrs: true, // attributes become child nodes
             emptyTag: {}
+        }, function(err, result) {
+            var resultJSON = analyze(result)
+            if (err) {
+                reject(err)
+            } else resolve(resultJSON)
+            console.log(resultJSON)
         })
-    var result = analyze(resultJSON)
-    return result // return JSON model
+    })
 }
 
 /*
