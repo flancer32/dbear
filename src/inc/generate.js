@@ -6,9 +6,6 @@ var meta = require('./generate/meta.js')
 function Generator() {
     this.sequelize = {}
     this.model = {}
-    this.db_entities = []
-    this.db_relations = []
-
     this.getOrm = function () {
         /* to use in tests . */
         return Sequelize
@@ -130,44 +127,47 @@ function Generator() {
 
     }
 
-    function defineEntities(entities, options) {
+    function defineEntities(entities, options, gen) {
 
         /* In 'Promises' functions 'this' is not visible.
          * This hack fix it. */
-        var gen = this
+        //var gen = this
         //return new Promise(function (resolve, reject) {
-            for (var i = 0; i < entities.length; i++) {
-                console.log("Define new entity :  " + entities[i].id)
-                gen.db_entities[i] = gen.sequelize.define(entities[i].id, entities[i].attributes, options)
-                //if (i + 1 == entities.length) {
-                //    console.log("Entities were defined!")
-                //    resolve('Ok!');
-                //}
-            }
-            /* TODO analyze entities before defining
-             * #Created ~ 1-Jul-15
-             * aliases
-             * */
+        for (var i = 0; i < entities.length; i++) {
+            console.log("Define new entity :  " + entities[i].id)
+            gen.sequelize.define(entities[i].id, entities[i].attributes, options)
+            //if (i + 1 == entities.length) {
+            //    console.log("Entities were defined!")
+            //    resolve('Ok!');
+            //}
+        }
+        /* TODO analyze entities before defining
+         * #Created ~ 1-Jul-15
+         * aliases
+         * */
         //})
 
 
     }
 
-    function defineRelations(relations) {
-        var gen = this
+    function defineRelations(relations, options, gen, namespace) {
         for (var i = 0; i < relations.length; i++) {
             console.log("Define new relation :  " + relations[i].id)
-            gen.db_relations = gen.sequelize.define(relations[i].id)
+            gen.sequelize.define(relations[i].id)
         }
+        //gen.db_entities.belongsTo(gen.db_relations[0])
+        var name = getTableAlias(relations[0].refs[0].id, namespace, 'e')
+        gen.sequelize.models[name].belongsTo(gen.sequelize.models[relations[0].id])
+        //gen.db_entities.(entities[1].id).belongsTo(gen.db_relations[0])
     }
 
     this.defineStructure = function (model) {
-        for (var i = 0; i < model.dbear.namespaces.length; i++) {
-            if (model.dbear.namespaces[i].entities.length !== 0) {
-                defineEntities(model.dbear.namespaces[i].entities)
+        for (var i = 0; i < model.namespaces.length; i++) {
+            if (model.namespaces[i].entities !== undefined) {
+                defineEntities(model.namespaces[i].entities, null, this)
             }
-            if (model.dbear.namespaces[i].relations.length !== 0) {
-                defineRelations(model.dbear.namespaces[i].relations)
+            if (model.namespaces[i].relations !== undefined) {
+                defineRelations(model.namespaces[i].relations, null, this, model.namespaces[i].id)
             }
         }
     }
