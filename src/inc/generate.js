@@ -151,17 +151,32 @@ function Generator() {
     }
 
     function defineRelations(relations, options, gen, namespace) {
+        var name = ''
         for (var i = 0; i < relations.length; i++) {
             console.log("Define new relation :  " + relations[i].id)
             gen.sequelize.define(relations[i].id)
+
+            /* TODO This part should be separated and moved after all tables defining
+             * #Created on 28-Jul-15
+             * There might be reference to non-created entity/relation */
+            for (var j = 0; j < relations[i].refs.length; j++) {
+                if (relations[i].refs[j].hasOwnProperty('namespace')) {
+                    name = getTableAlias(relations[i].refs[j].id, relations[i].refs[j].namespace, 'e')
+                } else {
+                    name = getTableAlias(relations[i].refs[j].id, namespace, 'e')
+                }
+                gen.sequelize.models[name].belongsTo(gen.sequelize.models[relations[i].id])
+            }
+
         }
         //gen.db_entities.belongsTo(gen.db_relations[0])
-        var name = getTableAlias(relations[0].refs[0].id, namespace, 'e')
-        gen.sequelize.models[name].belongsTo(gen.sequelize.models[relations[0].id])
+        //name = getTableAlias(relations[0].refs[0].id, namespace, 'e')
+        //gen.sequelize.models[name].belongsTo(gen.sequelize.models[relations[0].id])
         //gen.db_entities.(entities[1].id).belongsTo(gen.db_relations[0])
     }
 
     this.defineStructure = function (model) {
+        /* Define all relations and entities in this model*/
         for (var i = 0; i < model.namespaces.length; i++) {
             if (model.namespaces[i].entities !== undefined) {
                 defineEntities(model.namespaces[i].entities, null, this)
