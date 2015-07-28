@@ -3,8 +3,8 @@
 var fs = require('fs') // fs instance
 var parseString = require('xml2js').parseString // xml2js method parseString instance
 var prefixMatch = new RegExp(/(?!xmlns)^.*:/)
-var promise = require('promise')
-
+var Promise = require('promise')
+var readFile = require('./util/readFile')
 /*
  ---Bunch of functions to create a new valid json structure (relations part)
  */
@@ -132,28 +132,16 @@ function Converter() {
         var fileIn = param.demFileIn
         var fileOut = param.demFileOut
 
-        readXML(fileIn).then(function (data) {
+        readFile(fileIn).then(function (data) {
             parseXML(data).then(function (resultJSON) {
                 strJSON(resultJSON).then(function (result) {
                     writeJSON(fileOut, result).then(function (resolve) {
-                            resolve(result)
+                        resolve(result)
                     })
                 })
             })
         })
     }
-}
-
-
-function readXML(fileIn) {
-    return new Promise(function (resolve, reject) {
-        fs.readFile(fileIn, function (err, data) {
-            if (err) {
-                reject(err)
-            } else resolve(data)
-        })
-    })
-
 }
 
 function parseXML(data) {
@@ -163,7 +151,7 @@ function parseXML(data) {
             explicitArray: false, // remove arrays in child nodes
             mergeAttrs: true, // attributes become child nodes
             emptyTag: {}
-        }, function(err, result) {
+        }, function (err, result) {
             var resultJSON = analyze(result)
             if (err) {
                 reject(err)
@@ -189,7 +177,7 @@ function writeJSON(fileOut, result) {
     return new Promise(function (resolve, reject) {
         fs.writeFile(fileOut, result, function (err) {
             if (err) {
-                reject (err)
+                reject(err)
             } else resolve("The conversion is finished!")
         })
     })
