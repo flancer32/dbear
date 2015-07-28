@@ -1,3 +1,4 @@
+'use strict'
 /**
  * Created by Victor on 24-Jul-15.
  */
@@ -27,7 +28,7 @@ function Dummy() {
 describe('Meta', function () {
     describe('createMeta()', function () {
         it('should call define() method', function () {
-            dummy = new Dummy()
+            var dummy = new Dummy()
             meta.createMeta(dummy).then(function () {
             }, function (reject) {
                 console.log(reject);

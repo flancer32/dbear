@@ -1,3 +1,4 @@
+'use strict'
 /**
  * Create META-tables in DB.
  *

@@ -108,8 +108,8 @@ function Generator() {
             /* Analyze Relations */
             if (request.hasOwnProperty('relations')) {
                 result.relations = []
-                for (i = 0; i < request.entities.length; i++) {
-                    result.relations[i] = analyzeRelations(request.relations[i], request.id)
+                for (var j = 0; j < request.entities.length; j++) {
+                    result.relations[j] = analyzeRelations(request.relations[j], request.id)
                 }
             }
             return result
@@ -154,18 +154,19 @@ function Generator() {
     }
 
     function defineRelations(relations) {
+        var gen = this
         for (var i = 0; i < relations.length; i++) {
             console.log("Define new relation :  " + relations[i].id)
-            this.db_relations = this.sequelize.define(relations[i].id)
+            gen.db_relations = gen.sequelize.define(relations[i].id)
         }
     }
 
     this.defineStructure = function (model) {
         for (var i = 0; i < model.dbear.namespaces.length; i++) {
-            if (model.dbear.namespaces[i].entities.length != 0) {
+            if (model.dbear.namespaces[i].entities.length !== 0) {
                 defineEntities(model.dbear.namespaces[i].entities)
             }
-            if (model.dbear.namespaces[i].relations.length != 0) {
+            if (model.dbear.namespaces[i].relations.length !== 0) {
                 defineRelations(model.dbear.namespaces[i].relations)
             }
         }
@@ -220,7 +221,7 @@ function Generator() {
             meta.createMeta(gen.sequelize)
         }).then(function () {
             /* Using this.model define entities. */
-            gen.defineStructure(this.model)
+            gen.defineStructure(gen.model)
         }).then(function () {
             /* Finally, sync all structure with DB. */
             gen.synchronize()
@@ -240,7 +241,7 @@ function Generator() {
             /* Convert xml to JSON*/
             var converter = require('./convert.js')
             var params = require('./convert/params.js')
-            var cnv = new converter
+            var cnv = new converter()
             params.demFileIn = path
             params.demFileOut = './dem.json'
             cnv.run(params)
