@@ -4,4 +4,4 @@ function Params() {
     this.demFileOut = undefined
 }
 
-module['exports'] = new Params()
+module.exports = new Params()

@@ -3,8 +3,8 @@
 var Promise = require('promise')
 var parseString = require('xml2js').parseString
 /* own code */
-var AttrParser = require('./parseXml/attr')
-var attrParser = new AttrParser()
+var EntityParser = require('./parseXml/entity')
+var entityParser = new EntityParser()
 
 function parseXml(data) {
     /**
@@ -26,23 +26,6 @@ function parseXml(data) {
      */
     function analyze(request) {
         function analyzeNamespaces(request) {
-            function analyzeEntities(request) {
-                var result = {}
-                result.id = request.id
-                result.alias = request.alias
-                if (request.hasOwnProperty('comment')) {
-                    result.comment = request.comment
-                }
-                result.attributes = []
-                if (Array.isArray(request.attributes.attribute)) {
-                    for (var i = 0; i < request.attributes.attribute.length; i++) {
-                        result.attributes[i] = attrParser.parse(request.attributes.attribute[i])
-                    }
-                } else result.attributes[0] = attrParser.parse(request.attributes.attribute)
-
-                return result
-
-            }
 
             var result = {}
 
@@ -54,9 +37,9 @@ function parseXml(data) {
             result.entities = []
             if (Array.isArray(request.entities.entity)) {
                 for (var i = 0; i < request.entities.entity.length; i++) {
-                    result.entities[i] = analyzeEntities(request.entities.entity[i])
+                    result.entities[i] = entityParser.parse(request.entities.entity[i])
                 }
-            } else result.entities[0] = analyzeEntities(request.entities.entity)
+            } else result.entities[0] = entityParser.parse(request.entities.entity)
 
             if (request.hasOwnProperty('relations')) {
                 result.relations = []

@@ -8,4 +8,4 @@ function Params() {
     this.demFile = undefined
 }
 
-module['exports'] = new Params()
+module.exports = new Params()
