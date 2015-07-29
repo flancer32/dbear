@@ -1,7 +1,7 @@
 'use strict'
 /* libraries */
 /* own code */
-var AttributeParser = require('./attr')
+var AttributeParser = require('./attribute')
 var _const = require('./constants')
 /**
  *

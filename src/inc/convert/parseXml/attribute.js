@@ -17,7 +17,7 @@ function AttributeParser(options) {
  * @param objXml
  * @return {{}}
  */
-AttributeParser.prototype.parse = function (objXml) {
+AttributeParser.prototype.parse = function fn(objXml) {
 
     var result = {}
     result.id = objXml.id

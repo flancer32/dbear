@@ -3,9 +3,9 @@
 var should = require("chai").should()
 /* own code */
 var _const = require('./constants')
-var Parser = require('./entity')
+var Parser = require('./namespace')
 
-describe('Entity parser', function () {
+describe('Namspace parser', function () {
 
     it('should be instantiated without options', function () {
         var parser = new Parser()
@@ -22,45 +22,41 @@ describe('Entity parser', function () {
     it('should parse simple sample', function () {
         var parser = new Parser()
         var xmlObj = {
-            "id":         "Person",
-            "comment":    "Person basic entity with 2 attributes.",
-            "attributes": {
-                "attribute": [
-                    {"id": "NameFirst", "type": {"text": {}}},
-                    {"id": "NameLast", "type": {"text": {}}},
-                    {"id": "Gender", "type": {"text": {"isNullable": "false", "isUnique": "false", "length": "1"}}}
-                ]
-            }
+            id:        "com.flancer32.dbear.sample.core",
+            alias:     "core",
+            comment:   "Base namespace for samples.",
+            entities:  {entity: [{id: ''}]},
+            relations: {relation: [{id: ''}]}
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
         jsonObj.should.have.property('id')
         jsonObj.should.have.property('alias')
         jsonObj.should.have.property('comment')
-        jsonObj.should.have.property('attributes')
+        jsonObj.should.have.property('entities')
+        jsonObj.should.have.property('relations')
     })
 
-    it('should parse entity with one attribute only', function () {
+    it('should parse namespace w/o comment', function () {
         var parser = new Parser()
         var xmlObj = {
-            "id":         "Person",
-            "attributes": {
-                "attribute": {"id": "NameFirst", "type": {"text": {}}}
-            }
+            id: "com.flancer32.dbear.sample.core"
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
-        jsonObj.should.have.property('attributes')
     })
 
-    it('should parse entity w/o comment and attributes', function () {
+    it('should parse namespace with one entity or relation', function () {
         var parser = new Parser()
         var xmlObj = {
-            "id":         "Person"
+            id:        "com.flancer32.dbear.sample.core",
+            entities:  {entity: {id: ''}},
+            relations: {relation: {id: ''}}
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
-        jsonObj.should.have.property('attributes')
+        jsonObj.should.have.property('entities')
+        jsonObj.should.have.property('relations')
     })
 
 })
