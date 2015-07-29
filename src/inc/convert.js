@@ -2,7 +2,6 @@
 
 var fs = require('fs') // fs instance
 var parseString = require('xml2js').parseString // xml2js method parseString instance
-var prefixMatch = new RegExp(/(?!xmlns)^.*:/)
 var Promise = require('promise')
 var readFile = require('./util/readFile')
 /*
@@ -100,8 +99,8 @@ function analyze(request) {
         if (request.hasOwnProperty('relations')) {
             result.relations = []
             if (Array.isArray(request.relations.relation)) {
-                for (var i = 0; i < request.relations.relation.length; i++) {
-                    result.relations[i] = analyzeRelations(request.relations.relation[i])
+                for (var j = 0; j < request.relations.relation.length; j++) {
+                    result.relations[j] = analyzeRelations(request.relations.relation[j])
                 }
             } else result.relations[0] = analyzeRelations(request.relations.relation)
         }
@@ -124,27 +123,38 @@ function analyze(request) {
     return result
 }
 
-/*
- ---Main part of convertor
+/**
+ * Main part of convertor.
+ * @constructor
  */
 function Converter() {
+
     this.run = function (param) {
         var fileIn = param.demFileIn
         var fileOut = param.demFileOut
-
-        readFile(fileIn).then(function (data) {
-            parseXML(data).then(function (resultJSON) {
-                strJSON(resultJSON).then(function (result) {
-                    writeJSON(fileOut, result).then(function (resolve) {
-                        resolve(result)
-                    })
-                })
+        readFile(fileIn)
+            .then(parseXML)
+            .then(strJSON)
+            .then(function (result) {
+                writeJSON(fileOut, result)
             })
-        })
+            .catch(function (err) {
+                console.log(err)
+            })
     }
 }
 
 function parseXML(data) {
+    var prefixMatch = new RegExp(/(?!xmlns)^.*:/)
+    /*
+     ---Function to strip tag prefix
+     */
+    function tagStripPrefix(name) {
+        /* Is this function obliged? It is used once. */
+        var result = name.replace(prefixMatch, '')
+        return result //function to strip tag prefix
+    }
+
     return new Promise(function (resolve, reject) {
         parseString(data, {
             tagNameProcessors: [tagStripPrefix], // strip tag prefix
@@ -155,7 +165,9 @@ function parseXML(data) {
             var resultJSON = analyze(result)
             if (err) {
                 reject(err)
-            } else resolve(resultJSON)
+            } else {
+                resolve(resultJSON)
+            }
         })
     })
 }
@@ -183,16 +195,8 @@ function writeJSON(fileOut, result) {
     })
 }
 
-/*
- ---Function to strip tag prefix
- */
-function tagStripPrefix(name) {
-    /* Is this function obliged? It is used once. */
-    var result = name.replace(prefixMatch, '')
-    return result //function to strip tag prefix
-}
 
-module['exports'] = Converter
+module.exports = Converter
 
 /* TODO create test for converter
  * #Created on 21-Jul-15
