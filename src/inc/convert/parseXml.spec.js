@@ -1,9 +1,12 @@
 'use strict'
+/* libraries */
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
 var should = chai.should()
-var parser = require('./parser')
+/* own code */
+var parseXml = require('./parseXml')
+
+chai.use(chaiAsPromised);
 
 //describe('readFile', function () {
 //
