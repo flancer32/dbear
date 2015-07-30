@@ -10,13 +10,15 @@ describe('Reference parser', function () {
     it('should be instantiated without options', function () {
         var parser = new Parser()
         parser.should.be.an('object')
+        parser.should.have.property('_mode')
+        parser._mode.should.be.equal(_const.MODE.ASIS)
     })
 
     it('should be instantiated with options', function () {
-        var parser = new Parser({mode: _const.MODE.NORMAL})
+        var parser = new Parser({mode: _const.MODE.CLEAR})
         parser.should.be.an('object')
         parser.should.have.property('_mode')
-        parser._mode.should.be.equal(_const.MODE.NORMAL)
+        parser._mode.should.be.equal(_const.MODE.CLEAR)
     })
 
     it('should parse simple sample', function () {

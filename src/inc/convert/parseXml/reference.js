@@ -11,7 +11,7 @@ function ReferenceParser(options) {
     this._options = options
     //this._attrParser = new AttributeParser(options)
     /* there are 3 mode for parsing: normal, condensed & full */
-    this._mode = (options && options.mode) ? options.mode : _const.MODE.NORMAL
+    this._mode = (options && options.mode) ? options.mode : _const.MODE.ASIS
 }
 
 /**

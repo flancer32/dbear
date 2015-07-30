@@ -2,9 +2,9 @@
 
 var constants = {
     MODE: {
-        NORMAL:    'normal',
-        CONDENSED: 'condensed',
-        FULL:      'full'
+        ASIS:    'asis',
+        CLEAR: 'clear',
+        RICH:      'rich'
     }
 }
 
