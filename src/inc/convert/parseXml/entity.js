@@ -21,13 +21,14 @@ function EntityParser(options) {
  */
 EntityParser.prototype.parse = function fn(objXml) {
 
-    var result = {attributes: []}
+    var result = {}
     result.id = objXml.id
     result.alias = objXml.alias
     if (objXml.hasOwnProperty('comment')) {
         result.comment = objXml.comment
     }
     if (objXml.attributes) {
+        result.attributes = []
         if (Array.isArray(objXml.attributes.attribute)) {
             for (var i = 0; i < objXml.attributes.attribute.length; i++) {
                 result.attributes[i] = this._attrParser.parse(objXml.attributes.attribute[i])

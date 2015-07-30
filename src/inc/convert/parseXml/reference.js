@@ -1,7 +1,7 @@
 'use strict'
 /* libraries */
 /* own code */
-//var AttributeParser = require('./attribute')
+var IndexParser = require('./index')
 var _const = require('./constants')
 /**
  *
@@ -9,7 +9,7 @@ var _const = require('./constants')
  */
 function ReferenceParser(options) {
     this._options = options
-    //this._attrParser = new AttributeParser(options)
+    this._indParser = new IndexParser(options)
     /* there are 3 mode for parsing: normal, condensed & full */
     this._mode = (options && options.mode) ? options.mode : _const.MODE.ASIS
 }
@@ -19,26 +19,28 @@ function ReferenceParser(options) {
  * @param objXml
  * @return {{}}
  */
-ReferenceParser.prototype.parse = function _parse(objXml) {
+ReferenceParser.prototype.parse = function fn(objXml) {
     var result = {}
+
+    result.id = objXml.id
+    if (objXml.alias) {
+        result.alias = objXml.alias
+    }
     if (objXml.comment) {
         result.comment = objXml.comment
     }
     if (objXml.namespace) {
         result.namespace = objXml.namespace
     }
-    result.id = objXml.id
-    if (objXml.alias) {
-        result.alias = objXml.alias
-    }
+
     if (objXml.indexes) {
         result.indexes = []
         if (Array.isArray(objXml.indexes.index)) {
             for (var i = 0; i < objXml.indexes.index.length; i++) {
-                result.indexes[i] = objXml.indexes.index[i]
+                result.indexes[i] = this._indParser.parse(objXml.indexes.index[i])
             }
         } else {
-            result.indexes[0] = objXml.indexes.index
+            result.indexes[0] = this._indParser.parse(objXml.indexes.index)
         }
     }
     return result

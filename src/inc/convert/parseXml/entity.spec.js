@@ -25,6 +25,7 @@ describe('Entity parser', function () {
         var parser = new Parser()
         var xmlObj = {
             "id":         "Person",
+            "alias":      "person",
             "comment":    "Person basic entity with 2 attributes.",
             "attributes": {
                 "attribute": [
@@ -52,16 +53,23 @@ describe('Entity parser', function () {
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
+        jsonObj.should.have.property('id')
         jsonObj.should.have.property('attributes')
     })
 
     it('should parse entity w/o comment and attributes', function () {
         var parser = new Parser()
         var xmlObj = {
-            "id":         "Person"
+            "id":         "Person",
+            "comment":    "Person basic entity with 1 attribute.",
+            "attributes": {
+                "attribute": {"id": "NameFirst", "type": {"text": {}}}
+            }
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
+        jsonObj.should.have.property('id')
+        jsonObj.should.have.property('comment')
         jsonObj.should.have.property('attributes')
     })
 
