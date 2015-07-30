@@ -7,7 +7,7 @@ var readFile = require('./readFile')
 
 describe('readFile', function () {
 
-    it('should throw error on file not exist', function () {
+    it('should read existed file', function () {
         return readFile('./README.md').should.be.fulfilled;
 
     })
