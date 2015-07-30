@@ -258,10 +258,13 @@ function Generator() {
             var params = require('./convert/params.js')
             var cnv = new converter()
             params.demFileIn = path
-            params.demFileOut = './dem.json'
+            params.demFileOut = '../../dem.json'
             cnv.run(params)
-            /* TODO This part don't work. */
-            result = require('./dem.json')
+            /* TODO This part don't work.
+            * Can't find created file */
+            result = require('../../dem.json')
+
+
         } else if (path.slice(-4) == 'json') {
             console.log("DEM as JSON file is loaded")
             /* Get JSON */
