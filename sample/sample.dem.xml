@@ -56,13 +56,11 @@
 							<tns:namespace>com.flancer32.dbear.sample.core</tns:namespace>
 							<tns:id>Person</tns:id>
 							<!-- Uncomment unique index to allow one only authentication method per person. -->
-							<!--
 							<tns:indexes>
 								<tns:index id="UniquePerson">
 									<tns:comment>One only Method per Person is allowed.</tns:comment>
 								</tns:index>
 							</tns:indexes>
-							-->
 						</tns:entryRef>
 					</tns:refs>
 				</tns:relation>
