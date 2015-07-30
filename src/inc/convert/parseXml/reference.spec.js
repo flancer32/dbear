@@ -24,14 +24,22 @@ describe('Reference parser', function () {
     it('should parse simple sample', function () {
         var parser = new Parser()
         var xmlObj = {
-            comment:   "Authentication method for the Person.",
-            namespace: "sample namespace",
             id:        "SampleId",
             alias:     "sampleAlias",
-            indexes:   [{id: "IndexId", comment: "Index Comment", position: 0}]
+            comment:   "Authentication method for the Person.",
+            namespace: "sample namespace",
+            indexes:   {
+                index: [
+                    {id: "IndexId", comment: "Index Comment", position: 0}
+                ]
+            }
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
         jsonObj.should.have.property('id')
+        jsonObj.should.have.property('alias')
+        jsonObj.should.have.property('comment')
+        jsonObj.should.have.property('namespace')
+        jsonObj.should.have.property('indexes')
     })
 })

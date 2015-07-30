@@ -31,5 +31,8 @@ describe('Index parser', function () {
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
         jsonObj.should.have.property('id')
+        jsonObj.should.have.property('comment')
+        /* How i can check not string value, but numeric??? */
+        //jsonObj.should.have.property('position')
     })
 })

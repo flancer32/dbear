@@ -21,16 +21,18 @@ function ReferenceParser(options) {
  */
 ReferenceParser.prototype.parse = function fn(objXml) {
     var result = {}
+
+    result.id = objXml.id
+    if (objXml.alias) {
+        result.alias = objXml.alias
+    }
     if (objXml.comment) {
         result.comment = objXml.comment
     }
     if (objXml.namespace) {
         result.namespace = objXml.namespace
     }
-    result.id = objXml.id
-    if (objXml.alias) {
-        result.alias = objXml.alias
-    }
+
     if (objXml.indexes) {
         result.indexes = []
         if (Array.isArray(objXml.indexes.index)) {
