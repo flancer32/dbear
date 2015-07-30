@@ -21,7 +21,7 @@ describe('Index parser', function () {
         parser._mode.should.be.equal(_const.MODE.CLEAR)
     })
 
-    it('should parse simple sample', function () {
+    it('should parse a simple sample', function () {
         var parser = new Parser()
         var xmlObj = {
             id:        "IndexId",
@@ -32,7 +32,7 @@ describe('Index parser', function () {
         jsonObj.should.be.an('object')
         jsonObj.should.have.property('id')
         jsonObj.should.have.property('comment')
-        /* How i can check not string value, but numeric??? */
-        //jsonObj.should.have.property('position')
+        jsonObj.should.have.property('position')
+        jsonObj.position.should.be.equal(0)
     })
 })
