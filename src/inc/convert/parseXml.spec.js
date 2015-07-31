@@ -4,9 +4,12 @@ var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 var should = chai.should()
 /* own code */
-var parseXml = require('./parseXml')
+var Parser = require('./parseXml')
 
 chai.use(chaiAsPromised);
+
+describe('ParseXML file', function() {
+})
 
 //describe('readFile', function () {
 //

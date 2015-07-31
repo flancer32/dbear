@@ -3,24 +3,11 @@
 var Promise = require('promise')
 var parseString = require('xml2js').parseString
 /* own code */
+var tagStrip = require('./../util/tagStrip')
 var NamespaceParser = require('./parseXml/namespace')
 var parser = new NamespaceParser()
 
 function parseXml(data) {
-    /**
-     * Function to strip tag prefix.
-     *
-     * @param name
-     * @return {*|string|void|XML}
-     */
-    function tagStripPrefix(name) {
-        var prefixMatch = new RegExp(/(?!xmlns)^.*:/)
-        /* Is this function obliged? It is used once. */
-        var result = name.replace(prefixMatch, '')
-        return result
-    }
-
-
     /*
      ---Bunch of functions to create a new valid json structure (main part)
      */
@@ -44,7 +31,7 @@ function parseXml(data) {
 
     return new Promise(function (resolve, reject) {
         parseString(data, {
-            tagNameProcessors: [tagStripPrefix], // strip tag prefix
+            tagNameProcessors: [tagStrip], // strip tag prefix
             explicitArray:     false, // remove arrays in child nodes
             mergeAttrs:        true, // attributes become child nodes
             emptyTag:          {}

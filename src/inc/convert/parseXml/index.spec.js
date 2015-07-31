@@ -21,12 +21,12 @@ describe('Index parser', function () {
         parser._mode.should.be.equal(_const.MODE.CLEAR)
     })
 
-    it('should parse a simple sample', function () {
+    it('should parse simple sample', function () {
         var parser = new Parser()
         var xmlObj = {
-            id:        "IndexId",
-            comment:   "Index Comment",
-            position:  0
+            "id":        "IndexId",
+            "comment":   "Index Comment",
+            "position":  0
         }
         var jsonObj = parser.parse(xmlObj)
         jsonObj.should.be.an('object')
@@ -34,5 +34,15 @@ describe('Index parser', function () {
         jsonObj.should.have.property('comment')
         jsonObj.should.have.property('position')
         jsonObj.position.should.be.equal(0)
+    })
+
+    it('should parse index without comment and position', function() {
+        var parser = new Parser()
+        var xmlObj = {
+            "id":        "IndexId"
+        }
+        var jsonObj = parser.parse(xmlObj)
+        jsonObj.should.be.an('object')
+        jsonObj.should.have.property('id')
     })
 })
