@@ -20,13 +20,18 @@ function EntityParser(options) {
  * @return {{}}
  */
 EntityParser.prototype.parse = function fn(objXml) {
-
     var result = {}
+
     result.id = objXml.id
-    result.alias = objXml.alias
-    if (objXml.hasOwnProperty('comment')) {
+
+    if (objXml.alias) {
+        result.alias = objXml.alias
+    }
+
+    if (objXml.comment) {
         result.comment = objXml.comment
     }
+
     if (objXml.attributes) {
         result.attributes = []
         if (Array.isArray(objXml.attributes.attribute)) {

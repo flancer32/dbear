@@ -21,9 +21,11 @@ IndexParser.prototype.parse = function fn(objXml) {
     var result = {}
 
     result.id = objXml.id
+
     if (objXml.comment) {
         result.comment = objXml.comment
     }
+
     if ('position' in objXml) {
         result.position = objXml.position
     }

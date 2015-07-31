@@ -25,10 +25,15 @@ NamespaceParser.prototype.parse = function fn(objXml) {
     var result = {}
 
     result.id = objXml.id
-    result.alias = objXml.alias
-    if (objXml.hasOwnProperty('comment')) {
+
+    if (objXml.alias) {
+        result.alias = objXml.alias
+    }
+
+    if (objXml.comment) {
         result.comment = objXml.comment
     }
+
     if (objXml.entities) {
         result.entities = []
         if (Array.isArray(objXml.entities.entity)) {

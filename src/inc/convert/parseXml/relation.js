@@ -21,10 +21,17 @@ function RelationParser(options) {
  */
 RelationParser.prototype.parse = function fn(objXml) {
     var result = {}
+
     result.id = objXml.id
-    if (objXml.hasOwnProperty('comment')) {
+
+    if (objXml.alias) {
+        result.alias = objXml.alias
+    }
+
+    if (objXml.comment) {
         result.comment = objXml.comment
     }
+    
     if (objXml.refs) {
         result.refs = []
         if (Array.isArray(objXml.refs.entryRef)) {
