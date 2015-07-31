@@ -5,6 +5,7 @@
  */
 'use strict'
 var program = require('commander')
+var path = require('path')
 var paramsConverter = require('./inc/convert/params')
 var paramsGenerator = require('./inc/generate/params')
 var Converter = require('./inc/convert')
@@ -39,8 +40,8 @@ program
     .option('-n, --db-name [value]', 'Database name to connect to, default: sample', 'sample')
     .option('-u, --db-user [value]', 'User name to create database connection, default: sample', 'sample')
     .option('-p, --db-password [value]', 'Password to create database connection, default: sample', 'sample')
-    .option('-i, --in [value]', 'Input DEM file (XML or JSON)')
-    .option('-o, --out [value]', 'Output DEM file (JSON)')
+    .option('-i, --in [value]', 'Input DEM file (XML or JSON)', absolutePath)
+    .option('-o, --out [value]', 'Output DEM file (JSON)', absolutePath)
 
 program
     .command('validate')
@@ -87,3 +88,18 @@ program
  */
 program.parse(process.argv)
 
+/*
+ Coercion functions (https://www.npmjs.com/package/commander#coercion).
+ */
+
+/**
+ * Return absolute path to file related to working directory.
+ *
+ * @param val
+ * @returns {Array}
+ */
+function absolutePath(val) {
+    var currentDir = process.cwd()
+    var result = path.join(currentDir, val)
+    return result
+}

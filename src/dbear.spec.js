@@ -50,8 +50,8 @@ describe('#dbear', function () {
 
     it('should perform conversation', function () {
         sinon.stub(converter, 'run', function (params) {
-            params.demFileIn.should.equal('input_file')
-            params.demFileOut.should.equal('output_file')
+            params.demFileIn.should.contain('input_file')
+            params.demFileOut.should.contain('output_file')
         })
         dbear.converter = converter
         dbear.parse(['node', 'dbear', '-i', 'input_file', '-o', 'output_file', 'convert'])
@@ -66,7 +66,7 @@ describe('#dbear', function () {
                 params.dbName.should.equal('sample')
                 params.dbUser.should.equal('sample')
                 params.dbPassword.should.equal('sample')
-                params.demFile.should.equal('input_file')
+                params.demFile.should.contain('input_file')
             })
             dbear.generator = generator
             dbear.parse(['node', 'dbear', '-i', 'input_file', 'generate'])
