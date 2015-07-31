@@ -79,6 +79,11 @@
 				</documentation>
 			</annotation>
 		</attribute>
+		<attribute name="alias" use="optional" type="tns:Alias">
+			<annotation>
+				<documentation>Attribute alias (used in NF6 transformations)</documentation>
+			</annotation>
+		</attribute>
 	</complexType>
 
 	<complexType name="AttributeTypeChoice">
@@ -286,6 +291,11 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 				<documentation>
 					Relation name. Must be unique across all other relations of the entity in the current namespace.
 				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="alias" use="optional" type="tns:Alias">
+			<annotation>
+				<documentation>Relation alias (second part of the table name for entity of relation)</documentation>
 			</annotation>
 		</attribute>
 	</complexType>
