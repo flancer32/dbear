@@ -22,13 +22,20 @@ function ReferenceParser(options) {
 ReferenceParser.prototype.parse = function fn(objXml) {
     var result = {}
 
+    if (objXml.isEntity) {
+        result.isEntity = objXml.isEntity
+    }
+
     result.id = objXml.id
+
     if (objXml.alias) {
         result.alias = objXml.alias
     }
+
     if (objXml.comment) {
         result.comment = objXml.comment
     }
+
     if (objXml.namespace) {
         result.namespace = objXml.namespace
     }
@@ -43,8 +50,8 @@ ReferenceParser.prototype.parse = function fn(objXml) {
             result.indexes[0] = this._indParser.parse(objXml.indexes.index)
         }
     }
-    return result
 
+    return result
 }
 
 module.exports = ReferenceParser
