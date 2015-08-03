@@ -1,14 +1,15 @@
 'use strict'
 /* libraries */
-var fs = require('fs')
 var Promise = require('promise')
 /* own code */
 var readFile = require('./util/readFile')
+var writeFile = require('./util/writeFile')
 var parseXml = require('./convert/parseXml')
+var strJSON = require('./convert/strJSON')
 
 
 /**
- * Main part of convertor.
+ * Main part of convert.
  * @constructor
  */
 function Converter() {
@@ -20,35 +21,12 @@ function Converter() {
             .then(parseXml)
             .then(strJSON)
             .then(function (result) {
-                writeJSON(fileOut, result)
+                writeFile(fileOut, result)
             })
             .catch(function (err) {
                 console.log(err)
             })
     }
-}
-
-function strJSON(resultJSON) {
-    return new Promise(function (resolve) {
-        var result = JSON.stringify(resultJSON,
-            function (key, value) // callable function to strip some useless nodes
-            {
-                var result = value
-                if (key == 'xmlns:tns' || key == 'xmlns:xsi' || key == 'xsi:schemaLocation') result = undefined
-                return result
-            }, 2)
-        resolve(result)
-    })
-}
-
-function writeJSON(fileOut, result) {
-    return new Promise(function (resolve, reject) {
-        fs.writeFile(fileOut, result, function (err) {
-            if (err) {
-                reject(err)
-            } else resolve("The conversion is finished!")
-        })
-    })
 }
 
 
