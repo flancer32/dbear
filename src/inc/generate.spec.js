@@ -17,6 +17,7 @@ describe('Generator module', function () {
         params.dbPassword = '3Jcftix7VycNkEYKxIDW'
         params.dbHost = 'localhost'
         params.dbDialect = 'mysql'
+        params.demFile = 'sample/sample.dem.xml'
         // 1st test
         it('should authenticate with correct data', function (done) {
             sinon.stub(sg, 'getOrm', function () {
@@ -43,6 +44,15 @@ describe('Generator module', function () {
                 done(err)
             })
 
+        })
+    })
+
+    describe('#run', function () {
+        it.only('should start with simple data', function (done) {
+            var sg = new Generator()
+            params.demFile = 'sample/sample.dem.xml'
+            sg.run(params)
+            done()
         })
     })
 })

@@ -6,6 +6,6 @@ describe('Default params', function () {
     it('should contain default properties', function () {
         params.should.have.property('demFileIn')
         params.should.have.property('demFileOut')
-
+        params.should.have.property('skipWriteOut')
     })
 })

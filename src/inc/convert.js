@@ -17,15 +17,22 @@ function Converter() {
     this.run = function (param) {
         var fileIn = param.demFileIn
         var fileOut = param.demFileOut
-        readFile(fileIn)
-            .then(parseXml)
-            .then(strJSON)
-            .then(function (result) {
-                writeFile(fileOut, result)
-            })
-            .catch(function (err) {
-                console.log(err)
-            })
+        return new Promise(function (resolve, reject) {
+            readFile(fileIn)
+                .then(parseXml)
+                .then(strJSON)
+                .then(function (result) {
+                    if (!param.skipWriteOut) {
+                        writeFile(fileOut, result)
+                    } else {
+                        resolve(result)
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err)
+                    reject(err)
+                })
+        })
     }
 }
 

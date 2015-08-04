@@ -1,6 +1,9 @@
 'use strict'
+/* libraries */
 var Sequelize = require('sequelize')
 var Promise = require('Promise')
+/* own code */
+var Converter = require('./convert')
 var meta = require('./generate/meta.js')
 
 function Generator() {
@@ -225,23 +228,29 @@ function Generator() {
     this.run = function (params) {
         /* Get request in JSON format. */
         /* todo: we need to analyze format of the DEM file and to use converter to get JSON from XML (as separate function)*/
-        var request = getJsonFromDemFile(params.demFile)
-        /* In 'then' functions 'this' is not visible.
-         * This hack fix it. */
-        var gen = this
-        /* setConnection creates this.sequelize, that is using further. */
-        gen.setConnection(params).then(function () {
-            /*Parse JSON and create Meta information.*/
-            gen.createModel(request)
-            meta.createMeta(gen.sequelize)
-        }).then(function () {
-            /* Using this.model define entities. */
-            gen.defineStructure(gen.model)
-        }).then(function () {
-            /* Finally, sync all structure with DB. */
-            gen.synchronize()
-        }).catch(function (err) {
-            console.log(err);
+        var converter = new Converter()
+        //var request = getJsonFromDemFile(params.demFile)
+        var paramsConv = require('./convert/params')
+        paramsConv.demFileIn = params.demFile
+        paramsConv.skipWriteOut = true
+        converter.run(paramsConv).then(function (request, err) {
+            /* In 'then' functions 'this' is not visible.
+             * This hack fix it. */
+            var gen = this
+            /* setConnection creates this.sequelize, that is using further. */
+            gen.setConnection(params).then(function () {
+                /*Parse JSON and create Meta information.*/
+                gen.createModel(request)
+                meta.createMeta(gen.sequelize)
+            }).then(function () {
+                /* Using this.model define entities. */
+                gen.defineStructure(gen.model)
+            }).then(function () {
+                /* Finally, sync all structure with DB. */
+                gen.synchronize()
+            }).catch(function (err) {
+                console.log(err);
+            })
         })
     }
 
@@ -261,7 +270,7 @@ function Generator() {
             params.demFileOut = '../../dem.json'
             cnv.run(params)
             /* TODO This part don't work.
-            * Can't find created file */
+             * Can't find created file */
             result = require('../../dem.json')
 
 
