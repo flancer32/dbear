@@ -14,28 +14,30 @@ var strJSON = require('./convert/strJSON')
  */
 function Converter() {
 
-    this.run = function (param) {
-        var fileIn = param.demFileIn
-        var fileOut = param.demFileOut
-        return new Promise(function (resolve, reject) {
-            readFile(fileIn)
-                .then(parseXml)
-                .then(strJSON)
-                .then(function (result) {
-                    if (!param.skipWriteOut) {
-                        writeFile(fileOut, result)
-                    } else {
-                        resolve(result)
-                    }
-                })
-                .catch(function (err) {
-                    console.log(err)
-                    reject(err)
-                })
-        })
-    }
 }
 
+Converter.prototype.run = function _run(params) {
+    return new Promise(function (resolve, reject) {
+        var fileIn = params.demFileIn
+        var fileOut = params.demFileOut
+
+        readFile(fileIn)
+            .then(parseXml)
+            .then(strJSON)
+            .then(function (result) {
+                if (!params.skipWriteOut) {
+                    writeFile(fileOut, result).then(resolve).catch(function (err) {
+                        reject(err)
+                    })
+                } else {
+                    resolve(result)
+                }
+            })
+            .catch(function (err) {
+                reject(err)
+            })
+    })
+}
 
 module.exports = Converter
 

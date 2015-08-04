@@ -2,7 +2,6 @@
 'use strict'
 var sinon = require('sinon').sandbox.create()
 var should = require('chai').should()
-var assert = require('chai')
 var Promise = require('Promise')
 var Generator = require('./generate')
 var params = require('./generate/params')

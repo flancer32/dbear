@@ -7,14 +7,13 @@ var readFile = require('./readFile')
 
 describe('readFile', function () {
 
-    it('should read existed file', function () {
-        return readFile('./README.md').should.be.fulfilled;
+    it('should read existed file', function (done) {
+        readFile('./README.md').should.be.fulfilled.eventually.be.an('object').notify(done);
 
     })
 
-    it('should throw error when file does not exist', function () {
-        //readFile.should.be.a('string')
-        return readFile('./some-file-here').should.be.rejectedWith(Error)
+    it('should throw error when file does not exist', function (done) {
+        readFile('./some-file-here').should.be.rejectedWith(Error).notify(done)
     })
 
 })

@@ -14,7 +14,9 @@ function writeJSON(fileOut, result) {
         fs.writeFile(fileOut, result, function (err) {
             if (err) {
                 reject(err)
-            } else resolve("The conversion is finished!")
+            } else {
+                resolve(result)
+            }
         })
     })
 }
