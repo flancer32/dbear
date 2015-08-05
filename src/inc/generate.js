@@ -27,7 +27,7 @@ function Generator() {
         return new Promise(function (resolve, reject) {
             var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
             }
@@ -226,6 +226,7 @@ function Generator() {
     }
 
     this.run = function (params) {
+        var gen = this
         return new Promise(function (resolve, reject) {
             /* Get request in JSON format. */
             /* todo: we need to analyze format of the DEM file and to use converter to get JSON from XML (as separate function)*/
@@ -235,9 +236,6 @@ function Generator() {
             paramsConv.demFileIn = params.demFile
             paramsConv.skipWriteOut = true
             converter.run(paramsConv).then(function (request, err) {
-                /* In 'then' functions 'this' is not visible.
-                 * This hack fix it. */
-                var gen = this
                 /* setConnection creates this.sequelize, that is using further. */
                 gen.setConnection(params).then(function () {
                     /*Parse JSON and create Meta information.*/
@@ -254,6 +252,8 @@ function Generator() {
                     console.log(err);
                     reject(err)
                 })
+            }, function (err) {
+                reject(err)
             }).catch(function (err) {
                     console.log('err' + err)
                     reject(err)

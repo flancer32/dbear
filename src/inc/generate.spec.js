@@ -12,8 +12,8 @@ describe('Generator module', function () {
         var sg = new Generator()
 
         params.dbUser = 'sample'
-        params.dbName = 'sample_sequelize'
-        params.dbPassword = '3Jcftix7VycNkEYKxIDW'
+        params.dbName = 'sample'
+        params.dbPassword = 'sample'
         params.dbHost = 'localhost'
         params.dbDialect = 'mysql'
         params.demFile = 'sample/sample.dem.xml'
@@ -47,11 +47,10 @@ describe('Generator module', function () {
     })
 
     describe('#run', function () {
-        it.only('should start with simple data', function (done) {
+        it('should start with simple data', function (done) {
             var sg = new Generator()
             params.demFile = 'sample/sample.dem.xml'
-            sg.run(params)
-            done()
+            sg.run(params).then(done).catch(done)
         })
     })
 })
