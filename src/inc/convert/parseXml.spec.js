@@ -1,5 +1,6 @@
 'use strict'
 /* libraries */
+var sinon = require('sinon').sandbox.create()
 var chai = require("chai");
 var chaiAsPromised = require("chai-as-promised");
 var should = chai.should()
@@ -9,6 +10,10 @@ var Parser = require('./parseXml')
 chai.use(chaiAsPromised);
 
 describe('ParseXML file', function() {
+    it('should throw error if data is incorrect', function (done) {
+        var stub = sinon.stub().throws()
+        Parser(stub).should.be.rejectedWith(Error).notify(done)
+    })
 })
 
 //describe('readFile', function () {

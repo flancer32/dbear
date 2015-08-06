@@ -5,7 +5,7 @@ var Promise = require('promise')
 var readFile = require('./util/readFile')
 var writeFile = require('./util/writeFile')
 var parseXml = require('./convert/parseXml')
-var strJSON = require('./convert/strJSON')
+var strJson = require('./convert/strJson')
 
 
 /**
@@ -28,7 +28,7 @@ Converter.prototype.run = function _run(params) {
 
         readFile(fileIn)
             .then(parseXml)
-            .then(strJSON)
+            .then(strJson)
             .then(function (result) {
                 if (!params.skipWriteOut) {
                     /* other async flow (TODO should we have one more object to process this?) */
