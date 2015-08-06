@@ -5,6 +5,7 @@ var parseString = require('xml2js').parseString
 /* own code */
 var tagStrip = require('./../util/tagStrip')
 var analyzeRoot = require('./parseXml/root')
+var analyze = new analyzeRoot()
 
 function parseXml(data) {
 
@@ -15,7 +16,7 @@ function parseXml(data) {
             mergeAttrs:        true, // attributes become child nodes
             emptyTag:          {}
         }, function (err, result) {
-            var resultJSON = analyzeRoot(result)
+            var resultJSON = analyze.parse(result)
             if (err) {
                 reject(err)
             } else {

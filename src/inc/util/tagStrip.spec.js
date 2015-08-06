@@ -6,7 +6,6 @@ var strip = require('./tagStrip')
 
 describe('#tagStrip()', function () {
     it('should strip tag prefix', function () {
-        var node = strip('tns:dBEAR')
-        node.should.be.equal('dBEAR')
+        return strip('tns:dBEAR').should.be.equal('dBEAR')
     })
 })
