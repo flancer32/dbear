@@ -5,7 +5,7 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 var should = chai.should()
 /* own code */
-var stringJson = require('./strJson')
+var stringJson = require('./strJs')
 
 describe('strJson function', function () {
     it('should stringify simple JSON structure', function () {
