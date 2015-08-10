@@ -9,9 +9,15 @@ var meta = require('./generate/meta.js')
 function Generator() {
     this.sequelize = {}
     this.model = {}
+
     this.getOrm = function () {
-        /* to use in tests . */
+        /* to use in tests instead of IoC */
         return Sequelize
+    }
+
+    this.getConverter = function () {
+        /* to use in tests instead of IoC */
+        return Converter
     }
 
     this.setConnection = function (params) {
@@ -27,7 +33,7 @@ function Generator() {
         return new Promise(function (resolve, reject) {
             var opt = {
                 host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps: false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                     freezeTableName: true /* disable the modification of tablenames into plural */
                 }
             }
@@ -225,78 +231,57 @@ function Generator() {
 
     }
 
-    this.run = function (params) {
+    /**
+     *
+     * @param json
+     * @param err
+     * @return {*|exports|module.exports}
+     */
+    this.processJson = function (json) {
+        /* create shortcut for Generator */
         var gen = this
+        /* ... then return promise function that performs requested operations */
+        return new Promise(function (resolve, reject) {
+            /* setConnection creates this.sequelize, that is using further. */
+            gen.setConnection(params).then(function () {
+                /*Parse JSON and create Meta information.*/
+                gen.createModel(json)
+                meta.createMeta(gen.sequelize)
+            }).then(function () {
+                /* Using this.model define entities. */
+                gen.defineStructure(gen.model)
+            }).then(function () {
+                /* Finally, sync all structure with DB. */
+                gen.synchronize()
+                resolve()
+            }).catch(function (err) {
+                console.log(err);
+                reject(err)
+            })
+        })
+    }
+
+    this.run = function (params) {
+        /* create shortcut for Generator */
+        var gen = this
+        /* ... then return promise function that performs all operations */
         return new Promise(function (resolve, reject) {
             /* Get request in JSON format. */
-            /* todo: we need to analyze format of the DEM file and to use converter to get JSON from XML (as separate function)*/
+            var Converter = gen.getConverter()
             var converter = new Converter()
-            //var request = getJsonFromDemFile(params.demFile)
             var paramsConv = require('./convert/params')
             paramsConv.demFileIn = params.demFile
             paramsConv.skipWriteOut = true
-            converter.run(paramsConv).then(function (request, err) {
-                /* setConnection creates this.sequelize, that is using further. */
-                gen.setConnection(params).then(function () {
-                    /*Parse JSON and create Meta information.*/
-                    gen.createModel(request)
-                    meta.createMeta(gen.sequelize)
-                }).then(function () {
-                    /* Using this.model define entities. */
-                    gen.defineStructure(gen.model)
-                }).then(function () {
-                    /* Finally, sync all structure with DB. */
-                    gen.synchronize()
-                    resolve()
-                }).catch(function (err) {
-                    console.log(err);
-                    reject(err)
-                })
-            }, function (err) {
-                reject(err)
-            }).catch(function (err) {
+            converter.run(paramsConv)
+                .then(gen.processJson)
+                .catch(function (err) {
                     console.log('err' + err)
                     reject(err)
                 }
             )
-            1 + 1
         })
     }
 
-    /**
-     * @param path
-     * @returns {object}
-     */
-    function getJsonFromDemFile(path) {
-        var result
-        if (path.slice(-3) == 'xml') {
-            console.log("DEM as xml file is loaded")
-            /* Convert xml to JSON*/
-            var converter = require('./convert.js')
-            var params = require('./convert/params.js')
-            var cnv = new converter()
-            params.demFileIn = path
-            params.demFileOut = '../../dem.json'
-            cnv.run(params)
-            /* TODO This part don't work.
-             * Can't find created file */
-            result = require('../../dem.json')
-
-
-        } else if (path.slice(-4) == 'json') {
-            console.log("DEM as JSON file is loaded")
-            /* Get JSON */
-            result = require(path)
-        } else {
-            /* Throw error*/
-        }
-        /* TODO why we need this?
-         * #Created on 23-Jul-15
-         * Delete on 6-Aug-15 if unneeded
-         * */
-        //var self = this
-        return result;
-    }
 }
 
 module.exports = Generator
