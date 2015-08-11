@@ -49,10 +49,10 @@ describe('Generator module', function () {
     })
 
     describe('#run', function () {
-        it('should start with simple data', function (done) {
-            var sg = new Generator()
-            params.demFile = 'sample/sample.dem.xml'
-            sg.run(params).then(done).catch(done)
-        })
+        //it('should start with simple data', function (done) {
+        //    var sg = new Generator()
+        //    params.demFile = 'sample/sample.dem.xml'
+        //    sg.run(params).then(done).catch(done)
+        //})
     })
 })
