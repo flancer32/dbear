@@ -52,7 +52,7 @@ program
 
 program
     .command('convert')
-    .description('Convert DEM from one format to another (XML to JSON, for example)')
+    .description('Convert DEM from one format to another (XML to JSON, for example) Usage: dbear --in [value] --out [value] convert')
     .action(function (command) {
         var params = program.params.convert
         params.demFileIn = program.in
