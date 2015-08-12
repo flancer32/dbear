@@ -23,22 +23,49 @@ function Converter() {
  */
 Converter.prototype.run = function _run(params) {
     return new Promise(function (resolve, reject) {
-        var fileIn = params.demFileIn
-        var fileOut = params.demFileOut
 
-        readFile(fileIn)
-            .then(parseXml)
-            .then(strJson)
-            .then(function (result) {
-                if (!params.skipWriteOut) {
-                    /* other async flow (TODO should we have one more object to process this?) */
-                    writeFile(fileOut, result).then(resolve)
+        if (params.skipWriteOut) {
+            if (params.demFileIn !== undefined) {
+                if ((params.demFileIn.lastIndexOf(".xml") == params.demFileIn.length-4) && (params.demFileIn.lastIndexOf("\\") !== params.demFileIn.length-5)) {
+                    var fileIn = params.demFileIn
+                    var fileOut = params.demFileOut
+                    readFile(fileIn)
+                        .then(parseXml)
+                        .then(strJson)
+                        .then(function (result) {
+                            /* convert JSON string back to JSON object */
+                            var json = JSON.parse(result)
+                            resolve(json)
+                        })
                 } else {
-                    /* convert JSON string back to JSON object */
-                    var json = JSON.parse(result)
-                    resolve(json)
+                    reject(console.log("Error! Input file has incorrect name or extension!"))
                 }
-            })
+            } else {
+                reject(console.log("Error! Required option 'in' is missing! Type dbear --help for details"))
+            }
+        } else {
+            if ((params.demFileIn && params.demFileOut) !== undefined) {
+                if ((params.demFileIn.lastIndexOf(".xml") == params.demFileIn.length-4) && (params.demFileIn.lastIndexOf("\\") !== params.demFileIn.length-5)) {
+                    if ((params.demFileOut.lastIndexOf(".json") == params.demFileOut.length-5) && (params.demFileOut.lastIndexOf("\\") !== params.demFileOut.length-6)) {
+                        var fileIn = params.demFileIn
+                        var fileOut = params.demFileOut
+                        readFile(fileIn)
+                            .then(parseXml)
+                            .then(strJson)
+                            .then(function (result) {
+                                /* other async flow (TODO should we have one more object to process this?) */
+                                writeFile(fileOut, result).then(resolve)
+                            })
+                    } else {
+                        reject(console.log("Error! Output file has incorrect name or extension!"))
+                    }
+                } else {
+                    reject(console.log("Error! Input file has incorrect name or extension!"))
+                }
+            } else {
+                reject(console.log("Error! Required options 'in, out' is missing! Type dbear --help for details"))
+            }
+        }
     })
 }
 
