@@ -106,6 +106,9 @@
 			<element name="isPrimaryKey" type="boolean" default="false" minOccurs="0" maxOccurs="1">
 				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
 			</element>
+			<element name="defaultValue" type="string" minOccurs="0" maxOccurs="1">
+				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
+			</element>
 			<element name="isNullable" type="boolean" default="true" minOccurs="0" maxOccurs="1">
 				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
 				<!-- Если isNullable == false, то нужно указывать default-значение, которым будет инициализироваться атрибут в БД -->

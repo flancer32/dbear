@@ -11,7 +11,9 @@
 					<tns:attributes>
 						<tns:attribute id="NameFirst">
 							<tns:type>
-								<tns:text/>
+								<tns:text>
+									<tns:length>255</tns:length>
+								</tns:text>
 							</tns:type>
 						</tns:attribute>
 						<tns:attribute id="NameLast">
