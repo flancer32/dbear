@@ -164,7 +164,6 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 		<complexContent>
 			<extension base="tns:AttributeType">
 				<sequence>
-					<element name="isUnsigned" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
 					<element name="precision" type="integer" default="16" minOccurs="0" maxOccurs="1"/>
 					<element name="scale" type="integer" default="4" minOccurs="0" maxOccurs="1"/>
 				</sequence>

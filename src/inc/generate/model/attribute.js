@@ -27,10 +27,19 @@ function Attribute() {
  }
  *
  * Result data:
- * {
- *  column: "NameFirst",
- *  definition: { / Sequelize definition of the table's field / }
- * }
+ {
+     column:     "NameFirst",
+     definition: {
+         allowNull:     false,
+         autoIncrement: true,
+         comment:       "I'm a comment!",
+         defaultValue:  true,
+         field:         "field_with_underscores",
+         primaryKey:    true,
+         type:          Sequelize.BOOLEAN,
+         unique:        [true | 'compositeIndex']
+     }
+ }
  *
  * See http://sequelize.readthedocs.org/en/latest/docs/models-definition/#definition
  *
@@ -62,23 +71,37 @@ Attribute.prototype.parseJson = function _parseJson(jsDemAttr, seqModel) {
         } else if (type.hasOwnProperty('integer')) {
             typeData = type.integer
             def.type = Sequelize.INTEGER
+            if (('isUnsigned' in typeData) && (typeData.isUnsigned)) def.type = Sequelize.INTEGER.UNSIGNED
+            if (('isAutoincrement' in typeData) && (typeData.isAutoincrement)) def.autoIncrement = true
         } else if (type.hasOwnProperty('numeric')) {
             typeData = type.numeric
-            def.type = Sequelize.DECIMAL
+            if (('precision' in typeData) && ('scale' in typeData)) {
+                /* both precision and scale should present */
+                def.type = Sequelize.DECIMAL(typeData.precision, typeData.scale)
+            } else {
+                def.type = Sequelize.DECIMAL
+            }
         } else if (type.hasOwnProperty('option')) {
             typeData = type.option
             def.type = Sequelize.ENUM
         } else if (type.hasOwnProperty('text')) {
             typeData = type.text
-            def.type = Sequelize.STRING
+            if ('length' in typeData) {
+                def.type = Sequelize.STRING(typeData.length)
+            } else {
+                def.type = Sequelize.STRING
+            }
         } else {
-            console.log(("Can't resolve type '" + JSON.stringify(result.type) + "' of attribute '" + result.field + "'."))
+            console.log(("Can't resolve type '" + JSON.stringify(result.type) + "' of attribute '" + jsDemAttr.id + "'."))
+            throw 'Unknown attribute type.'
         }
         /* parse common properties for the type data */
         if ('isPrimaryKey' in typeData) def.primaryKey = typeData.isPrimaryKey
         if ('isNullable' in typeData) def.allowNull = typeData.isNullable
         if ('defaultValue' in typeData) def.defaultValue = typeData.defaultValue
 
+    } else {
+        throw 'Attribute type is missed.'
     }
 
 

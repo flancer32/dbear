@@ -48,11 +48,11 @@ describe('Generator Model Attribute', function () {
         def.should.have.property('comment')
         def.should.have.property('primaryKey')
         def.should.have.property('allowNull')
-        def['field'].should.be.equal('fieldName')
-        def['comment'].should.be.equal('comment here')
-        def['primaryKey'].should.be.equal(false)
-        def['allowNull'].should.be.equal(true)
-        def['defaultValue'].should.be.equal("some string")
+        def.field.should.be.equal('fieldName')
+        def.comment.should.be.equal('comment here')
+        def.primaryKey.should.be.equal(false)
+        def.allowNull.should.be.equal(true)
+        def.defaultValue.should.be.equal("some string")
     })
 
     it('should process binary attributes', function () {
@@ -68,7 +68,7 @@ describe('Generator Model Attribute', function () {
         parsed.definition.should.be.an('object')
         var def = parsed.definition
         def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.BLOB)
+        def.type.should.be.equal(Sequelize.BLOB)
     })
 
     it('should process boolean attributes', function () {
@@ -84,7 +84,7 @@ describe('Generator Model Attribute', function () {
         parsed.definition.should.be.an('object')
         var def = parsed.definition
         def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.BOOLEAN)
+        def.type.should.be.equal(Sequelize.BOOLEAN)
     })
 
     it('should process datetime attributes', function () {
@@ -100,39 +100,87 @@ describe('Generator Model Attribute', function () {
         parsed.definition.should.be.an('object')
         var def = parsed.definition
         def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.DATE)
+        def.type.should.be.equal(Sequelize.DATE)
     })
 
-    it('should process integer attributes', function () {
-        var mod = new Attribute()
-        var json = {
-            id:   "fieldName",
-            type: {
-                integer: {}
+    describe('should process integer attributes', function () {
+
+        it('simple definition', function () {
+            var mod = new Attribute()
+            var json = {
+                id:   "fieldName",
+                type: {
+                    integer: {}
+                }
             }
-        }
-        var parsed = mod.parseJson(json)
-        parsed.should.have.property('definition')
-        parsed.definition.should.be.an('object')
-        var def = parsed.definition
-        def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.INTEGER)
+            var parsed = mod.parseJson(json)
+            parsed.should.have.property('definition')
+            parsed.definition.should.be.an('object')
+            var def = parsed.definition
+            def.should.have.property('type')
+            def.type.should.be.equal(Sequelize.INTEGER)
+        })
+
+        it('unsigned and auto incremented', function () {
+            var mod = new Attribute()
+            var json = {
+                id:   "fieldName",
+                type: {
+                    integer: {
+                        isUnsigned:      true,
+                        isAutoincrement: true
+                    }
+                }
+            }
+            var parsed = mod.parseJson(json)
+            parsed.should.have.property('definition')
+            parsed.definition.should.be.an('object')
+            var def = parsed.definition
+            def.should.have.property('type')
+            def.type.options.unsigned.should.be.equal(Sequelize.INTEGER.UNSIGNED.options.unsigned)
+            def.should.have.property('autoIncrement')
+            def.autoIncrement.should.be.equal(true)
+        })
+
     })
 
-    it('should process numeric attributes', function () {
-        var mod = new Attribute()
-        var json = {
-            id:   "fieldName",
-            type: {
-                numeric: {}
+    describe('should process numeric attributes', function () {
+
+        it('simple definition', function () {
+            var mod = new Attribute()
+            var json = {
+                id:   "fieldName",
+                type: {
+                    numeric: {}
+                }
             }
-        }
-        var parsed = mod.parseJson(json)
-        parsed.should.have.property('definition')
-        parsed.definition.should.be.an('object')
-        var def = parsed.definition
-        def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.DECIMAL)
+            var parsed = mod.parseJson(json)
+            parsed.should.have.property('definition')
+            parsed.definition.should.be.an('object')
+            var def = parsed.definition
+            def.should.have.property('type')
+            def.type.should.be.equal(Sequelize.DECIMAL)
+        })
+
+        it('with precision and scale', function () {
+            var mod = new Attribute()
+            var json = {
+                id:   "fieldName",
+                type: {
+                    numeric: {
+                        precision: 16,
+                        scale:     4
+                    }
+                }
+            }
+            var parsed = mod.parseJson(json)
+            parsed.should.have.property('definition')
+            parsed.definition.should.be.an('object')
+            var def = parsed.definition
+            def.should.have.property('type')
+            def.type.options.precision.should.be.equal(16)
+            def.type.options.scale.should.be.equal(4)
+        })
     })
 
     it('should process option attributes', function () {
@@ -148,23 +196,56 @@ describe('Generator Model Attribute', function () {
         parsed.definition.should.be.an('object')
         var def = parsed.definition
         def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.ENUM)
+        def.type.should.be.equal(Sequelize.ENUM)
     })
 
-    it('should process text attributes', function () {
-        var mod = new Attribute()
-        var json = {
-            id:   "fieldName",
-            type: {
-                text: {}
+    describe('should process text attributes', function () {
+
+        it('simple definition', function () {
+            var mod = new Attribute()
+            var json = {
+                id:   "fieldName",
+                type: {
+                    text: {}
+                }
             }
-        }
-        var parsed = mod.parseJson(json)
-        parsed.should.have.property('definition')
-        parsed.definition.should.be.an('object')
-        var def = parsed.definition
-        def.should.have.property('type')
-        def['type'].should.be.equal(Sequelize.STRING)
+            var def = mod.parseJson(json).definition
+            def.should.have.property('type')
+            def.type.should.be.equal(Sequelize.STRING)
+        })
+
+        it('with length', function () {
+            var mod = new Attribute()
+            var json = {
+                id:   "fieldName",
+                type: {
+                    text: {
+                        length: 23
+                    }
+                }
+            }
+            var def = mod.parseJson(json).definition
+            def.should.have.property('type')
+            def.type.options.length.should.be.equal(23)
+        })
+
+    })
+
+    describe('should handle other branches', function () {
+
+        it('without type data', function () {
+            var mod = new Attribute()
+            var json = {id: "fieldName"}
+            var fn = mod.parseJson.bind(mod, json)
+            fn.should.throw(/Attribute type is missed./)
+        })
+
+        it('with unknown type', function () {
+            var mod = new Attribute()
+            var json = {id: "fieldName", type: {}}
+            var fn = mod.parseJson.bind(mod, json)
+            fn.should.throw(/Unknown attribute type./)
+        })
     })
 
 })
