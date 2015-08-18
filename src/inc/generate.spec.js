@@ -8,15 +8,17 @@ var params = require('./generate/params')
 
 
 describe('Generator module', function () {
+
+    /* define parameters for all tests */
+    params.dbUser = 'sample'
+    params.dbName = 'sample'
+    params.dbPassword = 'sample'
+    params.dbHost = 'localhost'
+    params.dbDialect = 'mysql'
+    params.demFile = 'sample/sample.dem.xml'
+
     describe('#setConnection()', function () {
         var sg = new Generator()
-
-        params.dbUser = 'sample'
-        params.dbName = 'sample'
-        params.dbPassword = 'sample'
-        params.dbHost = 'localhost'
-        params.dbDialect = 'mysql'
-        params.demFile = 'sample/sample.dem.xml'
         // 1st test
         it('should authenticate with correct data', function (done) {
             sinon.stub(sg, 'getOrm', function () {
@@ -47,15 +49,10 @@ describe('Generator module', function () {
     })
 
     describe('#run', function () {
-        /* TODO Spec is working incorrectly, need fix?
-        it('should start with simple data', function (done) {
-            var sg = new Generator()
-            params.demFile = 'sample/sample.dem.xml'
-            sg.run(params).then(done).catch(done)
-        })*/
+        //it('should start with simple data', function (done) {
+        //    var sg = new Generator()
+        //    params.demFile = 'sample/sample.dem.xml'
+        //    sg.run(params).then(done).catch(done)
+        //})
     })
 })
-
-//sg.createModel(request);
-//sg.defineEntities(sg.model.namespaces[1].entities);
-//sg.synchronize(true);

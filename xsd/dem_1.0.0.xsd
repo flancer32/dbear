@@ -106,6 +106,9 @@
 			<element name="isPrimaryKey" type="boolean" default="false" minOccurs="0" maxOccurs="1">
 				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
 			</element>
+			<element name="defaultValue" type="string" minOccurs="0" maxOccurs="1">
+				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
+			</element>
 			<element name="isNullable" type="boolean" default="true" minOccurs="0" maxOccurs="1">
 				<!-- Нужно вынести элемент на уровень самого атрибута, а не его типа -->
 				<!-- Если isNullable == false, то нужно указывать default-значение, которым будет инициализироваться атрибут в БД -->
@@ -161,7 +164,6 @@ http://jira.flancer64.com/browse/WF-11?focusedCommentId=12164&page=com.atlassian
 		<complexContent>
 			<extension base="tns:AttributeType">
 				<sequence>
-					<element name="isUnsigned" type="boolean" default="false" minOccurs="0" maxOccurs="1"/>
 					<element name="precision" type="integer" default="16" minOccurs="0" maxOccurs="1"/>
 					<element name="scale" type="integer" default="4" minOccurs="0" maxOccurs="1"/>
 				</sequence>
