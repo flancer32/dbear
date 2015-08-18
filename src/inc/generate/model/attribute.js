@@ -43,21 +43,21 @@ function Attribute() {
  *
  * See http://sequelize.readthedocs.org/en/latest/docs/models-definition/#definition
  *
- * @param jsDemAttr
+ * @param jsDem
  * @param seqModel
  * @return {{}}
  * @private
  */
-Attribute.prototype.parseJson = function _parseJson(jsDemAttr, seqModel) {
+Attribute.prototype.parseJson = function _parseJson(jsDem, seqModel) {
     var result = {column: '', definition: {}};
     var def = result.definition
     /* process common attribute's properties */
-    result.column = jsDemAttr.id
-    def.field = jsDemAttr.id
-    if ('comment' in jsDemAttr) def.comment = jsDemAttr.comment
+    result.column = jsDem.id
+    def.field = jsDem.id
+    if ('comment' in jsDem) def.comment = jsDem.comment
     /* parse type data */
-    if ('type' in jsDemAttr) {
-        var type = jsDemAttr.type
+    if ('type' in jsDem) {
+        var type = jsDem.type
         var typeData
         if (type.hasOwnProperty('binary')) {
             typeData = type.binary
@@ -92,7 +92,7 @@ Attribute.prototype.parseJson = function _parseJson(jsDemAttr, seqModel) {
                 def.type = Sequelize.STRING
             }
         } else {
-            console.log(("Can't resolve type '" + JSON.stringify(result.type) + "' of attribute '" + jsDemAttr.id + "'."))
+            console.log(("Can't resolve type '" + JSON.stringify(result.type) + "' of attribute '" + jsDem.id + "'."))
             throw 'Unknown attribute type.'
         }
         /* parse common properties for the type data */

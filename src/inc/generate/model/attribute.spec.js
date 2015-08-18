@@ -5,20 +5,20 @@ var chai = require("chai");
 var should = chai.should()
 var Sequelize = require('sequelize')
 /* own code */
-var Attribute = require('./attribute')
+var Model = require('./attribute')
 
 
 describe('Generator Model Attribute', function () {
 
     it('should be instantiated', function () {
-        var mod = new Attribute()
+        var mod = new Model()
         mod.should.be.an('object')
         mod.should.has.property('parseJson')
         mod.parseJson.should.be.a('function')
     })
 
     it('should process common definition', function () {
-        var mod = new Attribute()
+        var mod = new Model()
         var json = {
             id:      "fieldName",
             comment: "comment here",
@@ -56,7 +56,7 @@ describe('Generator Model Attribute', function () {
     })
 
     it('should process binary attributes', function () {
-        var mod = new Attribute()
+        var mod = new Model()
         var json = {
             id:   "fieldName",
             type: {
@@ -72,7 +72,7 @@ describe('Generator Model Attribute', function () {
     })
 
     it('should process boolean attributes', function () {
-        var mod = new Attribute()
+        var mod = new Model()
         var json = {
             id:   "fieldName",
             type: {
@@ -88,7 +88,7 @@ describe('Generator Model Attribute', function () {
     })
 
     it('should process datetime attributes', function () {
-        var mod = new Attribute()
+        var mod = new Model()
         var json = {
             id:   "fieldName",
             type: {
@@ -106,7 +106,7 @@ describe('Generator Model Attribute', function () {
     describe('should process integer attributes', function () {
 
         it('simple definition', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {
                 id:   "fieldName",
                 type: {
@@ -122,7 +122,7 @@ describe('Generator Model Attribute', function () {
         })
 
         it('unsigned and auto incremented', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {
                 id:   "fieldName",
                 type: {
@@ -147,7 +147,7 @@ describe('Generator Model Attribute', function () {
     describe('should process numeric attributes', function () {
 
         it('simple definition', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {
                 id:   "fieldName",
                 type: {
@@ -163,7 +163,7 @@ describe('Generator Model Attribute', function () {
         })
 
         it('with precision and scale', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {
                 id:   "fieldName",
                 type: {
@@ -184,7 +184,7 @@ describe('Generator Model Attribute', function () {
     })
 
     it('should process option attributes', function () {
-        var mod = new Attribute()
+        var mod = new Model()
         var json = {
             id:   "fieldName",
             type: {
@@ -202,7 +202,7 @@ describe('Generator Model Attribute', function () {
     describe('should process text attributes', function () {
 
         it('simple definition', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {
                 id:   "fieldName",
                 type: {
@@ -215,7 +215,7 @@ describe('Generator Model Attribute', function () {
         })
 
         it('with length', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {
                 id:   "fieldName",
                 type: {
@@ -234,14 +234,14 @@ describe('Generator Model Attribute', function () {
     describe('should handle other branches', function () {
 
         it('without type data', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {id: "fieldName"}
             var fn = mod.parseJson.bind(mod, json)
             fn.should.throw(/Attribute type is missed./)
         })
 
         it('with unknown type', function () {
-            var mod = new Attribute()
+            var mod = new Model()
             var json = {id: "fieldName", type: {}}
             var fn = mod.parseJson.bind(mod, json)
             fn.should.throw(/Unknown attribute type./)
