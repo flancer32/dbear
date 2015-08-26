@@ -12,7 +12,7 @@ function Entity() {
 }
 
 /**
- * Input JSON (DEM attribut):
+ * Input JSON (DEM entity):
  {
    "id": "Person",
    "alias": "person",
@@ -36,7 +36,7 @@ function Entity() {
  */
 Entity.prototype.parseJson = function _parseJson(jsDem, seqModel) {
     var result = {table: '', columns: {}, options: {}};
-    /* process common attribute's properties */
+    /* process common properties */
     result.table = jsDem.id
     var options = result.options
     /* parse columns */

@@ -11,7 +11,7 @@ function Attribute() {
 }
 
 /**
- * Input JSON (DEM attribut):
+ * Input JSON (DEM attribute):
  {
      "id": "NameFirst",
      "alias": "nfirst",
@@ -51,7 +51,7 @@ function Attribute() {
 Attribute.prototype.parseJson = function _parseJson(jsDem, seqModel) {
     var result = {column: '', definition: {}};
     var def = result.definition
-    /* process common attribute's properties */
+    /* process common properties */
     result.column = jsDem.id
     def.field = jsDem.id
     if ('comment' in jsDem) def.comment = jsDem.comment
