@@ -9,6 +9,7 @@ var meta = require('./generate/meta.js')
 function Generator() {
     this.sequelize = {}
     this.model = {}
+    this.params = {}
 
     this.getOrm = function () {
         /* to use in tests instead of IoC */
@@ -261,24 +262,23 @@ function Generator() {
     }
 
     this.run = function (params) {
-        /* create shortcut for Generator */
+        /* save parameters and create shortcut for Generator */
+        this.params = params
         var gen = this
-        /* ... then return promise function that performs all operations */
-        return new Promise(function (resolve, reject) {
-            /* Get request in JSON format. */
-            var Converter = gen.getConverter()
-            var converter = new Converter()
-            var paramsConv = require('./convert/params')
-            paramsConv.demFileIn = params.demFile
-            paramsConv.skipWriteOut = true
-            converter.run(paramsConv)
-                .then(gen.processJson)
-                .catch(function (err) {
-                    console.log('err' + err)
-                    reject(err)
-                }
-            )
-        })
+
+        /* Convert XML request to JSON format. */
+        var Converter = gen.getConverter()
+        var converter = new Converter()
+        var paramsConv = require('./convert/params')
+        paramsConv.demFileIn = params.demFile
+        paramsConv.skipWriteOut = true
+        converter.run(paramsConv)
+            .then(gen.processJson)
+            .catch(function (err) {
+                console.log('err' + err)
+                reject(err)
+            }
+        )
     }
 
 }
