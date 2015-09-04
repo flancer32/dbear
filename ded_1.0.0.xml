@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:dBEAR xmlns:tns="http://www.flancer64.com/dBEAR/Schema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.flancer64.com/dBEAR/Schema ded_1.0.0.xsd ">
+	<tns:comment>Anthills</tns:comment>
+	<tns:namespaces>
+		<tns:namespace id="com.flancer32.anthills.core">
+			<tns:entities>
+				<tns:entity id="Client">
+					<tns:attributes>
+						<tns:attribute id="Name">
+							<tns:type>
+								<tns:text>
+									<tns:isNullable>false</tns:isNullable>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="Surname">
+							<tns:type>
+								<tns:text>
+									<tns:isNullable>false</tns:isNullable>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Service">
+					<tns:attributes>
+						<tns:attribute id="Name">
+							<tns:type>
+								<tns:text></tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Privilleges">
+					<tns:attributes>
+						<tns:attribute id="Name">
+							<tns:type>
+								<tns:text>
+									<tns:isNullable>false</tns:isNullable>
+								</tns:text>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="Description">
+							<tns:type>
+								<tns:text></tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Mapping">
+					<tns:attributes>
+						<tns:attribute id="AnthillName">
+							<tns:type>
+								<tns:text></tns:text>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Direct">
+					<tns:attributes>
+						<tns:attribute id="external_group_id">
+							<tns:type>
+								<tns:integer></tns:integer>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="internal_group_id">
+							<tns:type>
+								<tns:integer></tns:integer>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+				<tns:entity id="Transit">
+					<tns:attributes>
+						<tns:attribute id="external_group_id">
+							<tns:type>
+								<tns:integer>
+									<tns:isUnique>true</tns:isUnique>
+								</tns:integer>
+							</tns:type>
+						</tns:attribute>
+						<tns:attribute id="internal_group_id">
+							<tns:type>
+								<tns:integer></tns:integer>
+							</tns:type>
+						</tns:attribute>
+					</tns:attributes>
+				</tns:entity>
+			</tns:entities>
+			<tns:relations>
+				<tns:relation id="Client_Service">
+					<tns:refs>
+						<tns:entryRef>
+							<tns:namespace></tns:namespace>
+							<tns:name>Client</tns:name>
+							<tns:indexes>
+								<tns:index id="Client"></tns:index>
+								<tns:index id="Service"></tns:index>
+							</tns:indexes>
+						</tns:entryRef>
+					</tns:refs>
+				</tns:relation>
+			</tns:relations>
+		</tns:namespace>
+	</tns:namespaces>
+</tns:dBEAR>
