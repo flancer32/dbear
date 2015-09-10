@@ -23,12 +23,12 @@ function Converter() {
  */
 Converter.prototype.run = function _run(params) {
     return new Promise(function (resolve, reject) {
-
-        if (params.skipWriteOut) {
-            if (params.demFileIn !== undefined) {
-                if ((params.demFileIn.lastIndexOf(".xml") == params.demFileIn.length-4) && (params.demFileIn.lastIndexOf("\\") !== params.demFileIn.length-5)) {
-                    var fileIn = params.demFileIn
-                    var fileOut = params.demFileOut
+        var fileIn = params.demFileIn
+        var fileOut = params.demFileOut
+        var skipWriteOut = params.skipWriteOut
+        if (skipWriteOut) {
+            if (fileIn !== undefined) {
+                if ((fileIn.lastIndexOf(".xml") == fileIn.length - 4) && (fileIn.lastIndexOf("\\") !== fileIn.length - 5)) {
                     readFile(fileIn)
                         .then(parseXml)
                         .then(strJson)
@@ -44,11 +44,9 @@ Converter.prototype.run = function _run(params) {
                 reject(console.log("Error! Required option 'in' is missing! Type dbear --help for details"))
             }
         } else {
-            if ((params.demFileIn && params.demFileOut) !== undefined) {
-                if ((params.demFileIn.lastIndexOf(".xml") == params.demFileIn.length-4) && (params.demFileIn.lastIndexOf("\\") !== params.demFileIn.length-5)) {
-                    if ((params.demFileOut.lastIndexOf(".json") == params.demFileOut.length-5) && (params.demFileOut.lastIndexOf("\\") !== params.demFileOut.length-6)) {
-                        var fileIn = params.demFileIn
-                        var fileOut = params.demFileOut
+            if ((fileIn && fileOut) !== undefined) {
+                if ((fileIn.lastIndexOf(".xml") == fileIn.length - 4) && (fileIn.lastIndexOf("\\") !== fileIn.length - 5)) {
+                    if ((fileOut.lastIndexOf(".json") == fileOut.length - 5) && (fileOut.lastIndexOf("\\") !== fileOut.length - 6)) {
                         readFile(fileIn)
                             .then(parseXml)
                             .then(strJson)
