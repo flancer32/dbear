@@ -52,7 +52,24 @@ describe('Generator\'s DEM Loader', function () {
                 json.should.have.property('dBEAR')
                 done()
             }
-        )
+        ).catch(done)
+    })
 
+    it('should load JSON file', function (done) {
+        var loader = new Loader()
+        var stubReadFile = sinon.stub()
+        stubReadFile.resolves(new Buffer('{"dBEAR": {}}'))
+        loader.readFile = stubReadFile
+        var stubConverterRun = sinon.stub()
+        stubConverterRun.resolves({dBEAR: {}})
+        loader.converter.run = stubConverterRun
+        var demFileIn = './sample/sample.dem.json'
+        loader.load(demFileIn).should.be.fulfilled.then(
+            function (json) {
+                json.should.be.an('object')
+                json.should.have.property('dBEAR')
+                done()
+            }
+        ).catch(done)
     })
 })

@@ -37,7 +37,8 @@ DemLoader.prototype.load = function _load(demFileIn) {
                     iLoader.converter.run(params).then(resolve).catch(reject)
                 } else {
                     /* process as JSON */
-                    result = buffer.toJSON()
+                    var str = buffer.toString()
+                    result = JSON.parse(str)
                     resolve(result)
                 }
             })
