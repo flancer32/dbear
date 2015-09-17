@@ -6,53 +6,36 @@ var Promise = require('Promise')
 var Converter = require('./convert')
 var meta = require('./generate/meta.js')
 
-function Generator() {
+function Generator(params) {
+    if (!(this instanceof  Generator)) return new Generator(params)
+
+    this.params = params || {}
+    this.converter = {}
     this.sequelize = {}
     this.model = {}
-    this.params = {}
+    _initOrm(this)
+    return
 
-    this.getOrm = function () {
-        /* to use in tests instead of IoC */
-        return Sequelize
-    }
-
-    this.getConverter = function () {
-        /* to use in tests instead of IoC */
-        return Converter
-    }
-
-    this.setConnection = function (params) {
-
-        /* Creating conection instance (one per app) */
-        console.log("Setting connection with DB...")
-
-        /* In 'Promises' functions 'this' is not visible.
-         * This hack fix it. */
-        var gen = this
-        var Orm = this.getOrm()
-
-        return new Promise(function (resolve, reject) {
-            var opt = {
-                host: params.dbHost, dialect: params.dbDialect, define: {
-                    timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
-                    freezeTableName: true /* disable the modification of tablenames into plural */
-                }
+    /**
+     * Constructor's function to initialize Sequelize object (ORM).
+     *
+     * @param iGenerator
+     * @private
+     */
+    function _initOrm(iGenerator) {
+        //var iGenerator = this
+        var params = iGenerator.params
+        var opt = {
+            host:    params.dbHost,
+            dialect: params.dbDialect,
+            define:  {
+                timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+                freezeTableName: true /* disable the modification of tablenames into plural */
             }
-            gen.sequelize = new Orm(params.dbName, params.dbUser, params.dbPassword, opt)
-            gen.sequelize.authenticate().then(function (result) {
-                console.log("Connection established.")
-                resolve('Connection established')
+        }
+        iGenerator.sequelize = new Sequelize(params.dbName, params.dbUser, params.dbPassword, opt)
+    }
 
-            }, function (errors) {
-                console.log("Can't authenticate. Maybe data is incorrect or DB isn't still created?")
-                console.log(errors)
-                gen.sequelize = null
-                reject(errors)
-            })
-        })
-
-
-    };
 
     this.createModel = function (request) {
 
@@ -261,26 +244,92 @@ function Generator() {
         })
     }
 
-    this.run = function (params) {
-        /* save parameters and create shortcut for Generator */
-        this.params = params
-        var gen = this
-
-        /* Convert XML request to JSON format. */
-        var Converter = gen.getConverter()
-        var converter = new Converter()
-        var paramsConv = require('./convert/params')
-        paramsConv.demFileIn = params.demFile
-        paramsConv.skipWriteOut = true
-        converter.run(paramsConv)
-            .then(gen.processJson)
-            .catch(function (err) {
-                console.log('err' + err)
-                reject(err)
-            }
-        )
-    }
+    //this.run = function (params) {
+    //    /* save parameters and create shortcut for Generator */
+    //    this.params = params
+    //    var iGenerator = this
+    //
+    //    /* Convert XML request to JSON format. */
+    //    var Converter = iGenerator.getConverter()
+    //    var converter = new Converter()
+    //    var paramsConv = require('./convert/params')
+    //    paramsConv.demFileIn = params.demFile
+    //    paramsConv.skipWriteOut = true
+    //    converter.run(paramsConv)
+    //        .then(iGenerator.processJson)
+    //        .catch(function (err) {
+    //            console.log('err' + err)
+    //            reject(err)
+    //        }
+    //    )
+    //}
 
 }
+
+/**
+ * Perform all actions to generate addition domain structure defined in the new DEM.
+ */
+Generator.prototype.run = function _run() {
+    /* create shortcut for Generator itself */
+    var iGenerator = this
+    var params = iGenerator.params
+    /* compose converter parameters and run converter */
+    var paramsConv = require('./convert/params')
+    paramsConv.demFileIn = params.demFile
+    paramsConv.skipWriteOut = true
+    /* read META data from DB (dbDEM) and input data from file (newDEM) ... */
+    Promise.all([
+        iGenerator.readMeta(),
+        iGenerator.loadDem()
+    ])
+        .then(iGenerator.mergeDems)
+        .then(iGenerator.updateDb)
+        .catch(iGenerator.errorHandler)
+}
+
+/**
+ * Read META data from DB or create new META tables for empty DB.
+ */
+Generator.prototype.readMeta = function _readMeta() {
+    var iGenerator = this
+    return new Promise(function (resolve, reject) {
+        resolve('readMeta');
+    })
+}
+
+/**
+ * Load DEM and convert to JSON format.
+ */
+Generator.prototype.loadDem = function _loadDem() {
+    var iGenerator = this
+    return Promise.resolve('loadDem')
+}
+
+/**
+ * Merge dbDEM & newDEM into one commonDEM, update META information and prepare Sequelize definitions.
+ * @param $dems
+ *
+ */
+Generator.prototype.mergeDems = function _mergeDems($dems) {
+    var iGenerator = this
+    var dems = $dems
+    return new Promise(function (resolve, reject) {
+        resolve('mergedDems');
+    })
+}
+
+Generator.prototype.updateDb = function _updateDb() {
+    var iGenerator = this
+
+    return new Promise(function (resolve, reject) {
+        resolve('updateDb');
+        console.log('updated!');
+    })
+}
+
+Generator.prototype.errorHandler = function _errorHandler(err) {
+    console.log('error: ' + err);
+}
+
 
 module.exports = Generator

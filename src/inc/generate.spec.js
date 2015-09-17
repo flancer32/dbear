@@ -18,9 +18,10 @@ describe('Generator module', function () {
     params.demFile = 'sample/sample.dem.xml'
 
     describe('#setConnection()', function () {
-        var sg = new Generator()
+
         // 1st test
         it('should authenticate with correct data', function (done) {
+            var sg = new Generator(params)
             sinon.stub(sg, 'getOrm', function () {
                 return function (database, username, password, options) {
                     database.should.equal(params.dbName)
@@ -49,10 +50,10 @@ describe('Generator module', function () {
     })
 
     describe('#run', function () {
-        it.skip('should start with simple data', function (done) {
-            var sg = new Generator()
+        it.only('should start with simple data', function () {
             params.demFile = 'sample/sample.dem.xml'
-            sg.run(params).then(done).catch(done)
+            var sg = new Generator(params)
+            sg.run()//.then(done).catch(done)
         })
     })
 })
