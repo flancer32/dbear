@@ -22,10 +22,6 @@ program.params.generate = paramsGenerator
  */
 program.converter = new Converter()
 /**
- * @type {*|Generator}
- */
-program.generator = new Generator()
-/**
  * Module's exports.
  */
 module.exports = program
@@ -72,7 +68,11 @@ program
         params.dbPassword = program.dbPassword
         /* todo transform 'demFile' to absolute path */
         params.demFile = program.in
-        program.generator.run(params)
+        /**
+         * @type {*|Generator}
+         */
+        program.generator = new Generator(params)
+        program.generator.run()
     })
 
 program

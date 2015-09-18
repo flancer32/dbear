@@ -20,7 +20,7 @@ describe('Generator module', function () {
     describe('#setConnection()', function () {
 
         // 1st test
-        it('should authenticate with correct data', function (done) {
+        it.skip('should authenticate with correct data', function (done) {
             var sg = new Generator(params)
             sinon.stub(sg, 'getOrm', function () {
                 return function (database, username, password, options) {
@@ -50,7 +50,7 @@ describe('Generator module', function () {
     })
 
     describe('#run', function () {
-        it.only('should start with simple data', function () {
+        it('should start with simple data', function () {
             params.demFile = 'sample/sample.dem.xml'
             var sg = new Generator(params)
             sg.run()//.then(done).catch(done)

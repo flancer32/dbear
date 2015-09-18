@@ -46,7 +46,7 @@
 				</tns:entity>
 			</tns:entities>
 			<tns:relations>
-				<tns:relation id="Person_AuthMethod">
+				<tns:relation id="PersonAuthMethod">
 					<tns:comment>Each Person can be authenticated by one ore more methods.</tns:comment>
 					<tns:refs>
 						<tns:entryRef>

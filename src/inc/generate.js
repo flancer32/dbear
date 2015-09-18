@@ -5,11 +5,12 @@ var Promise = require('Promise')
 /* own code */
 var Converter = require('./convert')
 var meta = require('./generate/meta.js')
+var MetaTables = require('./generate/meta/tables')
 
-function Generator(params) {
-    if (!(this instanceof  Generator)) return new Generator(params)
+function Generator(opt) {
+    if (!(this instanceof  Generator)) return new Generator(opt)
 
-    this.params = params || {}
+    this.params = opt || {}
     this.converter = {}
     this.sequelize = {}
     this.model = {}
@@ -226,7 +227,7 @@ function Generator(params) {
         /* ... then return promise function that performs requested operations */
         return new Promise(function (resolve, reject) {
             /* setConnection creates this.sequelize, that is using further. */
-            gen.setConnection(params).then(function () {
+            gen.setConnection(opt).then(function () {
                 /*Parse JSON and create Meta information.*/
                 gen.createModel(json)
                 meta.createMeta(gen.sequelize)
@@ -293,6 +294,9 @@ Generator.prototype.run = function _run() {
 Generator.prototype.readMeta = function _readMeta() {
     var iGenerator = this
     return new Promise(function (resolve, reject) {
+        /* read META data */
+        var sequelize = iGenerator.sequelize;
+        var meta = new MetaTables({sequelize: sequelize})
         resolve('readMeta');
     })
 }
