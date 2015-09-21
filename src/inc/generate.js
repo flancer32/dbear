@@ -6,6 +6,7 @@ var Promise = require('Promise')
 var Converter = require('./convert')
 var meta = require('./generate/meta.js')
 var MetaTables = require('./generate/meta/tables')
+var MetaLoader = require('./generate/meta/loader')
 
 function Generator(opt) {
     if (!(this instanceof  Generator)) return new Generator(opt)
@@ -297,7 +298,11 @@ Generator.prototype.readMeta = function _readMeta() {
         /* read META data */
         var sequelize = iGenerator.sequelize;
         var meta = new MetaTables({sequelize: sequelize})
-        resolve('readMeta');
+        var loader = new MetaLoader({sequelize: sequelize, meta: meta})
+        sequelize.sync()
+            .then(loader.load)
+            .then(resolve)
+            .catch(reject)
     })
 }
 

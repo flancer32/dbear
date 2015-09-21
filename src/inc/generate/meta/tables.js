@@ -3,7 +3,7 @@
 var Sequelize = require('sequelize')
 
 /**
- *
+ * Return Sequelize definition for META tables.
  * @param opts
  * @return {Tables}
  * @constructor
