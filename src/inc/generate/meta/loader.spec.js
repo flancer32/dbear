@@ -9,7 +9,7 @@ var Model = require('./loader')
 var Meta = require('./tables')
 
 
-describe('Meta DEM Loader', function () {
+describe('META DEM Loader', function () {
 
     var sequelize = new Sequelize('sample', 'sample', 'sample', {dialect: 'mysql'});
     var meta = new Meta({sequelize: sequelize})
@@ -19,11 +19,13 @@ describe('Meta DEM Loader', function () {
         it('as Object', function () {
             var mod = new Model({sequelize: sequelize, meta: meta})
             mod.should.be.an('object')
+            mod.should.be.an.instanceOf(Model)
         })
 
         it('as Function', function () {
-            var mod = new Model({sequelize: sequelize, meta: meta})
+            var mod = Model({sequelize: sequelize, meta: meta})
             mod.should.be.an('object')
+            mod.should.be.an.instanceOf(Model)
         })
     })
 
@@ -34,7 +36,7 @@ describe('Meta DEM Loader', function () {
                 1 + 1
                 done()
             })
-        })
+        }).catch(done)
 
 
     })

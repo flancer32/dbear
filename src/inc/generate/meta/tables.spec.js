@@ -8,7 +8,7 @@ var Sequelize = require('sequelize')
 var Model = require('./tables')
 
 
-describe('Meta Tables', function () {
+describe('META Tables', function () {
 
     var sequelize = new Sequelize('sample', 'sample', 'sample', {dialect: 'mysql'});
 

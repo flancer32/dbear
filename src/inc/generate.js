@@ -4,7 +4,6 @@ var Sequelize = require('sequelize')
 var Promise = require('Promise')
 /* own code */
 var Converter = require('./convert')
-var meta = require('./generate/meta.js')
 var MetaTables = require('./generate/meta/tables')
 var MetaLoader = require('./generate/meta/loader')
 
