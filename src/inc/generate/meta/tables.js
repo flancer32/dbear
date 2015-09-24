@@ -36,7 +36,8 @@ function Tables(opts) {
             }, {
                 timestamps:      true,
                 freezeTableName: true,
-                tableName:       '_database'
+                tableName:       '_database',
+                comment:         'Main META table, contains DEM'
             }
         )
         return result
@@ -70,7 +71,8 @@ function Tables(opts) {
             }, {
                 timestamps:      false,
                 freezeTableName: true,
-                tableName:       '_namespace'
+                tableName:       '_namespace',
+                comment:         'Namespaces registry.'
             }
         )
         return result
@@ -109,6 +111,7 @@ function Tables(opts) {
                 timestamps:      false,
                 freezeTableName: true,
                 tableName:       '_entity',
+                comment:         'Entities registry',
                 indexes:         [
                     {unique: true, fields: ['namespace_id', 'name']}
                 ]
@@ -150,6 +153,7 @@ function Tables(opts) {
                 timestamps:      false,
                 freezeTableName: true,
                 tableName:       '_relation',
+                comment:         'Relations registry',
                 indexes:         [
                     {unique: true, fields: ['namespace_id', 'name']}
                 ]
@@ -191,6 +195,7 @@ function Tables(opts) {
                 timestamps:      false,
                 freezeTableName: true,
                 tableName:       '_attribute',
+                comment:         'Attributes registry',
                 indexes:         [
                     {unique: true, fields: ['entity_id', 'name']}
                 ]

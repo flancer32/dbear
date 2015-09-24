@@ -7,10 +7,10 @@ var Converter = require('./convert')
 var MetaTables = require('./generate/meta/tables')
 var MetaLoader = require('./generate/meta/loader')
 
-function Generator(opt) {
-    if (!(this instanceof  Generator)) return new Generator(opt)
+function Generator(opts) {
+    if (!(this instanceof  Generator)) return new Generator(opts)
 
-    this.params = opt || {}
+    this.opts = opts || {}
     this.converter = {}
     this.sequelize = {}
     this.model = {}
@@ -25,16 +25,16 @@ function Generator(opt) {
      */
     function _initOrm(iGenerator) {
         //var iGenerator = this
-        var params = iGenerator.params
+        var opts = iGenerator.opts
         var opt = {
-            host:    params.dbHost,
-            dialect: params.dbDialect,
+            host:    opts.dbHost,
+            dialect: opts.dbDialect,
             define:  {
                 timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                 freezeTableName: true /* disable the modification of tablenames into plural */
             }
         }
-        iGenerator.sequelize = new Sequelize(params.dbName, params.dbUser, params.dbPassword, opt)
+        iGenerator.sequelize = new Sequelize(opts.dbName, opts.dbUser, opts.dbPassword, opt)
     }
 
 
@@ -227,7 +227,7 @@ function Generator(opt) {
         /* ... then return promise function that performs requested operations */
         return new Promise(function (resolve, reject) {
             /* setConnection creates this.sequelize, that is using further. */
-            gen.setConnection(opt).then(function () {
+            gen.setConnection(opts).then(function () {
                 /*Parse JSON and create Meta information.*/
                 gen.createModel(json)
                 meta.createMeta(gen.sequelize)
@@ -244,27 +244,6 @@ function Generator(opt) {
             })
         })
     }
-
-    //this.run = function (params) {
-    //    /* save parameters and create shortcut for Generator */
-    //    this.params = params
-    //    var iGenerator = this
-    //
-    //    /* Convert XML request to JSON format. */
-    //    var Converter = iGenerator.getConverter()
-    //    var converter = new Converter()
-    //    var paramsConv = require('./convert/params')
-    //    paramsConv.demFileIn = params.demFile
-    //    paramsConv.skipWriteOut = true
-    //    converter.run(paramsConv)
-    //        .then(iGenerator.processJson)
-    //        .catch(function (err) {
-    //            console.log('err' + err)
-    //            reject(err)
-    //        }
-    //    )
-    //}
-
 }
 
 /**
@@ -273,10 +252,10 @@ function Generator(opt) {
 Generator.prototype.run = function _run() {
     /* create shortcut for Generator itself */
     var iGenerator = this
-    var params = iGenerator.params
+    var opts = iGenerator.opts
     /* compose converter parameters and run converter */
     var paramsConv = require('./convert/params')
-    paramsConv.demFileIn = params.demFile
+    paramsConv.demFileIn = opts.demFile
     paramsConv.skipWriteOut = true
     /* read META data from DB (dbDEM) and input data from file (newDEM) ... */
     Promise.all([

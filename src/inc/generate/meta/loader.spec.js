@@ -11,34 +11,36 @@ var Meta = require('./tables')
 
 describe('META DEM Loader', function () {
 
-    var sequelize = new Sequelize('sample', 'sample', 'sample', {dialect: 'mysql'});
-    var meta = new Meta({sequelize: sequelize})
+    //var sequelize = new Sequelize('sample', 'sample', 'sample', {dialect: 'mysql'});
+    //var meta = new Meta({sequelize: sequelize})
+    var meta = {}
 
     describe('should be instantiated', function () {
 
         it('as Object', function () {
-            var mod = new Model({sequelize: sequelize, meta: meta})
+            var mod = new Model({meta: meta})
             mod.should.be.an('object')
             mod.should.be.an.instanceOf(Model)
         })
 
         it('as Function', function () {
-            var mod = Model({sequelize: sequelize, meta: meta})
+            var mod = Model({meta: meta})
             mod.should.be.an('object')
             mod.should.be.an.instanceOf(Model)
         })
     })
 
-    it('should load empty dbDEM', function (done) {
-        var mod = new Model({sequelize: sequelize, meta: meta})
+    /* todo: enable skipped test to create META tables in DB */
+    it.skip('should load empty dbDEM', function (done) {
+        var mod = new Model({meta: meta})
         sequelize.sync().then(function () {
             mod.load().then(function (dbDEM) {
-                1 + 1
+                dbDEM.should.be.an('object')
+                dbDEM.should.have.property('dBEAR')
+                dbDEM.dBEAR.should.not.have.property('namespace')
                 done()
             })
         }).catch(done)
-
-
     })
 
 

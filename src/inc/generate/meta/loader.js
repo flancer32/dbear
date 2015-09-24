@@ -3,6 +3,7 @@
 var Sequelize = require('sequelize')
 var Promise = require('Promise')
 /* own code */
+var DbLoader = require('./loader/database')
 var NamespaceLoader = require('./loader/namespace')
 var EntityLoader = require('./loader/entity')
 /**
@@ -13,11 +14,6 @@ var EntityLoader = require('./loader/entity')
  */
 function Loader(opts) {
     if (!(this instanceof  Loader)) return new Loader(opts)
-    /* parse options */
-    /**
-     * Initialized Sequelize object.
-     */
-    //this.orm = opts.sequelize
     /**
      * META tables defined in Sequelize (namespace, entity, attribute, relation).
      */
@@ -30,6 +26,14 @@ function Loader(opts) {
      *  Cache to get META objects by ID while DEM is composed.
      */
     this.cache = {namespace: {}, entity: {}, relation: {}}
+    /* todo: remove NEAR loaders if not required */
+    /**
+     * Namespace META data loader.
+     */
+    this.dbLoader = new DbLoader({
+        table: this.meta.database,
+        dbDEM: this.dbDEM
+    })
     /**
      * Namespace META data loader.
      */
@@ -51,14 +55,12 @@ function Loader(opts) {
 Loader.prototype.load = function _load() {
     var iLoader = this
     return new Promise(function (resolve, reject) {
-            /* load META data and compose dbDEM */
-            iLoader
-                .nsLoader.load()
-                .then(iLoader.entityLoader.load.bind(iLoader.entityLoader))
+            /* load target dbDEM from META data */
+            iLoader.dbLoader.load()
                 .then(function () {
-                    /* resolve with target dbDEM */
+                    /* resolve promise with target dbDEM */
                     resolve(iLoader.dbDEM)
-                })
+                }).catch(reject)
         }
     )
 }
