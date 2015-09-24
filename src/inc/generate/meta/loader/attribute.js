@@ -3,14 +3,14 @@
 var Promise = require('Promise')
 
 /**
- * Load entity META data and save it to dbDEM structure.
+ * Load attribute META data and save it to dbDEM structure.
  *
  * @param opts
- * @return {Entity}
+ * @return {Attribute}
  * @constructor
  */
-function Entity(opts) {
-    if (!(this instanceof  Entity)) return new Entity(opts)
+function Attribute(opts) {
+    if (!(this instanceof  Attribute)) return new Attribute(opts)
     /* parse options */
     this.dbDEM = opts.dbDEM
     this.cache = opts.cache
@@ -18,31 +18,31 @@ function Entity(opts) {
 }
 
 /**
- * Return promise that loads entity related META data and initializes loader cache by entity data.
+ * Return promise that loads attribute related META data and initializes loader cache by attribute data.
  * @return {*|exports|module.exports}
  * @private
  */
-Entity.prototype.load = function _load() {
-    var iEntity = this
-    var table = iEntity.table
-    var dbDEM = iEntity.dbDEM
-    var cache = iEntity.cache
+Attribute.prototype.load = function _load() {
+    var iAttribute = this
+    var table = iAttribute.table
+    var dbDEM = iAttribute.dbDEM
+    var cache = iAttribute.cache
     return new Promise(function (resolve) {
             /* read META data */
             table.all({include: [{all: true}], raw: true}).then(
                 function (rs) {
                     if (rs.length > 0) {
                         for (var i in rs) {
-                            /* compose "entity" entries in dbDEM */
+                            /* compose "attribute" entries in dbDEM */
                             var one = rs[0]
                             var ns = cache.namespace[one.namespace_id]
-                            var entity = {
+                            var attr = {
                                 id:         one.name,
                                 comment:    one.comment,
                                 alias:      one.alias,
                                 attributes: {}
                             }
-                            dbDEM.dBEAR.namespaces[ns.name].entities[one.name] = entity
+                            dbDEM.dBEAR.namespaces[ns.name].entities[one.name] = attr
                             /* ... and save loaded entry META data to cache */
                             cache.entity[one.id] = one
                         }
@@ -54,4 +54,4 @@ Entity.prototype.load = function _load() {
     )
 }
 
-module.exports = Entity
+module.exports = Attribute

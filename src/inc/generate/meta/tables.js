@@ -13,6 +13,7 @@ function Tables(opts) {
     /* parse options */
     this.orm = opts.sequelize
     /* define META tables */
+    this.database = _defineDatabase(this.orm)
     this.namespace = _defineNamespace(this.orm)
     this.entity = _defineEntity(this.orm)
     this.relation = _defineRelation(this.orm)
@@ -23,6 +24,23 @@ function Tables(opts) {
     this.attribute.belongsTo(this.entity, {foreignKey: 'entity_id', onDelete: 'RESTRICT', onUpdate: 'RESTRICT'});
 
     return
+
+    function _defineDatabase(orm) {
+        var result = orm.define('database', {
+                name: {
+                    type:      Sequelize.TEXT,
+                    comment:   "actual DEM as JSON",
+                    allowNull: false,
+                    unique:    false
+                }
+            }, {
+                timestamps:      true,
+                freezeTableName: true,
+                tableName:       '_database'
+            }
+        )
+        return result
+    }
 
     /**
      * Define Sequelize model for 'namespace' table.
