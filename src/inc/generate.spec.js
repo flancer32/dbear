@@ -50,10 +50,10 @@ describe('Generator module', function () {
     })
 
     describe('#run', function () {
-        it('should start with simple data', function () {
+        it('should start with simple data', function (done) {
             opts.demFile = 'sample/sample.dem.xml'
             var sg = new Generator(opts)
-            sg.run()//.then(done).catch(done)
+            sg.run().then(done).catch(done)
         })
     })
 })

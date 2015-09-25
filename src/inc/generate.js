@@ -257,14 +257,21 @@ Generator.prototype.run = function _run() {
     var paramsConv = require('./convert/params')
     paramsConv.demFileIn = opts.demFile
     paramsConv.skipWriteOut = true
-    /* read META data from DB (dbDEM) and input data from file (newDEM) ... */
-    Promise.all([
-        iGenerator.readMeta(),
-        iGenerator.loadDem()
-    ])
-        .then(iGenerator.mergeDems)
-        .then(iGenerator.updateDb)
-        .catch(iGenerator.errorHandler)
+    return new Promise(function (resolve, reject) {
+        /* read META data from DB (dbDEM) and input data from file (newDEM) ... */
+        Promise.all([
+            iGenerator.readMeta(),
+            iGenerator.loadDem()
+        ])
+            .then(iGenerator.mergeDems.bind(iGenerator))
+            .then(iGenerator.updateDb.bind(iGenerator))
+            .then(function (res) {
+                resolve(res)
+            })
+            .catch(function (err) {
+                reject(err)
+            })
+    })
 }
 
 /**
@@ -278,7 +285,7 @@ Generator.prototype.readMeta = function _readMeta() {
         var meta = new MetaTables({sequelize: sequelize})
         var loader = new MetaLoader({sequelize: sequelize, meta: meta})
         sequelize.sync()
-            .then(loader.load)
+            .then(loader.load.bind(loader))
             .then(resolve)
             .catch(reject)
     })
