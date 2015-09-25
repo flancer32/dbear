@@ -48,9 +48,9 @@ describe('#dbear', function () {
     })
 
     it('should perform conversation', function () {
-        sinon.stub(converter, 'run', function (params) {
-            params.demFileIn.should.contain('input_file')
-            params.demFileOut.should.contain('output_file')
+        sinon.stub(converter, 'run', function (opts) {
+            opts.demFileIn.should.contain('input_file')
+            opts.demFileOut.should.contain('output_file')
         })
         dbear.converter = converter
         dbear.parse(['node', 'dbear', '-i', 'input_file', '-o', 'output_file', 'convert'])
@@ -59,13 +59,13 @@ describe('#dbear', function () {
     describe('should perform generation', function () {
 
         it.skip('with default parameters (except input file)', function () {
-            sinon.stub(generator, 'run', function (params) {
-                params.dbDialect.should.equal('mariadb')
-                params.dbHost.should.equal('localhost')
-                params.dbName.should.equal('sample')
-                params.dbUser.should.equal('sample')
-                params.dbPassword.should.equal('sample')
-                params.demFile.should.contain('input_file')
+            sinon.stub(generator, 'run', function (opts) {
+                opts.dbDialect.should.equal('mariadb')
+                opts.dbHost.should.equal('localhost')
+                opts.dbName.should.equal('sample')
+                opts.dbUser.should.equal('sample')
+                opts.dbPassword.should.equal('sample')
+                opts.demFile.should.contain('input_file')
             })
             dbear.generator = generator
             dbear.parse(['node', 'dbear', '-i', 'input_file', 'generate'])

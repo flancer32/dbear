@@ -6,16 +6,14 @@
 'use strict'
 var program = require('commander')
 var path = require('path')
-var paramsConverter = require('./inc/convert/params')
-var paramsGenerator = require('./inc/generate/params')
 var Converter = require('./inc/convert')
 var Generator = require('./inc/generate')
 /**
  * Initialize program properties that can be replaced in tests.
  */
-program.params = {}
-program.params.convert = paramsConverter
-program.params.generate = paramsGenerator
+//program.params = {}
+//program.params.convert = paramsConverter
+//program.params.generate = paramsGenerator
 /**
  *
  * @type {*|Converter}
@@ -50,28 +48,28 @@ program
     .command('convert')
     .description('Convert DEM from one format to another (XML to JSON, for example) Usage: dbear --in [value] --out [value] convert')
     .action(function (command) {
-        var params = program.params.convert
-        params.demFileIn = program.in
-        params.demFileOut = program.out
-        program.converter.run(params)
+        var opts = {}
+        opts.demFileIn = program.in
+        opts.demFileOut = program.out
+        program.converter.run(opts)
     })
 
 program
     .command('generate')
     .description('Parse incoming DEM and create tables in DB')
     .action(function (command) {
-        var params = program.params.generate
-        params.dbDialect = program.dbDialect
-        params.dbHost = program.dbHost
-        params.dbName = program.dbName
-        params.dbUser = program.dbUser
-        params.dbPassword = program.dbPassword
+        var opts = {}
+        opts.dbDialect = program.dbDialect
+        opts.dbHost = program.dbHost
+        opts.dbName = program.dbName
+        opts.dbUser = program.dbUser
+        opts.dbPassword = program.dbPassword
         /* todo transform 'demFile' to absolute path */
-        params.demFile = program.in
+        opts.demFile = program.in
         /**
          * @type {*|Generator}
          */
-        program.generator = new Generator(params)
+        program.generator = new Generator(opts)
         program.generator.run()
     })
 

@@ -4,12 +4,11 @@ var sinon = require('sinon').sandbox.create()
 var should = require('chai').should()
 var Promise = require('Promise')
 var Generator = require('./generate')
-var opts = require('./generate/params')
-
 
 describe('Generator module', function () {
 
     /* define parameters for all tests */
+    var opts = {}
     opts.dbUser = 'sample'
     opts.dbName = 'sample'
     opts.dbPassword = 'sample'

@@ -16,16 +16,20 @@ function Converter() {
 }
 
 /**
- *
- * @param params
+ *  opts:
+ {
+    demFileIn:    '(string): Path to the input file (XML/JSON).',
+    demFileOut:   '(string): Path to th output file (JSON)',
+    skipWriteOut: '(bool): should we skip the output file generation and return result JSON DEM as promise value.'
+}
+ * @param opts - running options.
  * @returns {promise}
- * @private
  */
-Converter.prototype.run = function _run(params) {
+Converter.prototype.run = function _run(opts) {
     return new Promise(function (resolve, reject) {
-        var fileIn = params.demFileIn
-        var fileOut = params.demFileOut
-        var skipWriteOut = params.skipWriteOut
+        var fileIn = opts.demFileIn
+        var fileOut = opts.demFileOut
+        var skipWriteOut = opts.skipWriteOut
         if (skipWriteOut) {
             if (fileIn !== undefined) {
                 if ((fileIn.lastIndexOf(".xml") == fileIn.length - 4) && (fileIn.lastIndexOf("\\") !== fileIn.length - 5)) {

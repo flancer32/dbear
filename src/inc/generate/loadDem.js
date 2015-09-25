@@ -33,8 +33,8 @@ DemLoader.prototype.load = function _load(demFileIn) {
                 var start = buffer.toString('utf8', 0, 5);
                 if (start == '<?xml') {
                     /* try to load XML DEM and convert it to JSON */
-                    var params = {demFileIn: demFileIn, skipWriteOut: true}
-                    iLoader.converter.run(params).then(resolve).catch(reject)
+                    var opts = {demFileIn: demFileIn, skipWriteOut: true}
+                    iLoader.converter.run(opts).then(resolve).catch(reject)
                 } else {
                     /* process as JSON */
                     var str = buffer.toString()
