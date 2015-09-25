@@ -1,58 +1,51 @@
 /* Define dependencies */
 'use strict'
 var sinon = require('sinon').sandbox.create()
+require('sinon-as-promised');
+var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
 var should = require('chai').should()
-var Promise = require('Promise')
-var Generator = require('./generate')
+var Model = require('./generate')
 
 describe('Generator module', function () {
 
     /* define parameters for all tests */
     var opts = {}
+
+    beforeEach(function () {
+        opts.dbName = 'sample'
+        opts.dbPassword = 'sample'
+        opts.dbHost = 'localhost'
+        opts.dbDialect = 'mysql'
+        opts.demFile = 'sample/sample.dem.xml'
+    })
     opts.dbUser = 'sample'
-    opts.dbName = 'sample'
-    opts.dbPassword = 'sample'
-    opts.dbHost = 'localhost'
-    opts.dbDialect = 'mysql'
-    opts.demFile = 'sample/sample.dem.xml'
 
-    describe('#setConnection()', function () {
+    describe('should be instantiated', function () {
+        it('as Object', function () {
+            var mod = new Model(opts)
+            mod.should.be.an('object')
+            mod.should.be.an.instanceOf(Model)
+        })
 
-        // 1st test
-        it.skip('should authenticate with correct data', function (done) {
-            var sg = new Generator(opts)
-            sinon.stub(sg, 'getOrm', function () {
-                return function (database, username, password, options) {
-                    database.should.equal(opts.dbName)
-                    username.should.equal(opts.dbUser)
-                    password.should.equal(opts.dbPassword)
-                    this.authenticate = function () {
-                        return new Promise(function (resolve, reject) {
-                            resolve()
-                        })
-                    }
-                }
-            })
-            /* TODO fix it! Should we close opened connection?????*/
-            sg.setConnection(opts).then(function (resolve) {
-                console.log("Ok!")
-                resolve.should.equal("Connection established")
-                done()
-            }, function (err) {
-                console.log("Something bad happened")
-                /* done() will be not called, if this should is rejected */
-                '2'.should.equal('3')
-                done(err)
-            })
-
+        it('as Function', function () {
+            var mod = Model(opts)
+            mod.should.be.an('object')
+            mod.should.be.an.instanceOf(Model)
         })
     })
 
-    describe('#run', function () {
-        it('should start with simple data', function (done) {
-            opts.demFile = 'sample/sample.dem.xml'
-            var sg = new Generator(opts)
-            sg.run().then(done).catch(done)
-        })
+    it('should load DEM from file', function (done) {
+        var mod = new Model(opts)
+        /* stub Generator attribute 'converter' by the promise that returns the object */
+        var stubPromise = sinon.stub()
+        stubPromise.resolves({dBEAR: 'is_loaded'})
+        mod.converter = {run: stubPromise}
+        mod.loadDem().should.be.fulfilled.then(function (res) {
+            res.dBEAR.should.be.equal('is_loaded')
+            done()
+        }).catch(done)
     })
+
 })

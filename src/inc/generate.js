@@ -11,7 +11,7 @@ function Generator(opts) {
     if (!(this instanceof  Generator)) return new Generator(opts)
 
     this.opts = opts || {}
-    this.converter = {}
+    this.converter = new Converter()
     this.sequelize = {}
     _initOrm(this)
     return
@@ -44,11 +44,6 @@ function Generator(opts) {
 Generator.prototype.run = function _run() {
     /* create shortcut for Generator itself */
     var iGenerator = this
-    var opts = iGenerator.opts
-    /* compose converter parameters and run converter */
-    var optsConv = {}
-    optsConv.demFileIn = opts.demFile
-    optsConv.skipWriteOut = true
     return new Promise(function (resolve, reject) {
         /* read META data from DB (dbDEM) and input data from file (newDEM) ... */
         Promise.all([
@@ -84,17 +79,18 @@ Generator.prototype.readMeta = function _readMeta() {
 }
 
 /**
- * Load DEM from file (XML/JSON) and convert to JSON format if required.
+ * Return promise that loads DEM from XML/JSON file using converter.
+ * Loaded DEM is a value of the promise.
  */
 Generator.prototype.loadDem = function _loadDem() {
     var iGenerator = this
+    /* compose converter parameters and run converter */
+    var opts = {}
+    opts.demFileIn = iGenerator.opts.demFile
+    opts.skipWriteOut = true
+    var converter = iGenerator.converter
     return new Promise(function (resolve, reject) {
-        /* read META data */
-        var sequelize = iGenerator.sequelize;
-        var meta = new MetaTables({sequelize: sequelize})
-        var loader = new MetaLoader({sequelize: sequelize, meta: meta})
-        sequelize.sync()
-            .then(loader.load.bind(loader))
+        converter.run(opts)
             .then(resolve)
             .catch(reject)
     })
