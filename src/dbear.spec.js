@@ -49,7 +49,7 @@ describe('#dbear', function () {
 
     it('should perform conversation', function () {
         sinon.stub(converter, 'run', function (opts) {
-            opts.demFileIn.should.contain('input_file')
+            opts.opts.should.contain('input_file')
             opts.demFileOut.should.contain('output_file')
         })
         dbear.converter = converter

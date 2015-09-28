@@ -10,7 +10,8 @@ var Converter = require('../convert')
  * @constructor
  */
 function DemLoader() {
-    this.demFileIn = undefined
+    if (!(this instanceof  DemLoader)) return new DemLoader()
+    this.opts = {}
     this.readFile = readFile
     this.converter = new Converter()
 }
@@ -23,11 +24,11 @@ function DemLoader() {
  */
 DemLoader.prototype.load = function _load(demFileIn) {
     var iLoader = this
-    iLoader.demFileIn = demFileIn
+    iLoader.opts = demFileIn
     /* ... return promise function that performs requested operations */
     return new Promise(function (resolve, reject) {
         iLoader
-            .readFile(iLoader.demFileIn)
+            .readFile(iLoader.opts)
             .then(function (buffer) {
                 var result
                 var start = buffer.toString('utf8', 0, 5);
@@ -36,7 +37,7 @@ DemLoader.prototype.load = function _load(demFileIn) {
                     var opts = {demFileIn: demFileIn, skipWriteOut: true}
                     iLoader.converter.run(opts).then(resolve).catch(reject)
                 } else {
-                    /* process as JSON */
+                    /* try to process as JSON */
                     var str = buffer.toString()
                     result = JSON.parse(str)
                     resolve(result)

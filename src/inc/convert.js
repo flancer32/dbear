@@ -27,7 +27,7 @@ function Converter() {
  */
 Converter.prototype.run = function _run(opts) {
     return new Promise(function (resolve, reject) {
-        var fileIn = opts.demFileIn
+        var fileIn = opts.opts
         var fileOut = opts.demFileOut
         var skipWriteOut = opts.skipWriteOut
         if (skipWriteOut) {

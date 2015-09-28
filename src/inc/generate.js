@@ -7,6 +7,19 @@ var Converter = require('./convert')
 var MetaTables = require('./generate/meta/tables')
 var MetaLoader = require('./generate/meta/loader')
 
+/**
+ * opts = {
+ *  dbHost:     '',
+ *  dbDialect:  '',
+ *  dbName:     '',
+ *  dbUser:     '',
+ *  dbPassword: '',
+ *  demFile:    '',
+ * }
+ * @param opts
+ * @return {Generator}
+ * @constructor
+ */
 function Generator(opts) {
     if (!(this instanceof  Generator)) return new Generator(opts)
 
@@ -24,16 +37,16 @@ function Generator(opts) {
      */
     function _initOrm(iGenerator) {
         //var iGenerator = this
-        var opts = iGenerator.opts
-        var opt = {
-            host:    opts.dbHost,
-            dialect: opts.dbDialect,
+        var ownOpts = iGenerator.opts
+        var ormOpts = {
+            host:    ownOpts.dbHost,
+            dialect: ownOpts.dbDialect,
             define:  {
                 timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
                 freezeTableName: true /* disable the modification of tablenames into plural */
             }
         }
-        iGenerator.sequelize = new Sequelize(opts.dbName, opts.dbUser, opts.dbPassword, opt)
+        iGenerator.sequelize = new Sequelize(ownOpts.dbName, ownOpts.dbUser, ownOpts.dbPassword, ormOpts)
     }
 
 }
@@ -80,13 +93,13 @@ Generator.prototype.readMeta = function _readMeta() {
 
 /**
  * Return promise that loads DEM from XML/JSON file using converter.
- * Loaded DEM is a value of the promise.
+ * Loaded DEM will be a value of the promise.
  */
 Generator.prototype.loadDem = function _loadDem() {
     var iGenerator = this
     /* compose converter parameters and run converter */
     var opts = {}
-    opts.demFileIn = iGenerator.opts.demFile
+    opts.opts = iGenerator.opts.demFile
     opts.skipWriteOut = true
     var converter = iGenerator.converter
     return new Promise(function (resolve, reject) {

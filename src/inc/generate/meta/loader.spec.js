@@ -11,8 +11,7 @@ var Meta = require('./tables')
 
 describe('META DEM Loader', function () {
 
-    //var sequelize = new Sequelize('sample', 'sample', 'sample', {dialect: 'mysql'});
-    //var meta = new Meta({sequelize: sequelize})
+
     var meta = {}
 
     describe('should be instantiated', function () {
