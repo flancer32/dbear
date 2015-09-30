@@ -11,9 +11,6 @@ var Generator = require('./inc/generate')
 /**
  * Initialize program properties that can be replaced in tests.
  */
-//program.params = {}
-//program.params.convert = paramsConverter
-//program.params.generate = paramsGenerator
 /**
  *
  * @type {*|Converter}

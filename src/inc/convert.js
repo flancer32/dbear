@@ -32,18 +32,14 @@ Converter.prototype.run = function _run(opts) {
         var skipWriteOut = opts.skipWriteOut
         if (skipWriteOut) {
             if (fileIn !== undefined) {
-                if ((fileIn.lastIndexOf(".xml") == fileIn.length - 4) && (fileIn.lastIndexOf("\\") !== fileIn.length - 5)) {
-                    readFile(fileIn)
-                        .then(parseXml)
-                        .then(strJson)
-                        .then(function (result) {
-                            /* convert JSON string back to JSON object */
-                            var json = JSON.parse(result)
-                            resolve(json)
-                        })
-                } else {
-                    reject(console.log("Error! Input file has incorrect name or extension!"))
-                }
+                readFile(fileIn)
+                    .then(parseXml)
+                    .then(strJson)
+                    .then(function (result) {
+                        /* convert JSON string back to JSON object */
+                        var json = JSON.parse(result)
+                        resolve(json)
+                    })
             } else {
                 reject(console.log("Error! Required option 'in' is missing! Type dbear --help for details"))
             }

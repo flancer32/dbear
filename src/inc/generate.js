@@ -6,7 +6,7 @@ var Promise = require('Promise')
 var Converter = require('./convert')
 var MetaTables = require('./generate/meta/tables')
 var MetaLoader = require('./generate/meta/loader')
-
+var DemLoader = require('./generate/loadDem')
 /**
  * opts = {
  *  dbHost:     '',
@@ -25,6 +25,7 @@ function Generator(opts) {
 
     this.opts = opts || {}
     this.converter = new Converter()
+    this.demLoader = new DemLoader()
     this.sequelize = {}
     _initOrm(this)
     return
@@ -82,6 +83,7 @@ Generator.prototype.readMeta = function _readMeta() {
     return new Promise(function (resolve, reject) {
         /* read META data */
         var sequelize = iGenerator.sequelize;
+        /* todo: not testable code */
         var meta = new MetaTables({sequelize: sequelize})
         var loader = new MetaLoader({sequelize: sequelize, meta: meta})
         sequelize.sync()
@@ -92,18 +94,15 @@ Generator.prototype.readMeta = function _readMeta() {
 }
 
 /**
- * Return promise that loads DEM from XML/JSON file using converter.
+ * Return promise that uses loader to get DEM from XML/JSON file.
  * Loaded DEM will be a value of the promise.
  */
 Generator.prototype.loadDem = function _loadDem() {
     var iGenerator = this
-    /* compose converter parameters and run converter */
-    var opts = {}
-    opts.opts = iGenerator.opts.demFile
-    opts.skipWriteOut = true
-    var converter = iGenerator.converter
+    var demFileIn = iGenerator.opts.demFile
+    var loader = iGenerator.demLoader
     return new Promise(function (resolve, reject) {
-        converter.run(opts)
+        loader.load(demFileIn)
             .then(resolve)
             .catch(reject)
     })

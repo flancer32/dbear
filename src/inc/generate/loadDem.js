@@ -9,8 +9,8 @@ var Converter = require('../convert')
  * Load DEM from XML file and convert to JSON or just load data from JSON file.
  * @constructor
  */
-function DemLoader() {
-    if (!(this instanceof  DemLoader)) return new DemLoader()
+function LoadDem() {
+    if (!(this instanceof  LoadDem)) return new LoadDem()
     this.opts = {}
     this.readFile = readFile
     this.converter = new Converter()
@@ -22,7 +22,7 @@ function DemLoader() {
  * @return {*|exports|module.exports}
  * @private
  */
-DemLoader.prototype.load = function _load(demFileIn) {
+LoadDem.prototype.load = function _load(demFileIn) {
     var iLoader = this
     iLoader.opts = demFileIn
     /* ... return promise function that performs requested operations */
@@ -47,4 +47,4 @@ DemLoader.prototype.load = function _load(demFileIn) {
     })
 }
 
-module.exports = DemLoader
+module.exports = LoadDem
