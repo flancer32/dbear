@@ -17,7 +17,7 @@ function MergeDem(opts) {
 /**
  * opts = {
  *  dbDem: {},
- *  loadedDem: {}
+ *  newDem: {}
  * }
  * @param opts
  * @return {promise}
@@ -26,18 +26,27 @@ function MergeDem(opts) {
 MergeDem.prototype.merge = function _merge(opts) {
     var iMerger = this
     var resultDem = opts.dbDem
-    var loadedDem = opts.loadedDem
+    var newDem = opts.newDem
     /* ... return promise function that performs requested operations */
     return new Promise(function (resolve, reject) {
         var result = {}
-        var namespaces = loadedDem.dBEAR.namespaces
+        var namespaces = newDem.dBEAR.namespaces
         for (var key in namespaces) {
             var ns = namespaces[key]
+            if (!resultDem.key) {
+                resultDem.key = {}
+            } else {
+
+            }
         }
 
         result.dem = resultDem
         resolve(result)
     })
+}
+
+MergeDem.prototype.mergeNamespaces = function _mergeNamespaces(opts) {
+
 }
 
 module.exports = MergeDem

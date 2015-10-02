@@ -3,15 +3,34 @@
 var Sequelize = require('sequelize')
 
 /**
- * Return Sequelize definition for META tables.
- * @param opts
+ * Define META tables structure.
+ *
  * @return {Tables}
  * @constructor
  */
-function Tables(opts) {
-    if (!(this instanceof  Tables)) return new Tables(opts)
+function Tables() {
+    /* allow to use Object & Function notations to init variables */
+    if (!(this instanceof  Tables)) return new Tables()
+    /* save Sequelize object */
+    this.orm = {}
+    /* define META tables */
+    this.database = {}
+    this.namespace = {}
+    this.entity = {}
+    this.relation = {}
+    this.attribute = {}
+}
+
+/**
+ * Initialize properties using $opts
+ * $opts = {
+ *  sequelize: {}
+ * }
+ * @param $opts
+ */
+Tables.prototype.init = function _init($opts) {
     /* parse options */
-    this.orm = opts.sequelize
+    this.orm = $opts.sequelize
     /* define META tables */
     this.database = _defineDatabase(this.orm)
     this.namespace = _defineNamespace(this.orm)
@@ -203,7 +222,5 @@ function Tables(opts) {
         )
         return result
     }
-
 }
-
 module.exports = Tables

@@ -66,8 +66,11 @@ program
         /**
          * @type {*|Generator}
          */
-        program.generator = new Generator(opts)
-        program.generator.run()
+        var generator = new Generator()
+        generator.init(opts)
+        generator.run().catch(function (err) {
+            console.log('Generation error: ' + err);
+        })
     })
 
 program

@@ -7,53 +7,58 @@ var Converter = require('./convert')
 var MetaTables = require('./generate/meta/tables')
 var MetaLoader = require('./generate/meta/loader')
 var DemLoader = require('./generate/loadDem')
+var DemMerger = require('./generate/mergeDem')
 /**
- * opts = {
+ * @return {Generator}
+ * @constructor
+ */
+function Generator() {
+    /* allow to use Object & Function notations to init variables */
+    if (!(this instanceof  Generator)) return new Generator()
+    /* define properties */
+    this.opts = {}
+    this.converter = {}
+    this.demLoader = {}
+    this.demMerger = {}
+    this.sequelize = {}
+    this.metaTables = {}
+    this.metaLoader = {}
+}
+
+/**
+ * $opts = {
  *  dbHost:     '',
  *  dbDialect:  '',
  *  dbName:     '',
  *  dbUser:     '',
  *  dbPassword: '',
- *  demFile:    '',
+ *  demFile:    'absolute path to file with XML/JSON DEM',
  * }
- * @param opts
- * @return {Generator}
- * @constructor
+ *
+ * @param $opts
+ * @private
  */
-function Generator(opts) {
-    if (!(this instanceof  Generator)) return new Generator(opts)
-
-    this.opts = opts || {}
+Generator.prototype.init = function _init($opts) {
+    this.opts = $opts
     this.converter = new Converter()
     this.demLoader = new DemLoader()
-    this.sequelize = {}
-    _initOrm(this)
-    return
-
-    /**
-     * Constructor's function to initialize Sequelize object (ORM).
-     *
-     * @param iGenerator
-     * @private
-     */
-    function _initOrm(iGenerator) {
-        //var iGenerator = this
-        var ownOpts = iGenerator.opts
-        var ormOpts = {
-            host:    ownOpts.dbHost,
-            dialect: ownOpts.dbDialect,
-            define:  {
-                timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
-                freezeTableName: true /* disable the modification of tablenames into plural */
-            }
+    this.demMerger = new DemMerger()
+    this.metaTables = new MetaTables()
+    this.metaLoader = new MetaLoader()
+    /* prepare options to initialize sequelize */
+    var ormOpts = {
+        host:     this.opts.dbHost,
+        dialect:  this.opts.dbDialect,
+        define:  {
+            timestamps:      false, /* don't add the timestamp attributes (updatedAt, createdAt) */
+            freezeTableName: true /* disable the modification of tablenames into plural */
         }
-        iGenerator.sequelize = new Sequelize(ownOpts.dbName, ownOpts.dbUser, ownOpts.dbPassword, ormOpts)
     }
-
+    this.sequelize = new Sequelize( this.opts.dbName,  this.opts.dbUser,  this.opts.dbPassword, ormOpts)
+    this.metaTables.init({sequelize: this.sequelize})
 }
-
 /**
- * Perform all actions to generate addition domain structure defined in the new DEM.
+ * Return promise that performs all actions to generate addition domain structure defined in the new DEM.
  */
 Generator.prototype.run = function _run() {
     /* create shortcut for Generator itself */
@@ -82,11 +87,8 @@ Generator.prototype.readMeta = function _readMeta() {
     var iGenerator = this
     return new Promise(function (resolve, reject) {
         /* read META data */
-        var sequelize = iGenerator.sequelize;
-        /* todo: not testable code */
-        var meta = new MetaTables({sequelize: sequelize})
-        var loader = new MetaLoader({sequelize: sequelize, meta: meta})
-        sequelize.sync()
+        var loader = iGenerator.metaLoader
+        iGenerator.sequelize.sync()
             .then(loader.load.bind(loader))
             .then(resolve)
             .catch(reject)
@@ -115,9 +117,11 @@ Generator.prototype.loadDem = function _loadDem() {
  */
 Generator.prototype.mergeDems = function _mergeDems($dems) {
     var iGenerator = this
-    var dems = $dems
+    var opts = {}
+    opts.dbDem = $dems[0]   // iGenerator.readMeta()
+    opts.newDem = $dems[1] // iGenerator.loadDem()
     return new Promise(function (resolve, reject) {
-        resolve('mergedDems');
+        iGenerator.demMerger.merge(opts).then(resolve).catch(reject)
     })
 }
 
